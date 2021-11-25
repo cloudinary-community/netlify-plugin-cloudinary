@@ -1,0 +1,20 @@
+{
+  "name": "netlify-plugin-cloudinary",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Colby Fayock",
+    "email": "hello@colbyfayock.com",
+    "url": "https://twitter.com/colbyfayock"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "glob": "^7.2.0",
+    "jsdom": "^18.1.1"
+  }
+}
