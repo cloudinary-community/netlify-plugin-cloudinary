@@ -8,6 +8,7 @@ const cloudinary = require('cloudinary').v2;
  * TODO
  * - Track uploads to avoid uploading same image multiple times
  * - Handle srcset
+ * - Delivery type for redirect via Netlify redirects
  */
 
 module.exports = {
@@ -16,7 +17,7 @@ module.exports = {
     const { PUBLISH_DIR } = constants;
     const { deliveryType, uploadPreset } = inputs;
 
-    const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+    const cloudName = process.env.CLOUDINARY_CLOUD_NAME || inputs.cloudName;
     const apiKey = process.env.CLOUDINARY_API_KEY;
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
