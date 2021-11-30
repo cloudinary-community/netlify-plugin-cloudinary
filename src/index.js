@@ -7,6 +7,7 @@ const cloudinary = require('cloudinary').v2;
 /**
  * TODO
  * - Track uploads to avoid uploading same image multiple times
+ * - Handle srcset
  */
 
 module.exports = {
@@ -29,11 +30,18 @@ module.exports = {
       api_secret: apiSecret
     });
 
+    // Find all HTML source files in the publish directory
+
     const pages = glob.sync(`${PUBLISH_DIR}/**/*.html`);
+    const errors = [];
 
     for ( const page of pages ) {
       const html = await fs.readFile(page, 'utf-8');
       const dom = new JSDOM(html);
+
+      // Loop through all images found in the DOM and swap the source with
+      // a Cloudinary URL
+
       const images = Array.from(dom.window.document.querySelectorAll('img'));
 
       for ( const $img of images ) {
@@ -41,6 +49,9 @@ module.exports = {
         let cloudinarySrc;
 
         if ( deliveryType === 'fetch' ) {
+          // fetch allows us to pass in a remote URL to the Cloudinary API
+          // which it will cache and serve from the CDN, but not store
+
           imgSrc = determineRemoteUrl(imgSrc);
 
           cloudinarySrc = cloudinary.url(imgSrc, {
@@ -54,6 +65,12 @@ module.exports = {
             ]
           });
         } else if ( deliveryType === 'upload' ) {
+          // upload will actually store the image in the Cloudinary account
+          // and subsequently serve that stored image
+
+          // If our image is locally sourced, we need to obtain the full
+          // local relative path so that we can tell Cloudinary where
+          // to upload from
 
           if ( !isRemoteUrl(imgSrc) ) {
             imgSrc = path.join(PUBLISH_DIR, imgSrc);
@@ -62,20 +79,37 @@ module.exports = {
           let results;
           
           if ( apiKey && apiSecret ) {
+            // We need an API Key and Secret to use signed uploading
+
             try {
               results = await cloudinary.uploader.upload(imgSrc);
             } catch(e) {
-              console.log('e', e)
+              const { error } = e;
+              errors.push({
+                imgSrc,
+                message: error.message
+              });
+              continue;
             }
           } else if ( uploadPreset ) {
+            // If we want to avoid signing our uploads, we don't need our API Key and Secret,
+            // however, we need to provide an uploadPreset
+
             try {
               results = await cloudinary.uploader.unsigned_upload(imgSrc, uploadPreset);
             } catch(e) {
-              console.log('e', e)
+              const { error } = e;
+              errors.push({
+                imgSrc,
+                message: error.message
+              });
+              continue;
             }
           } else {
             throw new Error(`To use deliveryType ${deliveryType}, please use an uploadPreset for unsigned requests or an API Key and Secret for signed requests.`);
           }
+
+          // Finally use the stored public ID to grab the image URL
 
           const { public_id } = results;
 
@@ -95,6 +129,13 @@ module.exports = {
 
         await fs.writeFile(page, dom.serialize());
       }
+    }
+
+    if ( errors.length > 0) {
+      console.log(`Done with ${errors.length} errors...`);
+      console.log(JSON.stringify(errors, null, 2));
+    } else {
+      console.log('Done.');
     }
   }
 
