@@ -86,7 +86,7 @@ Inside your Netlify config:
 
 Learn more about [unsigned uploads](https://cloudinary.com/documentation/upload_images#unsigned_upload).
 
-**upload - Signed
+**upload - Signed**
 
 Signed uploads require you to set your API Key and API Secret as environment variables.
 
