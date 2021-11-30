@@ -25,7 +25,7 @@ module.exports = {
           if ( !imgSrc.startsWith('/') ) {
             cloudinarySrc = `/${cloudinarySrc}`;
           }
-          cloudinarySrc = `${process.env.DEPLOY_URL}${cloudinarySrc}`;
+          cloudinarySrc = `${process.env.DEPLOY_PRIME_URL}${cloudinarySrc}`;
         }
 
         cloudinarySrc = `https://res.cloudinary.com/${CLOUD_NAME}/image/fetch/${cloudinarySrc}`;
