@@ -1,1 +1,9 @@
 name: netlify-plugin-cloudinary
+inputs:
+  - name: deliveryType
+    required: false
+    description: "The method in which Cloudinary stores and delivers images (Ex: fetch, upload)"
+    default: "fetch"
+  - name: uploadPreset
+    required: false
+    description: "Defined set of asset upload defaults in Cloudinary"
