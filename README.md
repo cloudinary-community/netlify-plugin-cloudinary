@@ -80,7 +80,7 @@ Inside your Netlify config:
 
   [plugins.inputs]
   cloudName = "[Your Cloudinary Cloud Name]"
-  deliveryMethod = "upload"
+  deliveryType = "upload"
   uploadPreset = "[Your Cloudinary Upload Preset]"
 ```
 
@@ -98,7 +98,7 @@ Inside your Netlify config:
 
   [plugins.inputs]
   cloudName = "[Your Cloudinary Cloud Name]"
-  deliveryMethod = "upload"
+  deliveryType = "upload"
 ```
 
 Inside your environment variable configuration:
