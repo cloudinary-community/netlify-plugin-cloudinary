@@ -1,16 +1,6 @@
 const { isRemoteUrl, determineRemoteUrl } = require('../../src/lib/util');
 
 describe('lib/util', () => {
-  const ENV_ORIGINAL = process.env;
-
-  beforeEach(() => {
-    jest.resetModules();
-    process.env = { ...ENV_ORIGINAL };
-  });
-
-  afterAll(() => {
-    process.env = ENV_ORIGINAL;
-  });
 
   describe('isRemoteUrl', () => {
     
@@ -27,17 +17,21 @@ describe('lib/util', () => {
   });
 
   describe('determineRemoteUrl', () => {
-
-    process.env.DEPLOY_PRIME_URL = 'https://cloudinary.netlify.app';
     
     test('should return original value when remote URL', () => {
-      expect(determineRemoteUrl('https://cloudinary.com')).toEqual('https://cloudinary.com');
-      expect(determineRemoteUrl('http://cloudinary.com')).toEqual('http://cloudinary.com');
+      const secure = determineRemoteUrl('https://cloudinary.com', 'https://cloudinary.netlify.app');
+      expect(secure).toEqual('https://cloudinary.com');
+
+      const notSecure = determineRemoteUrl('http://cloudinary.com', 'https://cloudinary.netlify.app');
+      expect(notSecure).toEqual('http://cloudinary.com');
     });
     
     test('should prepend DEPLOY_PRIME_URL when local path', () => {
-      expect(determineRemoteUrl('/images/cloud.jpg')).toEqual('https://cloudinary.netlify.app/images/cloud.jpg');
-      expect(determineRemoteUrl('images/cloud.jpg')).toEqual('https://cloudinary.netlify.app/images/cloud.jpg');
+      const withStartingSlash = determineRemoteUrl('/images/cloud.jpg', 'https://cloudinary.netlify.app');
+      expect(withStartingSlash).toEqual('https://cloudinary.netlify.app/images/cloud.jpg');
+
+      const withoutStartingSlash = determineRemoteUrl('images/cloud.jpg', 'https://cloudinary.netlify.app');
+      expect(withoutStartingSlash).toEqual('https://cloudinary.netlify.app/images/cloud.jpg');
     });
 
   });

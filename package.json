@@ -19,6 +19,7 @@
     "node-fetch": "2"
   },
   "devDependencies": {
+    "dotenv": "^10.0.0",
     "jest": "^27.4.3"
   }
 }

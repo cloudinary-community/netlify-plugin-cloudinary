@@ -1,8 +1,7 @@
 const fs = require('fs').promises;
 const glob = require('glob');
-const { JSDOM } = require('jsdom');
 
-const { getCloudinary, getCloudinaryUrl } = require('./lib/cloudinary');
+const { getCloudinary, updateHtmlImagesToCloudinary } = require('./lib/cloudinary');
 
 /**
  * TODO
@@ -39,45 +38,27 @@ module.exports = {
     // Find all HTML source files in the publish directory
 
     const pages = glob.sync(`${PUBLISH_DIR}/**/*.html`);
-    const errors = [];
 
-    for ( const page of pages ) {
-      const html = await fs.readFile(page, 'utf-8');
-      const dom = new JSDOM(html);
+    const results = await Promise.all(pages.map(async page => {
+      const sourceHtml = await fs.readFile(page, 'utf-8');
 
-      // Loop through all images found in the DOM and swap the source with
-      // a Cloudinary URL
+      const { html, errors } = await updateHtmlImagesToCloudinary(sourceHtml, {
+        deliveryType,
+        uploadPreset,
+        folder,
+        localDir: PUBLISH_DIR,
+        remoteHost: process.env.DEPLOY_PRIME_URL
+      });
 
-      const images = Array.from(dom.window.document.querySelectorAll('img'));
+      await fs.writeFile(page, html);
 
-      for ( const $img of images ) {
-        let imgSrc = $img.getAttribute('src');
-
-        try {
-          const cloudinarySrc = await getCloudinaryUrl({
-            apiKey,
-            apiSecret,
-            deliveryType,
-            folder,
-            path: imgSrc,
-            publishDir: PUBLISH_DIR,
-            uploadPreset,
-          });
-  
-          $img.setAttribute('src', cloudinarySrc)
-        } catch(e) {
-          const { error } = e;
-          errors.push({
-            imgSrc,
-            message: e.message || error.message
-          });
-          continue;
-        }
-        
+      return {
+        page,
+        errors
       }
+    }));
 
-      await fs.writeFile(page, dom.serialize());
-    }
+    const errors = results.filter(({ errors }) => errors.length > 0);
 
     if ( errors.length > 0) {
       console.log(`Done with ${errors.length} errors...`);
