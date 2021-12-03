@@ -1,12 +1,13 @@
-const glob = require('glob');
 const fs = require('fs').promises;
 const path = require('path');
+const crypto = require('crypto');
+const glob = require('glob');
+const fetch = require('node-fetch');
 const { JSDOM } = require('jsdom');
 const cloudinary = require('cloudinary').v2;
 
 /**
  * TODO
- * - Track uploads to avoid uploading same image multiple times
  * - Handle srcset
  * - Delivery type for redirect via Netlify redirects
  */
@@ -73,9 +74,21 @@ module.exports = {
           // local relative path so that we can tell Cloudinary where
           // to upload from
 
+          const { name: imgName } = path.parse(imgSrc);
+          let hash = crypto.createHash('md5');
+
           if ( !isRemoteUrl(imgSrc) ) {
             imgSrc = path.join(PUBLISH_DIR, imgSrc);
+            hash.update(imgSrc);
+          } else {
+            const response = await fetch(imgSrc);
+            const buffer = await response.buffer();
+            hash.update(buffer);
           }
+
+          hash = hash.digest('hex');
+
+          const id = `${imgName}-${hash}`;
 
           let results;
           
@@ -83,12 +96,15 @@ module.exports = {
             // We need an API Key and Secret to use signed uploading
 
             try {
-              results = await cloudinary.uploader.upload(imgSrc);
+              results = await cloudinary.uploader.upload(imgSrc, {
+                public_id: id,
+                overwrite: false
+              });
             } catch(e) {
               const { error } = e;
               errors.push({
                 imgSrc,
-                message: error.message
+                message: e.message || error.message
               });
               continue;
             }
@@ -97,12 +113,15 @@ module.exports = {
             // however, we need to provide an uploadPreset
 
             try {
-              results = await cloudinary.uploader.unsigned_upload(imgSrc, uploadPreset);
+              results = await cloudinary.uploader.unsigned_upload(imgSrc, uploadPreset, {
+                public_id: id,
+                // Unsigned uploads default to overwrite: false
+              });
             } catch(e) {
               const { error } = e;
               errors.push({
                 imgSrc,
-                message: error.message
+                message: e.message || error.message
               });
               continue;
             }
