@@ -37,6 +37,17 @@ By default, your images will served via the [fetch delivery method](https://clou
 
 ## 🧰 Configuration
 
+### Plugin Inputs
+
+| Name            | Required | Description |
+|-----------------|----------|-------------|
+| cloudName       | false*   | Cloudinary Cloud Name |
+| deliveryType    | false    | The method in which Cloudinary stores and delivers images (Ex: fetch, upload) |
+| folder          | false    | Folder all media will be stored in. Defaults to Netlify site name |
+| uploadPreset    | false    | Defined set of asset upload defaults in Cloudinary |
+
+*Cloud Name must be set as an environment variable if not as an input
+
 ### Setting your Cloud Name
 
 You have two options for setting your Cloud Name: plugin input or environment variable.
