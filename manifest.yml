@@ -7,6 +7,9 @@ inputs:
     required: false
     description: "The method in which Cloudinary stores and delivers images (Ex: fetch, upload)"
     default: "fetch"
+  - name: folder
+    required: false
+    description: "Folder all media will be stored in. Defaults to Netlify site name"
   - name: uploadPreset
     required: false
     description: "Defined set of asset upload defaults in Cloudinary"
