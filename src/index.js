@@ -16,7 +16,11 @@ module.exports = {
 
   async onPostBuild({ constants, inputs }) {
     const { PUBLISH_DIR } = constants;
-    const { deliveryType, uploadPreset } = inputs;
+    const {
+      deliveryType,
+      uploadPreset,
+      folder = process.env.SITE_NAME
+    } = inputs;
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME || inputs.cloudName;
     const apiKey = process.env.CLOUDINARY_API_KEY;
@@ -90,14 +94,19 @@ module.exports = {
 
           const id = `${imgName}-${hash}`;
 
+          const uploadOptions = {
+            folder,
+            public_id: id
+          }
+
           let results;
-          
+
           if ( apiKey && apiSecret ) {
             // We need an API Key and Secret to use signed uploading
 
             try {
               results = await cloudinary.uploader.upload(imgSrc, {
-                public_id: id,
+                ...uploadOptions,
                 overwrite: false
               });
             } catch(e) {
@@ -114,7 +123,7 @@ module.exports = {
 
             try {
               results = await cloudinary.uploader.unsigned_upload(imgSrc, uploadPreset, {
-                public_id: id,
+                ...uploadOptions
                 // Unsigned uploads default to overwrite: false
               });
             } catch(e) {
@@ -169,7 +178,7 @@ function isRemoteUrl(path) {
   return path.startsWith('http');
 }
 
-/** 
+/**
  * determineRemoteUrl
  */
 
@@ -181,7 +190,7 @@ function determineRemoteUrl(path) {
   if ( !path.startsWith('/') ) {
     url = `/${url}`;
   }
-  
+
   url = `${process.env.DEPLOY_PRIME_URL}${url}`;
 
   return url;
