@@ -173,7 +173,7 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
   // Then separately run through all images so that we can grab the URL either by
   // generating it or uploading the image in parallel
 
-  const imagesWithUrls = await Promise.all(imagesWithSources.map(async (image) => {
+  const imagesWithUrls = await Promise.allSettled(imagesWithSources.map(async (image) => {
     const { imgSrc } = image;
     try {
       const cloudinarySrc = await getCloudinaryUrl({
@@ -198,9 +198,11 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
     }
   }));
 
+  const imagesToReplace = imagesWithUrls.filter(({ status } = {}) => status === 'fulfilled').map(({ value }) => value);
+
   // Finally set the images
 
-  for ( const image of imagesWithUrls.filter(image => !!image) ) {
+  for ( const image of imagesToReplace ) {
     const { cloudinarySrc, $img } = image;
     $img.setAttribute('src', cloudinarySrc)
   }
