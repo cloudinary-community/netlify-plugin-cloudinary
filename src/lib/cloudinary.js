@@ -24,6 +24,7 @@ async function createPublicId({ path: filePath } = {}) {
   let hash = crypto.createHash('md5');
 
   const { name: imgName } = path.parse(filePath);
+  const name = imgName.split('?')[0];
 
   if ( !isRemoteUrl(filePath) ) {
     hash.update(filePath);
@@ -35,7 +36,7 @@ async function createPublicId({ path: filePath } = {}) {
 
   hash = hash.digest('hex');
 
-  return `${imgName}-${hash}`
+  return `${name}-${hash}`
 }
 
 module.exports.createPublicId = createPublicId;
@@ -155,26 +156,10 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
   const errors = [];
   const dom = new JSDOM(html);
 
-  // Loop through all images found in the DOM and swap the source with
-  // a Cloudinary URL
-
   const images = Array.from(dom.window.document.querySelectorAll('img'));
 
-  // First collect all of the image sources to process
-
-  const imagesWithSources = images.map($img => {
+  await Promise.all(images.map(async ($img) => {
     const imgSrc = $img.getAttribute('src');
-    return {
-      $img,
-      imgSrc
-    }
-  })
-
-  // Then separately run through all images so that we can grab the URL either by
-  // generating it or uploading the image in parallel
-
-  const imagesWithUrls = await Promise.allSettled(imagesWithSources.map(async (image) => {
-    const { imgSrc } = image;
     try {
       const cloudinarySrc = await getCloudinaryUrl({
         deliveryType,
@@ -184,28 +169,15 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
         uploadPreset,
         remoteHost
       });
-      return {
-        ...image,
-        cloudinarySrc
-      }
+      $img.setAttribute('src', cloudinarySrc)
     } catch(e) {
       const { error } = e;
       errors.push({
         imgSrc,
         message: e.message || error.message
       });
-      return undefined;
     }
   }));
-
-  const imagesToReplace = imagesWithUrls.filter(({ status } = {}) => status === 'fulfilled').map(({ value }) => value);
-
-  // Finally set the images
-
-  for ( const image of imagesToReplace ) {
-    const { cloudinarySrc, $img } = image;
-    $img.setAttribute('src', cloudinarySrc)
-  }
 
   return {
     html: dom.serialize(),
