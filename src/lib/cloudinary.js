@@ -160,9 +160,21 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
 
   const images = Array.from(dom.window.document.querySelectorAll('img'));
 
-  for ( const $img of images ) {
-    let imgSrc = $img.getAttribute('src');
+  // First collect all of the image sources to process
 
+  const imagesWithSources = images.map($img => {
+    const imgSrc = $img.getAttribute('src');
+    return {
+      $img,
+      imgSrc
+    }
+  })
+
+  // Then separately run through all images so that we can grab the URL either by
+  // generating it or uploading the image in parallel
+
+  const imagesWithUrls = await Promise.all(imagesWithSources.map(async (image) => {
+    const { imgSrc } = image;
     try {
       const cloudinarySrc = await getCloudinaryUrl({
         deliveryType,
@@ -172,17 +184,25 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
         uploadPreset,
         remoteHost
       });
-
-      $img.setAttribute('src', cloudinarySrc)
+      return {
+        ...image,
+        cloudinarySrc
+      }
     } catch(e) {
       const { error } = e;
       errors.push({
         imgSrc,
         message: e.message || error.message
       });
-      continue;
+      return undefined;
     }
+  }));
 
+  // Finally set the images
+
+  for ( const image of imagesWithUrls.filter(image => !!image) ) {
+    const { cloudinarySrc, $img } = image;
+    $img.setAttribute('src', cloudinarySrc)
   }
 
   return {
