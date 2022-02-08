@@ -1,4 +1,5 @@
 const { getQueryParams } = require('../../lib/util');
+const { getCloudinary, getCloudinaryUrl } = require('../../lib/cloudinary');
 
 exports.handler = async function (event, context) {
   const { rawUrl } = event;
@@ -11,10 +12,27 @@ exports.handler = async function (event, context) {
   const { deliveryType } = getQueryParams(rawUrl);
 
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME || queryParams.cloudName;
+  const apiKey = process.env.CLOUDINARY_API_KEY;
+  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+  if ( !cloudName ) {
+    throw new Error('Cloudinary Cloud Name required. Please set cloudName input or use environment variable CLOUDINARY_CLOUD_NAME');
+  }
+
+  getCloudinary({
+    cloudName,
+    apiKey,
+    apiSecret
+  });
+
 
   const remoteUrl = encodeURIComponent(`${endpoint}${imagePath}`);
 
-  const cloudinaryUrl = `https://res.cloudinary.com/${cloudName}/image/${deliveryType}/f_auto,q_auto/${remoteUrl}`
+  const cloudinaryUrl = await getCloudinaryUrl({
+    deliveryType,
+    path: imagePath,
+    remoteHost: endpoint
+  });
 
   console.log({
     rawUrl,

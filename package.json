@@ -1,6 +1,6 @@
 {
   "name": "netlify-plugin-cloudinary",
-  "version": "0.0.10",
+  "version": "0.0.10-beta.2",
   "description": "",
   "main": "src/index.js",
   "scripts": {
