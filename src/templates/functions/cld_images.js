@@ -9,7 +9,7 @@ exports.handler = async function (event, context) {
   const pathSegments = rawUrlSegments[1].split('?');
   const imagePath = `/cld-assets/images${pathSegments[0]}`;
 
-  const { deliveryType } = getQueryParams(rawUrl);
+  const { deliveryType, uploadPreset, folder } = getQueryParams(rawUrl);
 
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME || queryParams.cloudName;
   const apiKey = process.env.CLOUDINARY_API_KEY;
@@ -25,13 +25,13 @@ exports.handler = async function (event, context) {
     apiSecret
   });
 
-
-  const remoteUrl = encodeURIComponent(`${endpoint}${imagePath}`);
+  const remoteUrl = `${endpoint}${imagePath}`;
 
   const cloudinaryUrl = await getCloudinaryUrl({
     deliveryType,
-    path: imagePath,
-    remoteHost: endpoint
+    folder,
+    path: remoteUrl,
+    uploadPreset
   });
 
   console.log({

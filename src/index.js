@@ -20,7 +20,7 @@ module.exports = {
 
   async onBuild({ netlifyConfig, constants, inputs }) {
     const { FUNCTIONS_SRC, INTERNAL_FUNCTIONS_SRC } = constants;
-    const { uploadPreset, deliveryType } = inputs;
+    const { uploadPreset, deliveryType, folder = process.env.SITE_NAME } = inputs;
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME || inputs.cloudName;
 
@@ -52,8 +52,9 @@ module.exports = {
 
     const params = {
       uploadPreset,
-      deliveryType: 'fetch',
-      cloudName
+      deliveryType,
+      cloudName,
+      folder
     }
 
     const paramsString = Object.keys(params)
