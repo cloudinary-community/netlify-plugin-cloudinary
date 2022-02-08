@@ -2,6 +2,7 @@
 const fs = require('fs-extra')
 const path = require('path');
 const glob = require('glob');
+const ncc = require('@vercel/ncc');
 
 const { getCloudinary, updateHtmlImagesToCloudinary, getCloudinaryUrl } = require('./lib/cloudinary');
 
@@ -31,10 +32,19 @@ module.exports = {
 
     // Copy all of the templates over including the functions to deploy
 
+    const functionTemplatesPath = path.join(__dirname, 'templates/functions');
+    const functionTemplates = await fs.readdir(functionTemplatesPath);
+
     try {
-      await fs.copy(path.join(__dirname, 'templates'), functionsPath);
+      await Promise.all(functionTemplates.map(async templateFileName => {
+        const bundle = await ncc(path.join(functionTemplatesPath, templateFileName));
+        const { name, base } = path.parse(templateFileName);
+        const templateDirectory = path.join(functionsPath, name);
+        await fs.mkdir(templateDirectory);
+        await fs.writeFile(path.join(templateDirectory, base), bundle.code, 'utf8');
+      }));
     } catch(e) {
-      console.log('Failed to copy templates:', e);
+      console.log('Failed to generate templates:', e);
       throw e;
     }
 

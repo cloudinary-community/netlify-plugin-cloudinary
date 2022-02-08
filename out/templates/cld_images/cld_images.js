@@ -1,3 +1,5 @@
+'use strict';
+
 const { getQueryParams } = require('../../lib/util');
 
 exports.handler = async function (event, context) {
@@ -8,13 +10,13 @@ exports.handler = async function (event, context) {
   const pathSegments = rawUrlSegments[1].split('?');
   const imagePath = `/cld-assets/images${pathSegments[0]}`;
 
-  const { deliveryType } = getQueryParams(rawUrl);
+  getQueryParams(rawUrl);
 
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME || queryParams.cloudName;
 
   const remoteUrl = encodeURIComponent(`${endpoint}${imagePath}`);
 
-  const cloudinaryUrl = `https://res.cloudinary.com/${cloudName}/image/${deliveryType}/f_auto,q_auto/${remoteUrl}`
+  const cloudinaryUrl = `https://res.cloudinary.com/colbydemo/image/fetch/f_auto,q_auto/${remoteUrl}`;
 
   console.log({
     rawUrl,
@@ -25,7 +27,7 @@ exports.handler = async function (event, context) {
     imagePath,
     remoteUrl,
     cloudinaryUrl
-  })
+  });
 
   return {
     statusCode: 302,
