@@ -1,15 +1,80 @@
-const fs = require('fs').promises;
+
+const fs = require('fs-extra')
+const path = require('path');
 const glob = require('glob');
 
-const { getCloudinary, updateHtmlImagesToCloudinary } = require('./lib/cloudinary');
+const { getCloudinary, updateHtmlImagesToCloudinary, getCloudinaryUrl } = require('./lib/cloudinary');
+
+const CLOUDINARY_ASSET_PATH = "/cloudinary-assets";
+const CLOUDINARY_IMAGES_PATH = `${CLOUDINARY_ASSET_PATH}/images`;
+
+const CLOUDINARY_MEDIA_FUNCTIONS = ['images'];
 
 /**
  * TODO
  * - Handle srcset
- * - Delivery type for redirect via Netlify redirects
  */
 
 module.exports = {
+
+  async onBuild({ netlifyConfig, constants, inputs }) {
+    const { FUNCTIONS_SRC, INTERNAL_FUNCTIONS_SRC } = constants;
+    const { uploadPreset, deliveryType } = inputs;
+
+    const cloudName = process.env.CLOUDINARY_CLOUD_NAME || inputs.cloudName;
+
+    if ( !cloudName ) {
+      throw new Error('Cloudinary Cloud Name required. Please set cloudName input or use environment variable CLOUDINARY_CLOUD_NAME');
+    }
+
+    const functionsPath = INTERNAL_FUNCTIONS_SRC || FUNCTIONS_SRC;
+
+    // Copy all of the templates over including the functions to deploy
+
+    try {
+      await fs.copy(path.join(__dirname, 'templates'), functionsPath);
+    } catch(e) {
+      console.log('Failed to copy templates:', e);
+      throw e;
+    }
+
+    // Configure reference parameters for Cloudinary delivery to attach to redirect
+
+    const params = {
+      uploadPreset,
+      deliveryType: 'fetch',
+      cloudName
+    }
+
+    const paramsString = Object.keys(params)
+      .filter(key => typeof params[key] !== 'undefined')
+      .map(key => `${key}=${encodeURIComponent(params[key])}`)
+      .join('&');
+
+    // Redirect any requests that hits /[media type]/* to a serverless function
+
+    CLOUDINARY_MEDIA_FUNCTIONS.forEach(mediaName => {
+      const functionName = `cld_${mediaName}`;
+
+      netlifyConfig.redirects.push({
+        from: `/${mediaName}/*`,
+        to: `${process.env.DEPLOY_PRIME_URL}/.netlify/functions/${functionName}/:splat?${paramsString}`,
+        status: 302,
+        force: true,
+      });
+
+      netlifyConfig.redirects.push({
+        from: `/cld-assets/${mediaName}/*`,
+        to: `/${mediaName}/:splat`,
+        status: 200,
+        force: true
+      });
+    });
+
+  },
+
+  // Post build looks through all of the output HTML and rewrites any src attributes to use a cloudinary URL
+  // This only solves on-page references until any JS refreshes the DOM
 
   async onPostBuild({ constants, inputs }) {
     const { PUBLISH_DIR } = constants;
@@ -27,12 +92,10 @@ module.exports = {
       throw new Error('Cloudinary Cloud Name required. Please use environment variable CLOUDINARY_CLOUD_NAME');
     }
 
-    const cloudinary = getCloudinary();
-
-    cloudinary.config({
-      cloud_name: cloudName,
-      api_key: apiKey,
-      api_secret: apiSecret
+    const cloudinary = getCloudinary({
+      cloudName,
+      apiKey,
+      apiSecret
     });
 
     // Find all HTML source files in the publish directory

@@ -10,7 +10,13 @@ const { isRemoteUrl, determineRemoteUrl } = require('./util');
  * getCloudinary
  */
 
-function getCloudinary() {
+function getCloudinary(config = {}) {
+  cloudinary.config({
+    cloud_name: config.cloudName,
+    api_key: config.apiKey,
+    api_secret: config.apiSecret
+  });
+
   return cloudinary;
 }
 
