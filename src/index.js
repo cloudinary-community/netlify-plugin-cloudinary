@@ -6,6 +6,8 @@ const ncc = require('@vercel/ncc');
 const { configureCloudinary, updateHtmlImagesToCloudinary } = require('./lib/cloudinary');
 const { PREFIX, PUBLIC_ASSET_PATH } = require('./data/cloudinary');
 
+const CLOUDINARY_MEDIA_FUNCTIONS = ['images'];
+
 /**
  * TODO
  * - Handle srcset
