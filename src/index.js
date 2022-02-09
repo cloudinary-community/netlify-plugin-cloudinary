@@ -1,4 +1,3 @@
-
 const fs = require('fs-extra')
 const path = require('path');
 const glob = require('glob');
@@ -6,11 +5,6 @@ const ncc = require('@vercel/ncc');
 
 const { configureCloudinary, updateHtmlImagesToCloudinary } = require('./lib/cloudinary');
 const { PREFIX, PUBLIC_ASSET_PATH } = require('./data/cloudinary');
-
-const CLOUDINARY_ASSET_PATH = "/cloudinary-assets";
-const CLOUDINARY_IMAGES_PATH = `${CLOUDINARY_ASSET_PATH}/images`;
-
-const CLOUDINARY_MEDIA_FUNCTIONS = ['images'];
 
 /**
  * TODO
