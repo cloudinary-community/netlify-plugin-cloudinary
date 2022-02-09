@@ -1,10 +1,8 @@
-const { builder } = require('@netlify/functions');
-
 const { getQueryParams } = require('../../lib/util');
 const { configureCloudinary, getCloudinaryUrl } = require('../../lib/cloudinary');
 const { PUBLIC_ASSET_PATH } = require('../../data/cloudinary');
 
-async function handler(event, context) {
+exports.handler = async function (event, context) {
   const { rawUrl, headers } = event;
   const { host } = headers;
 
@@ -40,5 +38,3 @@ async function handler(event, context) {
     }
   };
 };
-
-exports.handler = builder(handler);
