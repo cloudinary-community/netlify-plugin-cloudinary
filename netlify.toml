@@ -1,12 +1,12 @@
 [build]
-  command = "yarn build"
-  publish = ".next"
+  command = "cd demo && yarn && yarn build"
+  publish = "demo/.next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 [[plugins]]
-  package = "../"
+  package = "."
 
   [plugins.inputs]
   cloudName = "colbycloud"
