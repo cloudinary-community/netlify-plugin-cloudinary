@@ -25,3 +25,26 @@ function determineRemoteUrl(url, host) {
 }
 
 module.exports.determineRemoteUrl = determineRemoteUrl;
+
+/**
+ * getQueryParams
+ */
+
+function getQueryParams(url) {
+  if ( typeof url !== 'string') {
+    throw new Error('Can not getQueryParams. Invalid URL');
+  }
+
+  const params = {};
+
+  const urlSegments = url.split('?');
+
+  urlSegments[1] && urlSegments[1].split('&').forEach(segment => {
+    const [key, value] = segment.split('=');
+    params[key] = value;
+  });
+
+  return params;
+}
+
+module.exports.getQueryParams = getQueryParams;

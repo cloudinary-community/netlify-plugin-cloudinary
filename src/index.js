@@ -1,15 +1,91 @@
-const fs = require('fs').promises;
+const fs = require('fs-extra')
+const path = require('path');
 const glob = require('glob');
+const ncc = require('@vercel/ncc');
 
-const { getCloudinary, updateHtmlImagesToCloudinary } = require('./lib/cloudinary');
+const { configureCloudinary, updateHtmlImagesToCloudinary } = require('./lib/cloudinary');
+const { PREFIX, PUBLIC_ASSET_PATH } = require('./data/cloudinary');
+
+const CLOUDINARY_MEDIA_FUNCTIONS = ['images'];
 
 /**
  * TODO
  * - Handle srcset
- * - Delivery type for redirect via Netlify redirects
  */
 
 module.exports = {
+
+  async onBuild({ netlifyConfig, constants, inputs }) {
+    const { FUNCTIONS_SRC, INTERNAL_FUNCTIONS_SRC } = constants;
+    const { uploadPreset, deliveryType, folder = process.env.SITE_NAME } = inputs;
+
+    const cloudName = process.env.CLOUDINARY_CLOUD_NAME || inputs.cloudName;
+
+    if ( !cloudName ) {
+      throw new Error('Cloudinary Cloud Name required. Please set cloudName input or use environment variable CLOUDINARY_CLOUD_NAME');
+    }
+
+    const functionsPath = INTERNAL_FUNCTIONS_SRC || FUNCTIONS_SRC;
+
+    // Copy all of the templates over including the functions to deploy
+
+    const functionTemplatesPath = path.join(__dirname, 'templates/functions');
+    const functionTemplates = await fs.readdir(functionTemplatesPath);
+
+    try {
+      await Promise.all(functionTemplates.map(async templateFileName => {
+        const bundle = await ncc(path.join(functionTemplatesPath, templateFileName));
+        const { name, base } = path.parse(templateFileName);
+        const templateDirectory = path.join(functionsPath, name);
+        const filePath = path.join(templateDirectory, base);
+
+        await fs.ensureDir(templateDirectory);
+        await fs.writeFile(filePath, bundle.code, 'utf8');
+      }));
+    } catch(e) {
+      console.log('Failed to generate templates:', e);
+      throw e;
+    }
+
+    // Configure reference parameters for Cloudinary delivery to attach to redirect
+
+    const params = {
+      uploadPreset,
+      deliveryType,
+      cloudName,
+      folder
+    }
+
+    const paramsString = Object.keys(params)
+      .filter(key => typeof params[key] !== 'undefined')
+      .map(key => `${key}=${encodeURIComponent(params[key])}`)
+      .join('&');
+
+    // Redirect any requests that hits /[media type]/* to a serverless function
+
+    CLOUDINARY_MEDIA_FUNCTIONS.forEach(mediaName => {
+      const functionName = `${PREFIX}_${mediaName}`;
+      const mediaPathSplat = `/${mediaName}/:splat`;
+
+      netlifyConfig.redirects.unshift({
+        from: path.join(PUBLIC_ASSET_PATH, mediaName, '*'),
+        to: mediaPathSplat,
+        status: 200,
+        force: true
+      });
+
+      netlifyConfig.redirects.unshift({
+        from: `/${mediaName}/*`,
+        to: `/.netlify/functions/${functionName}?path=${mediaPathSplat}&${paramsString}`,
+        status: 302,
+        force: true,
+      });
+    });
+
+  },
+
+  // Post build looks through all of the output HTML and rewrites any src attributes to use a cloudinary URL
+  // This only solves on-page references until any JS refreshes the DOM
 
   async onPostBuild({ constants, inputs }) {
     const { PUBLISH_DIR } = constants;
@@ -19,6 +95,14 @@ module.exports = {
       folder = process.env.SITE_NAME
     } = inputs;
 
+    const host = process.env.DEPLOY_PRIME_URL;
+
+    if ( !host ) {
+      console.log('Can not determine Netlify host, not proceeding with on-page image replacement.');
+      console.log('Note: the Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
+      return;
+    }
+
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME || inputs.cloudName;
     const apiKey = process.env.CLOUDINARY_API_KEY;
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
@@ -27,12 +111,10 @@ module.exports = {
       throw new Error('Cloudinary Cloud Name required. Please use environment variable CLOUDINARY_CLOUD_NAME');
     }
 
-    const cloudinary = getCloudinary();
-
-    cloudinary.config({
-      cloud_name: cloudName,
-      api_key: apiKey,
-      api_secret: apiSecret
+    configureCloudinary({
+      cloudName,
+      apiKey,
+      apiSecret
     });
 
     // Find all HTML source files in the publish directory
@@ -47,7 +129,7 @@ module.exports = {
         uploadPreset,
         folder,
         localDir: PUBLISH_DIR,
-        remoteHost: process.env.DEPLOY_PRIME_URL
+        remoteHost: host
       });
 
       await fs.writeFile(page, html);

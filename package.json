@@ -1,6 +1,6 @@
 {
   "name": "netlify-plugin-cloudinary",
-  "version": "0.0.9",
+  "version": "0.0.10-beta.6",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -13,7 +13,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@vercel/ncc": "^0.33.1",
     "cloudinary": "^1.27.1",
+    "fs-extra": "^10.0.0",
     "glob": "^7.2.0",
     "jsdom": "^18.1.1",
     "node-fetch": "2"
