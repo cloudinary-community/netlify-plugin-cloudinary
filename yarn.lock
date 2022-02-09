@@ -487,6 +487,13 @@
     "@types/yargs" "^16.0.0"
     chalk "^4.0.0"
 
+"@netlify/functions@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@netlify/functions/-/functions-0.11.0.tgz#224f3bba53809b364d36377ad0b2d3de594f994d"
+  integrity sha512-+WWX081UCkLZYkfh1Ru+PH5HTujNXugeskATGhZLTyS1U3Cqh2gYLArdG1a/vU8WWopu/wjpxEOdWq8/T5Nw5Q==
+  dependencies:
+    is-promise "^4.0.0"
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.8.3.tgz#3802ddd21a50a949b6721ddd72da36e67e7f1b2d"
@@ -1391,6 +1398,11 @@ is-potential-custom-element-name@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/is-potential-custom-element-name/-/is-potential-custom-element-name-1.0.1.tgz#171ed6f19e3ac554394edf78caa05784a45bebb5"
   integrity sha512-bCYeRA2rVibKZd+s2625gGnGF/t7DSqDs4dP7CrLA1m7jKWz6pps0LpYLJN8Q64HtmPKJ1hrN3nzPNKFEKOUiQ==
+
+is-promise@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/is-promise/-/is-promise-4.0.0.tgz#42ff9f84206c1991d26debf520dd5c01042dd2f3"
+  integrity sha512-hvpoI6korhJMnej285dSg6nu1+e6uxs7zG3BYAm5byqDsgJNWwxzM6z6iZiAgQR4TJ30JmBTOwqZUw3WlyH3AQ==
 
 is-stream@^2.0.0:
   version "2.0.1"
