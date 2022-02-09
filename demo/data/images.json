@@ -1,0 +1,50 @@
+[
+  {
+    "width": 2376,
+    "height": 1574,
+    "src": "/images/beach.jpeg",
+    "title": "Beach"
+  },
+  {
+    "width": 1364,
+    "height": 1705,
+    "src": "/images/city.jpeg",
+    "title": "City"
+  },
+  {
+    "width": 2344,
+    "height": 1560,
+    "src": "/images/earth.jpeg",
+    "title": "Earth"
+  },
+  {
+    "width": 2340,
+    "height": 1560,
+    "src": "/images/galaxy.jpeg",
+    "title": "Galaxy"
+  },
+  {
+    "width": 2148,
+    "height": 1611,
+    "src": "/images/iceberg.jpeg",
+    "title": "Iceberg"
+  },
+  {
+    "width": 1364,
+    "height": 1705,
+    "src": "/images/jungle.jpeg",
+    "title": "Jungle"
+  },
+  {
+    "width": 2340,
+    "height": 1561,
+    "src": "/images/mountain.jpeg",
+    "title": "Mountain"
+  },
+  {
+    "width": 2340,
+    "height": 1560,
+    "src": "/images/waterfall.jpeg",
+    "title": "Waterfall"
+  }
+]

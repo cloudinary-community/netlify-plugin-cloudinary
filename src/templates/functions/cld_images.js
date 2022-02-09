@@ -1,15 +1,14 @@
 const { getQueryParams } = require('../../lib/util');
-const { getCloudinary, getCloudinaryUrl } = require('../../lib/cloudinary');
+const { configureCloudinary, getCloudinaryUrl } = require('../../lib/cloudinary');
+const { PUBLIC_ASSET_PATH } = require('../../data/cloudinary');
 
 exports.handler = async function (event, context) {
-  const { rawUrl } = event;
+  const { rawUrl, headers } = event;
+  const { host } = headers;
 
-  const rawUrlSegments = rawUrl.split('.netlify/functions/cld_images');
-  const endpoint = rawUrlSegments[0].replace(/\/$/, '');
-  const pathSegments = rawUrlSegments[1].split('?');
-  const imagePath = `/cld-assets/images${pathSegments[0]}`;
-
-  const { deliveryType, uploadPreset, folder } = getQueryParams(rawUrl);
+  const { deliveryType, uploadPreset, folder, path, ...queryParams } = getQueryParams(rawUrl);
+  const mediaPath = `/${PUBLIC_ASSET_PATH}/${path}`;
+  const remoteUrl = `https://${host}${mediaPath}`;
 
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME || queryParams.cloudName;
   const apiKey = process.env.CLOUDINARY_API_KEY;
@@ -19,13 +18,11 @@ exports.handler = async function (event, context) {
     throw new Error('Cloudinary Cloud Name required. Please set cloudName input or use environment variable CLOUDINARY_CLOUD_NAME');
   }
 
-  getCloudinary({
+  configureCloudinary({
     cloudName,
     apiKey,
     apiSecret
   });
-
-  const remoteUrl = `${endpoint}${imagePath}`;
 
   const cloudinaryUrl = await getCloudinaryUrl({
     deliveryType,
@@ -33,17 +30,6 @@ exports.handler = async function (event, context) {
     path: remoteUrl,
     uploadPreset
   });
-
-  console.log({
-    rawUrl,
-    pathSegments,
-    imagePath,
-    cloudName,
-    endpoint,
-    imagePath,
-    remoteUrl,
-    cloudinaryUrl
-  })
 
   return {
     statusCode: 302,
