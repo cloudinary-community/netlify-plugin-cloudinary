@@ -136,3 +136,19 @@ Inside your Netlify config:
   cloudName = "[Your Cloudinary Cloud Name]"
   imagesPath = "/my-path"
 ```
+
+## How does it work?
+
+### Delivery Part 1: Replacing all static, on-page images with Cloudinary URLs
+
+During the Netlify build process, the plugin is able to tap into the `onPostBuild` hook where we use [jsdom](https://github.com/jsdom/jsdom) to create a node-based representation of the DOM for each output HTML file, then walk through each node, and if it's an image, we replace the source with a Cloudinary URL.
+
+Depending on the configuration, we'll either use the full URL for that image with the [Cloudinary fetch API](https://cloudinary.com/documentation/fetch_remote_images) or alternatively that image will be [uploaded](https://cloudinary.com/documentation/upload_images), where then it will be served by public ID from the Cloudinary account.
+
+While this works great for a lot of cases and in particular the first load of that page, using a framework with clientside routing or features that mutate the DOM may prevent that Cloudinary URL from persisting, making all of that hard work disappear, meaning it will be served from the Netlify CDN or original remote source (which is fine, but that leads us to Part 2).
+
+### Delivery Part 2: Serving all assets from the /images directory from Cloudinary
+
+To provide comprehensive coverage of images being served from Cloudinary, we take advantage of Netlify's dynamic redirects and serverless functions to map any image being served from the /images directory (or the configured `imagesPath`), redirect it to a serverless function, which then gets redirected to a Cloudinary URL.
+
+Through this process, we're still able to afford the same option of using either the fetch or upload API depending on preference, where the latter would be uploaded if it's a new asset within the serverless function.
