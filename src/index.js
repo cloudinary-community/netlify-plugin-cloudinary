@@ -42,6 +42,10 @@ module.exports = {
     const functionTemplatesPath = path.join(__dirname, 'templates/functions');
     const functionTemplates = await fs.readdir(functionTemplatesPath);
 
+    if ( !Array.isArray(functionTemplates) || functionTemplates.length == 0 ) {
+      throw new Error(`Failed to generate templates: can not find function templates in ${functionTemplatesPath}`);
+    }
+
     try {
       await Promise.all(functionTemplates.map(async templateFileName => {
         const bundle = await ncc(path.join(functionTemplatesPath, templateFileName));
@@ -53,8 +57,7 @@ module.exports = {
         await fs.writeFile(filePath, bundle.code, 'utf8');
       }));
     } catch(e) {
-      console.log('Failed to generate templates:', e);
-      throw e;
+      throw new Error(`Failed to generate templates: ${e}`);
     }
 
     // Configure reference parameters for Cloudinary delivery to attach to redirect
