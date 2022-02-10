@@ -137,7 +137,7 @@ Inside your Netlify config:
   imagesPath = "/my-path"
 ```
 
-## How does it work?
+## ⚙️ How does it work?
 
 ### Delivery Part 1: Replacing all static, on-page images with Cloudinary URLs
 
