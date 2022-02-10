@@ -6,7 +6,13 @@ const ncc = require('@vercel/ncc');
 const { configureCloudinary, updateHtmlImagesToCloudinary } = require('./lib/cloudinary');
 const { PREFIX, PUBLIC_ASSET_PATH } = require('./data/cloudinary');
 
-const CLOUDINARY_MEDIA_FUNCTIONS = ['images'];
+const CLOUDINARY_MEDIA_FUNCTIONS = [
+  {
+    name: 'images',
+    inputKey: 'imagesPath',
+    path: '/images'
+  }
+];
 
 /**
  * TODO
@@ -17,7 +23,11 @@ module.exports = {
 
   async onBuild({ netlifyConfig, constants, inputs }) {
     const { FUNCTIONS_SRC, INTERNAL_FUNCTIONS_SRC } = constants;
-    const { uploadPreset, deliveryType, folder = process.env.SITE_NAME } = inputs;
+    const {
+      deliveryType,
+      folder = process.env.SITE_NAME,
+      uploadPreset,
+    } = inputs;
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME || inputs.cloudName;
 
@@ -63,19 +73,20 @@ module.exports = {
 
     // Redirect any requests that hits /[media type]/* to a serverless function
 
-    CLOUDINARY_MEDIA_FUNCTIONS.forEach(mediaName => {
+    CLOUDINARY_MEDIA_FUNCTIONS.forEach(({ name: mediaName, inputKey, path: defaultPath }) => {
+      const mediaPath = inputs[inputKey] || defaultPath;
+      const mediaPathSplat = path.join(mediaPath, ':splat');
       const functionName = `${PREFIX}_${mediaName}`;
-      const mediaPathSplat = `/${mediaName}/:splat`;
 
       netlifyConfig.redirects.unshift({
-        from: path.join(PUBLIC_ASSET_PATH, mediaName, '*'),
+        from: path.join(PUBLIC_ASSET_PATH, mediaPath, '*'),
         to: mediaPathSplat,
         status: 200,
         force: true
       });
 
       netlifyConfig.redirects.unshift({
-        from: `/${mediaName}/*`,
+        from: path.join(mediaPath, '*'),
         to: `/.netlify/functions/${functionName}?path=${mediaPathSplat}&${paramsString}`,
         status: 302,
         force: true,
@@ -98,7 +109,7 @@ module.exports = {
     const host = process.env.DEPLOY_PRIME_URL;
 
     if ( !host ) {
-      console.log('Can not determine Netlify host, not proceeding with on-page image replacement.');
+      console.warn('Can not determine Netlify host, not proceeding with on-page image replacement.');
       console.log('Note: the Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
       return;
     }

@@ -43,6 +43,7 @@ By default, your images will served via the [fetch delivery method](https://clou
 |-----------------|----------|-------------|
 | cloudName       | false*   | Cloudinary Cloud Name |
 | deliveryType    | false    | The method in which Cloudinary stores and delivers images (Ex: fetch, upload) |
+| imagePath       | false    | Local path application serves image assets from |
 | folder          | false    | Folder all media will be stored in. Defaults to Netlify site name |
 | uploadPreset    | false    | Defined set of asset upload defaults in Cloudinary |
 
