@@ -121,3 +121,18 @@ CLOUDINARY_API_SECRET="[Your Cloudinary API Secret]"
 ```
 
 Learn more about [signed uploads](https://cloudinary.com/documentation/upload_images#uploading_assets_to_the_cloud).
+
+### Customizing where your images are served from
+
+By default, the plugin will attempt to serve any thing served from /images as Cloudinary paths. This can be customized by passing in the `imagesPath` input.
+
+Inside your Netlify config:
+
+```toml
+[[plugins]]
+  package = "netlify-plugin-cloudinary"
+
+  [plugins.inputs]
+  cloudName = "[Your Cloudinary Cloud Name]"
+  imagesPath = "/my-path"
+```
