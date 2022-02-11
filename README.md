@@ -38,7 +38,7 @@ yarn add netlify-plugin-cloudinary
   cloudName = "<Your Cloud Name>"
 ```
 
-By default, your images will served via the [fetch delivery method](https://cloudinary.com/documentation/fetch_remote_images).
+By default, your images will served via the [fetch delivery type](https://cloudinary.com/documentation/fetch_remote_images).
 
 ## 🛠 Configuration
 
@@ -87,7 +87,7 @@ CLOUDINARY_CLOUD_NAME="<Your Cloud Name>"
 
 Learn how to [set environment variables with Netlify](https://docs.netlify.com/configure-builds/environment-variables/).
 
-### Changing your Delivery Method
+### Changing your Delivery Type
 
 **fetch**
 
