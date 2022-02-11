@@ -6,7 +6,8 @@ Optimize and serve all images served in your Netlify site deploy with [Cloudinar
 
 - [Getting Started](#%EF%B8%8F-getting-started)
 - [Configuration](#-configuration)
-- [How it Works](#%EF%B8%8F-how-it-works)
+- [How It Works](#%EF%B8%8F-how-it-works)
+- [Development](#-development)
 
 ## ⚡️ Getting Started
 
@@ -39,7 +40,7 @@ yarn add netlify-plugin-cloudinary
 
 By default, your images will served via the [fetch delivery method](https://cloudinary.com/documentation/fetch_remote_images).
 
-## 🧰 Configuration
+## 🛠 Configuration
 
 ### Plugin Inputs
 
@@ -167,7 +168,7 @@ To provide comprehensive coverage of images being served from Cloudinary, we tak
 
 Through this process, we're still able to afford the same option of using either the fetch or upload API depending on preference, where the latter would be uploaded if it's a new asset within the serverless function.
 
-## Development
+## 🧰 Development
 
 ### Plugin
 
@@ -195,6 +196,14 @@ Which will combine the build and deploy contexts and run through the full proces
 ### Demo
 
 The repository additionally includes a demo which uses the plugin. The demo is a simple Next.js application that lows a few images statically and those same images in a separate list once the page loads. This helps us test both the on-page image replacement and the redirecting of the images directory.
+
+You can link this project to your Netlify account for testing purposes by creating a new Netlify site in the root of this project and linking it to that new site.
+
+Once linked, you can then run the build and deploy process with:
+
+```
+netlify deploy --build
+```
 
 ### Tests
 
