@@ -208,3 +208,9 @@ netlify deploy --build
 ### Tests
 
 Tests require all environment variables to be actively set in order to pass. See [configuration](#-configuration) above to see which variables need to be set.
+
+Once set, tests can be ran with:
+
+```
+yarn test
+```
