@@ -1,7 +1,7 @@
 {
   "name": "netlify-plugin-cloudinary",
   "version": "0.0.10-beta.7",
-  "description": "",
+  "description": "Supercharge images on your Netlify site with Cloudinary!",
   "main": "src/index.js",
   "scripts": {
     "test": "jest"
