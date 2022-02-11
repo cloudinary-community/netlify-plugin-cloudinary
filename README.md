@@ -4,6 +4,10 @@ Optimize and serve all images served in your Netlify site deploy with [Cloudinar
 
 **This plugin is not officially supported by Cloudinary.**
 
+- [Getting Started](#%EF%B8%8F-getting-started)
+- [Configuration](#-configuration)
+- [How it Works](#%EF%B8%8F-how-it-works)
+
 ## ⚡️ Getting Started
 
 - Sign up for a free [Cloudinary](https://cloudinary.com/) account.
@@ -137,7 +141,7 @@ Inside your Netlify config:
   imagesPath = "/my-path"
 ```
 
-## ⚙️ How does it work?
+## ⚙️ How It Works
 
 ### Delivery Part 1: Replacing all static, on-page images with Cloudinary URLs
 
