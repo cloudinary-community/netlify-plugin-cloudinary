@@ -93,7 +93,7 @@ Learn how to [set environment variables with Netlify](https://docs.netlify.com/c
 
 Default - no additional configuration needed.
 
-Learn more about using delivering remote images with [fetch](https://cloudinary.com/documentation/fetch_remote_images).
+The fetch method allows you to use Cloudinary delivery by providing a remote URL. Learn more about using delivering remote images with [fetch](https://cloudinary.com/documentation/fetch_remote_images).
 
 **upload - Unsigned**
 
@@ -111,7 +111,7 @@ Inside your Netlify config:
   uploadPreset = "[Your Cloudinary Upload Preset]"
 ```
 
-Learn more about [unsigned uploads](https://cloudinary.com/documentation/upload_images#unsigned_upload).
+Uploading media to Cloudinary gives you more flexibility with your media upon delivery. Learn more about [unsigned uploads](https://cloudinary.com/documentation/upload_images#unsigned_upload).
 
 **upload - Signed**
 
@@ -135,7 +135,7 @@ CLOUDINARY_API_KEY="[Your Cloudinary API Key]"
 CLOUDINARY_API_SECRET="[Your Cloudinary API Secret]"
 ```
 
-Learn more about [signed uploads](https://cloudinary.com/documentation/upload_images#uploading_assets_to_the_cloud).
+Uploading media to Cloudinary gives you more flexibility with your media upon delivery. Learn more about [signed uploads](https://cloudinary.com/documentation/upload_images#uploading_assets_to_the_cloud).
 
 ### Customizing where your images are served from
 
