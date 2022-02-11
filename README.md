@@ -43,15 +43,25 @@ By default, your images will served via the [fetch delivery method](https://clou
 
 ### Plugin Inputs
 
-| Name            | Required | Description |
-|-----------------|----------|-------------|
-| cloudName       | false*   | Cloudinary Cloud Name |
-| deliveryType    | false    | The method in which Cloudinary stores and delivers images (Ex: fetch, upload) |
-| imagePath       | false    | Local path application serves image assets from |
-| folder          | false    | Folder all media will be stored in. Defaults to Netlify site name |
-| uploadPreset    | false    | Defined set of asset upload defaults in Cloudinary |
+| Name            | Required | Example   | Description |
+|-----------------|----------|-----------| ------------|
+| cloudName       | No*      | mycloud   | Cloudinary Cloud Name |
+| deliveryType    | No       | fetch     | The method in which Cloudinary stores and delivers images (Ex: fetch, upload) |
+| imagePath       | No       | /assets   | Local path application serves image assets from |
+| folder          | No       | myfolder  | Folder all media will be stored in. Defaults to Netlify site name |
+| uploadPreset    | No       | my-preset | Defined set of asset upload defaults in Cloudinary |
 
 *Cloud Name must be set as an environment variable if not as an input
+
+### Environment Variables
+
+| Name                   | Required | Example  | Description |
+|------------------------|----------|----------|-------------|
+| CLOUDINARY_CLOUD_NAME  | No*      | mycloud  | Cloudinary Cloud Name |
+| CLOUDINARY_API_KEY     | No       | 1234     | Cloudinary API Key |
+| CLOUDINARY_API_SECRET  | No       | abcd1234 | Cloudinary API Secret |
+
+*Cloud Name must be set as an input variable if not as an environment variable
 
 ### Setting your Cloud Name
 
@@ -156,3 +166,36 @@ While this works great for a lot of cases and in particular the first load of th
 To provide comprehensive coverage of images being served from Cloudinary, we take advantage of Netlify's dynamic redirects and serverless functions to map any image being served from the /images directory (or the configured `imagesPath`), redirect it to a serverless function, which then gets redirected to a Cloudinary URL.
 
 Through this process, we're still able to afford the same option of using either the fetch or upload API depending on preference, where the latter would be uploaded if it's a new asset within the serverless function.
+
+## Development
+
+### Plugin
+
+To actively develop with the plugin, you need to be able to run a Netlify build and deploy.
+
+You can do this by pushing a site that uses this plugin to Netlify or you can use the [Netlify CLI](https://docs.netlify.com/cli/get-started/) locally (recommended).
+
+You can reference the plugin locally in your `netlify.toml` by specifying the directory the plugin is in relative to your project, for example:
+```
+[[plugins]]
+  package = "../netlify-plugin-cloudinary"
+```
+
+On the locally linked Netlify project, you can then run:
+
+```
+netlify deploy --build
+```
+
+Which will combine the build and deploy contexts and run through the full process, generating a preview URL.
+
+#### Caveats
+* The Netlify CLI doesn't support all input and environment variables for build plugins, primarily `process.env.DEPLOY_PRIME_URL` meaning the `onPostBuild` image replacement will not occur locally.
+
+### Demo
+
+The repository additionally includes a demo which uses the plugin. The demo is a simple Next.js application that lows a few images statically and those same images in a separate list once the page loads. This helps us test both the on-page image replacement and the redirecting of the images directory.
+
+### Tests
+
+Tests require all environment variables to be actively set in order to pass. See [configuration](#-configuration) above to see which variables need to be set.
