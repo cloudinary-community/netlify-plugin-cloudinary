@@ -15,7 +15,7 @@ exports.handler = async function (event, context) {
   const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
   if ( !cloudName ) {
-    throw new Error('Cloudinary Cloud Name required. Please set cloudName input or use environment variable CLOUDINARY_CLOUD_NAME');
+    throw new Error('A Cloudinary Cloud Name is required. Please set cloudName input or use an environment variable CLOUDINARY_CLOUD_NAME');
   }
 
   configureCloudinary({
