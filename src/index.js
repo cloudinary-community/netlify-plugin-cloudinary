@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const path = require('path');
 const glob = require('glob');
 
-const { configureCloudinary, updateHtmlImagesToCloudinary } = require('./lib/cloudinary');
+const { configureCloudinary, updateHtmlImagesToCloudinary, getCloudinaryUrl } = require('./lib/cloudinary');
 const { PUBLIC_ASSET_PATH } = require('./data/cloudinary');
 
 const CLOUDINARY_MEDIA_FUNCTIONS = [
