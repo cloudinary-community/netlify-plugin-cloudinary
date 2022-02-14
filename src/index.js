@@ -57,7 +57,7 @@ module.exports = {
     await Promise.all(imagesFiles.map(async file => {
       const filePath = file.replace(PUBLISH_DIR, '');
 
-      const cldAssetPath = path.join(PUBLIC_ASSET_PATH, filePath);
+      const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, filePath)}`;
       const cldAssetUrl = `${host}/${cldAssetPath}`;
 
       const assetRedirectUrl = await getCloudinaryUrl({
