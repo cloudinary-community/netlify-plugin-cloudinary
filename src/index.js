@@ -51,7 +51,7 @@ module.exports = {
       netlifyConfig.redirects.unshift({
         from: `${filePath}*`,
         to: `https://res.cloudinary.com/colbycloud/image/fetch/f_auto,q_auto/${process.env.DEPLOY_PRIME_URL}/${path.join(PUBLIC_ASSET_PATH, filePath)}:splat`,
-        status: 200,
+        status: 302,
         force: true
       });
 
