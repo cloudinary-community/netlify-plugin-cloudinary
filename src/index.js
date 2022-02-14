@@ -22,7 +22,7 @@ const CLOUDINARY_MEDIA_FUNCTIONS = [
 module.exports = {
 
   async onBuild({ netlifyConfig, constants, inputs }) {
-    const { FUNCTIONS_SRC, INTERNAL_FUNCTIONS_SRC } = constants;
+    const { FUNCTIONS_SRC, INTERNAL_FUNCTIONS_SRC, PUBLISH_DIR } = constants;
     const {
       deliveryType,
       folder = process.env.SITE_NAME,
@@ -34,6 +34,64 @@ module.exports = {
     if ( !cloudName ) {
       throw new Error('Cloudinary Cloud Name required. Please set cloudName input or use environment variable CLOUDINARY_CLOUD_NAME');
     }
+
+    const imagesDirectory = glob.sync(`${PUBLISH_DIR}/images/**/*`);
+    const imagesFiles = imagesDirectory.filter(file => !!path.extname(file));
+
+    imagesFiles.forEach(file => {
+      const filePath = file.replace(PUBLISH_DIR, '');
+
+      netlifyConfig.redirects.unshift({
+        from: `${path.join(PUBLIC_ASSET_PATH, filePath)}*`,
+        to: `${filePath}:splat`,
+        status: 200,
+        force: true
+      });
+
+      netlifyConfig.redirects.unshift({
+        from: `${filePath}*`,
+        to: `https://res.cloudinary.com/colbycloud/image/fetch/f_auto,q_auto/${process.env.DEPLOY_PRIME_URL}/${path.join(PUBLIC_ASSET_PATH, filePath)}:splat`,
+        status: 200,
+        force: true
+      });
+
+      // netlifyConfig.redirects.unshift({
+      //   from: `${filePath}*`,
+      //   to: `/.netlify/functions/${functionName}?path=${mediaPathSplat}&${paramsString}`,
+      //   status: 302,
+      //   force: true,
+      // });
+    })
+
+    return;
+
+    CLOUDINARY_MEDIA_FUNCTIONS.forEach(({ name: mediaName, inputKey, path: defaultPath }) => {
+      const mediaPath = inputs[inputKey] || defaultPath;
+      const mediaPathSplat = path.join(mediaPath, ':splat');
+      const functionName = `${PREFIX}_${mediaName}`;
+
+      netlifyConfig.redirects.unshift({
+        from: path.join(PUBLIC_ASSET_PATH, mediaPath, '*'),
+        to: mediaPathSplat,
+        status: 200,
+        force: true
+      });
+
+      netlifyConfig.redirects.unshift({
+        from: path.join(mediaPath, '*'),
+        to: `/.netlify/functions/${functionName}?path=${mediaPathSplat}&${paramsString}`,
+        status: 302,
+        force: true,
+      });
+    });
+
+
+
+
+    console.log('PUBLISH_DIR', PUBLISH_DIR);
+    console.log('imagesFiles', imagesFiles);
+
+    throw new Error('asdf');
 
     const functionsPath = INTERNAL_FUNCTIONS_SRC || FUNCTIONS_SRC;
 
