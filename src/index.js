@@ -1,10 +1,9 @@
 const fs = require('fs-extra')
 const path = require('path');
 const glob = require('glob');
-const ncc = require('@vercel/ncc');
 
 const { configureCloudinary, updateHtmlImagesToCloudinary } = require('./lib/cloudinary');
-const { PREFIX, PUBLIC_ASSET_PATH } = require('./data/cloudinary');
+const { PUBLIC_ASSET_PATH } = require('./data/cloudinary');
 
 const CLOUDINARY_MEDIA_FUNCTIONS = [
   {
@@ -22,27 +21,54 @@ const CLOUDINARY_MEDIA_FUNCTIONS = [
 module.exports = {
 
   async onBuild({ netlifyConfig, constants, inputs }) {
-    const { FUNCTIONS_SRC, INTERNAL_FUNCTIONS_SRC, PUBLISH_DIR } = constants;
+    const host = process.env.DEPLOY_PRIME_URL;
+
+    if ( !host ) {
+      console.warn('Can not determine Netlify host, not proceeding with on-page image replacement.');
+      console.log('Note: the Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
+      return;
+    }
+
+    const { PUBLISH_DIR } = constants;
+
     const {
       deliveryType,
-      folder = process.env.SITE_NAME,
       uploadPreset,
+      folder = process.env.SITE_NAME
     } = inputs;
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME || inputs.cloudName;
+    const apiKey = process.env.CLOUDINARY_API_KEY;
+    const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
     if ( !cloudName ) {
-      throw new Error('Cloudinary Cloud Name required. Please set cloudName input or use environment variable CLOUDINARY_CLOUD_NAME');
+      throw new Error('Cloudinary Cloud Name required. Please use environment variable CLOUDINARY_CLOUD_NAME');
     }
+
+    configureCloudinary({
+      cloudName,
+      apiKey,
+      apiSecret
+    });
 
     const imagesDirectory = glob.sync(`${PUBLISH_DIR}/images/**/*`);
     const imagesFiles = imagesDirectory.filter(file => !!path.extname(file));
 
-    imagesFiles.forEach(file => {
+    await Promise.all(imagesFiles.map(async file => {
       const filePath = file.replace(PUBLISH_DIR, '');
 
+      const cldAssetPath = path.join(PUBLIC_ASSET_PATH, filePath);
+      const cldAssetUrl = `${host}/${cldAssetPath}`;
+
+      const assetRedirectUrl = await getCloudinaryUrl({
+        deliveryType: 'fetch',
+        folder,
+        path: `${cldAssetUrl}:splat`,
+        uploadPreset
+      });
+
       netlifyConfig.redirects.unshift({
-        from: `${path.join(PUBLIC_ASSET_PATH, filePath)}*`,
+        from: `${cldAssetPath}*`,
         to: `${filePath}:splat`,
         status: 200,
         force: true
@@ -50,122 +76,17 @@ module.exports = {
 
       netlifyConfig.redirects.unshift({
         from: `${filePath}*`,
-        to: `https://res.cloudinary.com/colbycloud/image/fetch/f_auto,q_auto/${process.env.DEPLOY_PRIME_URL}/${path.join(PUBLIC_ASSET_PATH, filePath)}:splat`,
+        to: assetRedirectUrl,
         status: 302,
         force: true
       });
-
-      // netlifyConfig.redirects.unshift({
-      //   from: `${filePath}*`,
-      //   to: `/.netlify/functions/${functionName}?path=${mediaPathSplat}&${paramsString}`,
-      //   status: 302,
-      //   force: true,
-      // });
-    })
-
-    return;
-
-    CLOUDINARY_MEDIA_FUNCTIONS.forEach(({ name: mediaName, inputKey, path: defaultPath }) => {
-      const mediaPath = inputs[inputKey] || defaultPath;
-      const mediaPathSplat = path.join(mediaPath, ':splat');
-      const functionName = `${PREFIX}_${mediaName}`;
-
-      netlifyConfig.redirects.unshift({
-        from: path.join(PUBLIC_ASSET_PATH, mediaPath, '*'),
-        to: mediaPathSplat,
-        status: 200,
-        force: true
-      });
-
-      netlifyConfig.redirects.unshift({
-        from: path.join(mediaPath, '*'),
-        to: `/.netlify/functions/${functionName}?path=${mediaPathSplat}&${paramsString}`,
-        status: 302,
-        force: true,
-      });
-    });
-
-
-
-
-    console.log('PUBLISH_DIR', PUBLISH_DIR);
-    console.log('imagesFiles', imagesFiles);
-
-    throw new Error('asdf');
-
-    const functionsPath = INTERNAL_FUNCTIONS_SRC || FUNCTIONS_SRC;
-
-    // Copy all of the templates over including the functions to deploy
-
-    const functionTemplatesPath = path.join(__dirname, 'templates/functions');
-    const functionTemplates = await fs.readdir(functionTemplatesPath);
-
-    if ( !Array.isArray(functionTemplates) || functionTemplates.length == 0 ) {
-      throw new Error(`Failed to generate templates: can not find function templates in ${functionTemplatesPath}`);
-    }
-
-    try {
-      await Promise.all(functionTemplates.map(async templateFileName => {
-        const bundle = await ncc(path.join(functionTemplatesPath, templateFileName));
-        const { name, base } = path.parse(templateFileName);
-        const templateDirectory = path.join(functionsPath, name);
-        const filePath = path.join(templateDirectory, base);
-
-        await fs.ensureDir(templateDirectory);
-        await fs.writeFile(filePath, bundle.code, 'utf8');
-      }));
-    } catch(e) {
-      throw new Error(`Failed to generate templates: ${e}`);
-    }
-
-    // Configure reference parameters for Cloudinary delivery to attach to redirect
-
-    const params = {
-      uploadPreset,
-      deliveryType,
-      cloudName,
-      folder
-    }
-
-    const paramsString = Object.keys(params)
-      .filter(key => typeof params[key] !== 'undefined')
-      .map(key => `${key}=${encodeURIComponent(params[key])}`)
-      .join('&');
-
-    // Redirect any requests that hits /[media type]/* to a serverless function
-
-    CLOUDINARY_MEDIA_FUNCTIONS.forEach(({ name: mediaName, inputKey, path: defaultPath }) => {
-      const mediaPath = inputs[inputKey] || defaultPath;
-      const mediaPathSplat = path.join(mediaPath, ':splat');
-      const functionName = `${PREFIX}_${mediaName}`;
-
-      netlifyConfig.redirects.unshift({
-        from: path.join(PUBLIC_ASSET_PATH, mediaPath, '*'),
-        to: mediaPathSplat,
-        status: 200,
-        force: true
-      });
-
-      netlifyConfig.redirects.unshift({
-        from: path.join(mediaPath, '*'),
-        to: `/.netlify/functions/${functionName}?path=${mediaPathSplat}&${paramsString}`,
-        status: 302,
-        force: true,
-      });
-    });
-
+    }));
   },
 
   // Post build looks through all of the output HTML and rewrites any src attributes to use a cloudinary URL
   // This only solves on-page references until any JS refreshes the DOM
 
   async onPostBuild({ constants, inputs }) {
-    const { PUBLISH_DIR } = constants;
-    const {
-      deliveryType,
-      uploadPreset,
-      folder = process.env.SITE_NAME
-    } = inputs;
 
     const host = process.env.DEPLOY_PRIME_URL;
 
@@ -174,6 +95,13 @@ module.exports = {
       console.log('Note: the Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
       return;
     }
+
+    const { PUBLISH_DIR } = constants;
+    const {
+      deliveryType,
+      uploadPreset,
+      folder = process.env.SITE_NAME
+    } = inputs;
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME || inputs.cloudName;
     const apiKey = process.env.CLOUDINARY_API_KEY;
