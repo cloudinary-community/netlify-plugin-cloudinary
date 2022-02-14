@@ -24,8 +24,8 @@ module.exports = {
     const host = process.env.DEPLOY_PRIME_URL;
 
     if ( !host ) {
-      console.warn('Can not determine Netlify host, not proceeding with on-page image replacement.');
-      console.log('Note: the Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
+      console.warn('Cannot determine Netlify host, not proceeding with on-page image replacement.');
+      console.log('Note: The Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
       return;
     }
 
@@ -42,7 +42,7 @@ module.exports = {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
     if ( !cloudName ) {
-      throw new Error('Cloudinary Cloud Name required. Please use environment variable CLOUDINARY_CLOUD_NAME');
+      throw new Error('A Cloudinary Cloud Name is required. Please set cloudName input or use the environment variable CLOUDINARY_CLOUD_NAME');
     }
 
     configureCloudinary({
@@ -91,8 +91,8 @@ module.exports = {
     const host = process.env.DEPLOY_PRIME_URL;
 
     if ( !host ) {
-      console.warn('Can not determine Netlify host, not proceeding with on-page image replacement.');
-      console.log('Note: the Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
+      console.warn('Cannot determine Netlify host, not proceeding with on-page image replacement.');
+      console.log('Note: The Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
       return;
     }
 
@@ -108,7 +108,7 @@ module.exports = {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
     if ( !cloudName ) {
-      throw new Error('Cloudinary Cloud Name required. Please use environment variable CLOUDINARY_CLOUD_NAME');
+      throw new Error('A Cloudinary Cloud Name is required. Please set cloudName input or use the environment variable CLOUDINARY_CLOUD_NAME');
     }
 
     configureCloudinary({
