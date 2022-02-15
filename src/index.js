@@ -5,7 +5,7 @@ const glob = require('glob');
 const { configureCloudinary, updateHtmlImagesToCloudinary, getCloudinaryUrl } = require('./lib/cloudinary');
 const { PUBLIC_ASSET_PATH } = require('./data/cloudinary');
 
-const CLOUDINARY_MEDIA_FUNCTIONS = [
+const CLOUDINARY_ASSET_DIRECTORIES = [
   {
     name: 'images',
     inputKey: 'imagesPath',
@@ -21,7 +21,7 @@ const CLOUDINARY_MEDIA_FUNCTIONS = [
 module.exports = {
 
   async onBuild({ netlifyConfig, constants, inputs }) {
-    const host = process.env.DEPLOY_PRIME_URL;
+    const host = process.env.DEPLOY_PRIME_URL || process.env.NETLIFY_HOST;
 
     if ( !host ) {
       console.warn('Cannot determine Netlify host, not proceeding with on-page image replacement.');
@@ -51,31 +51,27 @@ module.exports = {
       apiSecret
     });
 
-    const imagesDirectory = glob.sync(`${PUBLISH_DIR}/images/**/*`);
-    const imagesFiles = imagesDirectory.filter(file => !!path.extname(file));
-
-    await Promise.all(imagesFiles.map(async file => {
-      const filePath = file.replace(PUBLISH_DIR, '');
-
-      const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, filePath)}`;
+    await Promise.all(CLOUDINARY_ASSET_DIRECTORIES.map(async ({ name: mediaName, inputKey, path: defaultPath }) => {
+      const mediaPath = inputs[inputKey] || defaultPath;
+      const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, mediaPath)}`;
       const cldAssetUrl = `${host}/${cldAssetPath}`;
 
       const assetRedirectUrl = await getCloudinaryUrl({
         deliveryType: 'fetch',
         folder,
-        path: `${cldAssetUrl}:splat`,
+        path: `${cldAssetUrl}/:splat`,
         uploadPreset
       });
 
       netlifyConfig.redirects.unshift({
         from: `${cldAssetPath}*`,
-        to: `${filePath}:splat`,
+        to: `${mediaPath}/:splat`,
         status: 200,
         force: true
       });
 
       netlifyConfig.redirects.unshift({
-        from: `${filePath}*`,
+        from: `${mediaPath}/*`,
         to: assetRedirectUrl,
         status: 302,
         force: true
