@@ -191,7 +191,7 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
     // Check to see if we have an existing asset already to pick from
     // Look at both the path and full URL
 
-    const asset = Array.isArray(assets?.images) && assets.images.find(({ publishPath, publishUrl } = {}) => {
+    const asset = assets && Array.isArray(assets.images) && assets.images.find(({ publishPath, publishUrl } = {}) => {
       return [publishPath, publishUrl].includes(imgSrc);
     });
 
