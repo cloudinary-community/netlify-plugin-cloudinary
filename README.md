@@ -2,6 +2,8 @@
 
 Optimize and serve all images served in your Netlify site deploy with [Cloudinary](https://cloudinary.com/).
 
+<img height="50" src="https://res.cloudinary.com/cloudinary-marketing/image/upload/f_auto,q_auto,h_100/v1595456749/creative_source/Logo/PNG/cloudinary_logo_blue_0720_2x.png" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="50" src="https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto,h_100/v1645122900/logos/netlify_ucvb40.png" />
+
 The Cloudinary plugin hooks into your Netlify build process and sets up images to be optimized and delivered by Cloudinary. First, the plugin will replace all of your on-page images post compilation with a Cloudinary-sourced URL giving your initial page load a huge boost by optimizing your media. To provide comprehensive coverage beyond the on-page images, any assets requested directly from your images directory will be redirected to a Cloudinary URL, whether using the Cloudinary fetch (default) or upload delivery type.
 
 **This plugin is not officially supported by Cloudinary.**
