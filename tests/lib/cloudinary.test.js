@@ -21,7 +21,7 @@ describe('lib/util', () => {
   });
 
   describe('createPublicId', () => {
-    
+
     test('should create a public ID from a remote URL', async () => {
       const mikeId = await createPublicId({ path: 'https://i.imgur.com/e6XK75j.png' });
       expect(mikeId).toEqual('e6XK75j-58e290136642a9c711afa6410b07848d');
@@ -29,11 +29,11 @@ describe('lib/util', () => {
       const lucasId = await createPublicId({ path: 'https://i.imgur.com/vtYmp1x.png' });
       expect(lucasId).toEqual('vtYmp1x-ae71a79c9c36b8d5dba872c3b274a444');
     });
-    
+
     test('should create a public ID from a local image', async () => {
       const dustinId = await createPublicId({ path: '../images/stranger-things-dustin.jpeg' });
       expect(dustinId).toEqual('stranger-things-dustin-9a2a7b1501695c50ad85c329f79fb184');
-      
+
       const elevenId = await createPublicId({ path: '../images/stranger-things-eleven.jpeg' });
       expect(elevenId).toEqual('stranger-things-eleven-c5486e412115dbeba03315959c3a6d20');
     });
@@ -41,45 +41,45 @@ describe('lib/util', () => {
   });
 
   describe('getCloudinaryUrl', () => {
-    
+
     test('should create a Cloudinary URL with delivery type of fetch from a local image', async () => {
-      const url = await getCloudinaryUrl({
+      const { cloudinaryUrl } = await getCloudinaryUrl({
         deliveryType: 'fetch',
         path: '/images/stranger-things-dustin.jpeg',
         localDir: '/tests/images',
         remoteHost: 'https://cloudinary.netlify.app'
       });
 
-      expect(url).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
+      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
     });
 
     test('should create a Cloudinary URL with delivery type of fetch from a remote image', async () => {
-      const url = await getCloudinaryUrl({
+      const { cloudinaryUrl } = await getCloudinaryUrl({
         deliveryType: 'fetch',
         path: 'https://i.imgur.com/vtYmp1x.png'
       });
 
-      expect(url).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png`);
+      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png`);
     });
-    
+
     test('should create a Cloudinary URL with delivery type of upload from a local image', async () => {
-      const url = await getCloudinaryUrl({
+      const { cloudinaryUrl } = await getCloudinaryUrl({
         deliveryType: 'upload',
         path: '/images/stranger-things-dustin.jpeg',
         localDir: 'tests',
         remoteHost: 'https://cloudinary.netlify.app'
       });
 
-      expect(url).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d`);
+      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d`);
     });
-    
+
     test('should create a Cloudinary URL with delivery type of upload from a remote image', async () => {
-      const url = await getCloudinaryUrl({
+      const { cloudinaryUrl }  = await getCloudinaryUrl({
         deliveryType: 'upload',
         path: 'https://i.imgur.com/vtYmp1x.png'
       });
 
-      expect(url).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/vtYmp1x-ae71a79c9c36b8d5dba872c3b274a444`);
+      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/vtYmp1x-ae71a79c9c36b8d5dba872c3b274a444`);
     });
 
   });
