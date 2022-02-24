@@ -17,15 +17,26 @@ tl;dr automatically serve smaller images in modern formats
 
 ## ⚡️ Getting Started
 
-- Sign up for a free [Cloudinary](https://cloudinary.com/) account.
+Before installing, make sure you're set up with a free [Cloudinary](https://cloudinary.com/) account.
 
-- Install the plugin:
+### Installing via Netlify UI
 
-```shell
-npm install netlify-plugin-cloudinary
-# or
-yarn add netlify-plugin-cloudinary
+- [Install the plugin](https://app.netlify.com/plugins/netlify-plugin-cloudinary/install) using the [Netlify Build Plugins Directory](https://app.netlify.com/plugins)
+
+<https://app.netlify.com/plugins/netlify-plugin-cloudinary/install>
+
+- Add your Cloudinary Cloud Name as a [build environment variable](https://docs.netlify.com/configure-builds/environment-variables)
+
 ```
+Name: CLOUDINARY_CLOUD_NAME
+Value: <Your Cloud Name>
+```
+
+- Trigger a new deploy!
+
+By default, your images will served via the [fetch delivery type](https://cloudinary.com/documentation/fetch_remote_images).
+
+### Filebased configuration
 
 - Add the plugin to your Netlify config:
 
@@ -45,6 +56,18 @@ yarn add netlify-plugin-cloudinary
 ```
 
 By default, your images will served via the [fetch delivery type](https://cloudinary.com/documentation/fetch_remote_images).
+
+### Installing locally
+
+- Install the plugin:
+
+```shell
+npm install netlify-plugin-cloudinary
+# or
+yarn add netlify-plugin-cloudinary
+```
+
+- Use a [file-based configuration](#filebased-configuration) to add the plugin to your builds
 
 ## 🛠 Configuration
 
