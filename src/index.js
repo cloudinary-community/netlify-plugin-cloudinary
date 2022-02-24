@@ -37,7 +37,7 @@ module.exports = {
     } = inputs;
 
     // If we're using the fetch API, we don't need to worry about uploading any
-    // of the media as itw ill all be publicly accessible, so we can skip this step
+    // of the media as it will all be publicly accessible, so we can skip this step
 
     if ( deliveryType === 'fetch' ) {
       console.log('Skipping: Delivery type set to fetch.')
