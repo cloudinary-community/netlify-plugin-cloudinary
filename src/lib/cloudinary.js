@@ -82,12 +82,14 @@ async function getCloudinaryUrl(options = {}) {
   }
 
   let fileLocation;
+  let publicId;
 
   if ( deliveryType === 'fetch' ) {
     // fetch allows us to pass in a remote URL to the Cloudinary API
     // which it will cache and serve from the CDN, but not store
 
     fileLocation = determineRemoteUrl(filePath, remoteHost);
+    publicId = fileLocation;
   } else if ( deliveryType === 'upload' ) {
     // upload will actually store the image in the Cloudinary account
     // and subsequently serve that stored image
@@ -136,10 +138,11 @@ async function getCloudinaryUrl(options = {}) {
     // Finally use the stored public ID to grab the image URL
 
     const { public_id } = results;
-    fileLocation = public_id;
+    publicId = public_id;
+    fileLocation = fullPath;
   }
 
-  const cloudinaryUrl = cloudinary.url(fileLocation, {
+  const cloudinaryUrl = cloudinary.url(publicId, {
     type: deliveryType,
     secure: true,
     transformation: [
@@ -150,7 +153,11 @@ async function getCloudinaryUrl(options = {}) {
     ]
   });
 
-  return cloudinaryUrl;
+  return {
+    sourceUrl: fileLocation,
+    cloudinaryUrl,
+    publicId
+  };
 }
 
 module.exports.getCloudinaryUrl = getCloudinaryUrl;
@@ -161,6 +168,7 @@ module.exports.getCloudinaryUrl = getCloudinaryUrl;
 
 async function updateHtmlImagesToCloudinary(html, options = {}) {
   const {
+    assets,
     deliveryType,
     uploadPreset,
     folder,
@@ -178,27 +186,44 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
 
   for ( const $img of images ) {
     let imgSrc = $img.getAttribute('src');
+    let cloudinaryUrl;
 
-    try {
-      const cloudinarySrc = await getCloudinaryUrl({
-        deliveryType,
-        folder,
-        path: imgSrc,
-        localDir,
-        uploadPreset,
-        remoteHost
-      });
+    // Check to see if we have an existing asset already to pick from
+    // Look at both the path and full URL
 
-      $img.setAttribute('src', cloudinarySrc)
-    } catch(e) {
-      const { error } = e;
-      errors.push({
-        imgSrc,
-        message: e.message || error.message
-      });
-      continue;
+    const asset = assets && Array.isArray(assets.images) && assets.images.find(({ publishPath, publishUrl } = {}) => {
+      return [publishPath, publishUrl].includes(imgSrc);
+    });
+
+    if ( asset ) {
+      cloudinaryUrl = asset.cloudinaryUrl;
     }
 
+    // If we don't have an asset and thus don't have a Cloudinary URL, create
+    // one for our asset
+
+    if ( !cloudinaryUrl ) {
+      try {
+        const { cloudinaryUrl: url } = await getCloudinaryUrl({
+          deliveryType,
+          folder,
+          path: imgSrc,
+          localDir,
+          uploadPreset,
+          remoteHost
+        });
+        cloudinaryUrl = url;
+      } catch(e) {
+        const { error } = e;
+        errors.push({
+          imgSrc,
+          message: e.message || error.message
+        });
+        continue;
+      }
+    }
+
+    $img.setAttribute('src', cloudinaryUrl)
   }
 
   return {

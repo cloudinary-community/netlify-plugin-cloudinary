@@ -5,20 +5,21 @@ on: [push, pull_request]
 jobs:
   tests:
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node: [ '12', '14', '16' ]
-        
+
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
-          
+
       - run: yarn install --frozen-lockfile
       - run: yarn test
         env:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          NETLIFY_HOST: ${{ secrets.NETLIFY_HOST }} # Used to test functionality outside of the Netlify environment
