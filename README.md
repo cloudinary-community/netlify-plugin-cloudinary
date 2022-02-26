@@ -36,7 +36,7 @@ Value: <Your Cloud Name>
 
 By default, your images will served via the [fetch delivery type](https://cloudinary.com/documentation/fetch_remote_images).
 
-### Filebased configuration
+### File-based configuration
 
 - Add the plugin to your Netlify config:
 
