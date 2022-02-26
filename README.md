@@ -67,7 +67,7 @@ npm install netlify-plugin-cloudinary
 yarn add netlify-plugin-cloudinary
 ```
 
-- Use a [file-based configuration](#filebased-configuration) to add the plugin to your builds
+- Use a [file-based configuration](#file-based-configuration) to add the plugin to your builds
 
 ## 🛠 Configuration
 
