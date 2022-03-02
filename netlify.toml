@@ -9,5 +9,5 @@
   package = "."
 
   [plugins.inputs]
-  cloudName = "colbycloud"
+  # cloudName = "colbycloud"
   # deliveryType = "upload"

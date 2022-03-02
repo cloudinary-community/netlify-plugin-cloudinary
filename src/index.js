@@ -4,6 +4,7 @@ const glob = require('glob');
 
 const { configureCloudinary, updateHtmlImagesToCloudinary, getCloudinaryUrl } = require('./lib/cloudinary');
 const { PUBLIC_ASSET_PATH } = require('./data/cloudinary');
+const { ERROR_CLOUD_NAME_REQUIRED } = require('./data/errors');
 
 const CLOUDINARY_ASSET_DIRECTORIES = [
   {
@@ -19,7 +20,7 @@ const CLOUDINARY_ASSET_DIRECTORIES = [
  */
 
 module.exports = {
-  async onPreBuild({ netlifyConfig, constants, inputs }) {
+  async onPreBuild({ netlifyConfig, constants, inputs, utils }) {
     const host = process.env.DEPLOY_PRIME_URL || process.env.NETLIFY_HOST;
 
     if ( !host ) {
@@ -50,7 +51,8 @@ module.exports = {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
     if ( !cloudName ) {
-      throw new Error('A Cloudinary Cloud Name is required. Please set cloudName input or use the environment variable CLOUDINARY_CLOUD_NAME');
+      utils.build.failPlugin(ERROR_CLOUD_NAME_REQUIRED);
+      return;
     }
 
     configureCloudinary({
@@ -62,34 +64,41 @@ module.exports = {
     const imagesDirectory = glob.sync(`${PUBLISH_DIR}/images/**/*`);
     const imagesFiles = imagesDirectory.filter(file => !!path.extname(file));
 
-    const images = await Promise.all(imagesFiles.map(async image => {
-      const publishPath = image.replace(PUBLISH_DIR, '');
-      const publishUrl = `${host}${publishPath}`;
-      const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, publishPath)}`;
-      const cldAssetUrl = `${host}${cldAssetPath}`;
+    let images;
 
-      const cloudinary = await getCloudinaryUrl({
-        deliveryType,
-        folder,
-        path: publishPath,
-        localDir: PUBLISH_DIR,
-        uploadPreset,
-        remoteHost: host,
-      });
+    try {
+      await Promise.all(imagesFiles.map(async image => {
+        const publishPath = image.replace(PUBLISH_DIR, '');
+        const publishUrl = `${host}${publishPath}`;
+        const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, publishPath)}`;
+        const cldAssetUrl = `${host}${cldAssetPath}`;
 
-      return {
-        publishPath,
-        publishUrl,
-        ...cloudinary
-      }
-    }));
+        const cloudinary = await getCloudinaryUrl({
+          deliveryType,
+          folder,
+          path: publishPath,
+          localDir: PUBLISH_DIR,
+          uploadPreset,
+          remoteHost: host,
+        });
+
+        return {
+          publishPath,
+          publishUrl,
+          ...cloudinary
+        }
+      }));
+    } catch(e) {
+      utils.build.failPlugin(e.message);
+      return;
+    }
 
     netlifyConfig.build.environment.CLOUDINARY_ASSETS = {
       images
     }
   },
 
-  async onBuild({ netlifyConfig, constants, inputs }) {
+  async onBuild({ netlifyConfig, constants, inputs, utils }) {
     const host = process.env.DEPLOY_PRIME_URL || process.env.NETLIFY_HOST;
 
     if ( !host ) {
@@ -111,7 +120,8 @@ module.exports = {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
     if ( !cloudName ) {
-      throw new Error('A Cloudinary Cloud Name is required. Please set cloudName input or use the environment variable CLOUDINARY_CLOUD_NAME');
+      utils.build.failPlugin(ERROR_CLOUD_NAME_REQUIRED);
+      return;
     }
 
     configureCloudinary({
@@ -177,7 +187,7 @@ module.exports = {
   // Post build looks through all of the output HTML and rewrites any src attributes to use a cloudinary URL
   // This only solves on-page references until any JS refreshes the DOM
 
-  async onPostBuild({ netlifyConfig, constants, inputs }) {
+  async onPostBuild({ netlifyConfig, constants, inputs, utils }) {
     const host = process.env.DEPLOY_PRIME_URL || process.env.NETLIFY_HOST;
 
     if ( !host ) {
@@ -198,7 +208,8 @@ module.exports = {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
     if ( !cloudName ) {
-      throw new Error('A Cloudinary Cloud Name is required. Please set cloudName input or use the environment variable CLOUDINARY_CLOUD_NAME');
+      utils.build.failPlugin(ERROR_CLOUD_NAME_REQUIRED);
+      return;
     }
 
     configureCloudinary({
