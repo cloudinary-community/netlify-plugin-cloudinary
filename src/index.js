@@ -51,7 +51,7 @@ module.exports = {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
     if ( !cloudName ) {
-      utils.build.failPlugin(ERROR_CLOUD_NAME_REQUIRED);
+      utils.build.failBuild(ERROR_CLOUD_NAME_REQUIRED);
       return;
     }
 
@@ -89,7 +89,7 @@ module.exports = {
         }
       }));
     } catch(e) {
-      utils.build.failPlugin(e.message);
+      utils.build.failBuild(e.message);
       return;
     }
 
@@ -120,7 +120,7 @@ module.exports = {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
     if ( !cloudName ) {
-      utils.build.failPlugin(ERROR_CLOUD_NAME_REQUIRED);
+      utils.build.failBuild(ERROR_CLOUD_NAME_REQUIRED);
       return;
     }
 
@@ -208,7 +208,7 @@ module.exports = {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
     if ( !cloudName ) {
-      utils.build.failPlugin(ERROR_CLOUD_NAME_REQUIRED);
+      utils.build.failBuild(ERROR_CLOUD_NAME_REQUIRED);
       return;
     }
 
