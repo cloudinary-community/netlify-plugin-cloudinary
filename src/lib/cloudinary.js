@@ -5,6 +5,7 @@ const { JSDOM } = require('jsdom');
 const cloudinary = require('cloudinary').v2;
 
 const { isRemoteUrl, determineRemoteUrl } = require('./util');
+const { ERROR_CLOUD_NAME } = require('../data/errors');
 
 /**
  * getCloudinary
@@ -74,7 +75,7 @@ async function getCloudinaryUrl(options = {}) {
   const canSignUpload = apiKey && apiSecret;
 
   if ( !cloudName ) {
-    throw new Error('Cloudinary Cloud Name required.');
+    throw new Error(ERROR_CLOUD_NAME);
   }
 
   if ( deliveryType === 'upload' && !canSignUpload && !uploadPreset ) {
