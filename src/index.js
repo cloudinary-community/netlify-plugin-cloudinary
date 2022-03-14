@@ -14,13 +14,15 @@ const CLOUDINARY_ASSET_DIRECTORIES = [
   }
 ];
 
+const _cloudinaryAssets = {};
+
 /**
  * TODO
  * - Handle srcset
  */
 
 module.exports = {
-  async onPreBuild({ netlifyConfig, constants, inputs, utils }) {
+  async onPreBuild({ constants, inputs, utils }) {
     const host = process.env.DEPLOY_PRIME_URL || process.env.NETLIFY_HOST;
 
     if ( !host ) {
@@ -93,9 +95,7 @@ module.exports = {
       return;
     }
 
-    netlifyConfig.build.environment.CLOUDINARY_ASSETS = {
-      images
-    }
+    _cloudinaryAssets.images = images;
   },
 
   async onBuild({ netlifyConfig, constants, inputs, utils }) {
@@ -135,8 +135,8 @@ module.exports = {
     // for each asset uploaded
 
     if ( deliveryType === 'upload' ) {
-      await Promise.all(Object.keys(netlifyConfig.build.environment.CLOUDINARY_ASSETS).flatMap(mediaType => {
-        return netlifyConfig.build.environment.CLOUDINARY_ASSETS[mediaType].map(async asset => {
+      await Promise.all(Object.keys(_cloudinaryAssets).flatMap(mediaType => {
+        return _cloudinaryAssets[mediaType].map(async asset => {
           const { publishPath, cloudinaryUrl } = asset;
 
           netlifyConfig.redirects.unshift({
@@ -187,7 +187,7 @@ module.exports = {
   // Post build looks through all of the output HTML and rewrites any src attributes to use a cloudinary URL
   // This only solves on-page references until any JS refreshes the DOM
 
-  async onPostBuild({ netlifyConfig, constants, inputs, utils }) {
+  async onPostBuild({ constants, inputs, utils }) {
     const host = process.env.DEPLOY_PRIME_URL || process.env.NETLIFY_HOST;
 
     if ( !host ) {
@@ -226,7 +226,7 @@ module.exports = {
       const sourceHtml = await fs.readFile(page, 'utf-8');
 
       const { html, errors } = await updateHtmlImagesToCloudinary(sourceHtml, {
-        assets: netlifyConfig.build.environment.CLOUDINARY_ASSETS,
+        assets: _cloudinaryAssets,
         deliveryType,
         uploadPreset,
         folder,
