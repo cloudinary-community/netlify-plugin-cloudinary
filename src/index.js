@@ -63,6 +63,11 @@ module.exports = {
     const imagesDirectory = glob.sync(`${PUBLISH_DIR}/${imagesPath}/**/*`);
     const imagesFiles = imagesDirectory.filter(file => !!path.extname(file));
 
+    if ( imagesFiles.length === 0 ) {
+      console.warn(`No image files found in ${imagesPath}`);
+      console.log(`Did you update your images path? You can set the imagesPath input in your Netlify config.`);
+    }
+
     try {
       _cloudinaryAssets.images = await Promise.all(imagesFiles.map(async image => {
         const publishPath = image.replace(PUBLISH_DIR, '');
