@@ -78,7 +78,7 @@ yarn add netlify-plugin-cloudinary
 |-----------------|----------|-----------| ------------|
 | cloudName       | No*      | mycloud   | Cloudinary Cloud Name |
 | deliveryType    | No       | fetch     | The method in which Cloudinary stores and delivers images (Ex: fetch, upload) |
-| imagePath       | No       | /assets   | Local path application serves image assets from |
+| imagesPath       | No      | /assets   | Local path application serves image assets from |
 | folder          | No       | myfolder  | Folder all media will be stored in. Defaults to Netlify site name |
 | uploadPreset    | No       | my-preset | Defined set of asset upload defaults in Cloudinary |
 

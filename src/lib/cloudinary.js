@@ -196,7 +196,7 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
       return [publishPath, publishUrl].includes(imgSrc);
     });
 
-    if ( asset ) {
+    if ( asset && deliveryType === 'upload' ) {
       cloudinaryUrl = asset.cloudinaryUrl;
     }
 

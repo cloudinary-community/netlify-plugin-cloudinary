@@ -19,6 +19,7 @@ describe('onBuild', () => {
 
       process.env.SITE_NAME = 'cool-site';
       process.env.CLOUDINARY_CLOUD_NAME = 'testcloud';
+      process.env.NETLIFY_HOST = 'https://netlify-plugin-cloudinary.netlify.app';
 
       const deliveryType = 'fetch';
       const imagesPath = '/images';
@@ -38,7 +39,7 @@ describe('onBuild', () => {
       await onBuild({
         netlifyConfig,
         constants: {
-          PUBLISH_DIR: '.next/out/images'
+          PUBLISH_DIR: `.next/out${imagesPath}`
         },
         inputs: {
           deliveryType
@@ -60,68 +61,6 @@ describe('onBuild', () => {
       });
 
       expect(redirects[2]).toEqual(defaultRedirect);
-    });
-
-
-    test('should create redirects with upload delivery type and custom inputs', async () => {
-      const imagesFunctionName = 'cld_images';
-
-      fs.readdir.mockResolvedValue([imagesFunctionName]);
-
-      process.env.SITE_NAME = 'cool-site';
-      process.env.NETLIFY_HOST = 'https://test-netlify-site.netlify.app';
-
-      const cloudName = 'othercloud';
-      const deliveryType = 'upload';
-      const imagesPath = '/awesome';
-      const folder = 'test-folder';
-      const uploadPreset = 'my-upload-preset';
-
-      const defaultRedirect = {
-        from: '/path',
-        to: '/other-path',
-        status: 200
-      }
-
-      const redirects = [defaultRedirect];
-
-      const netlifyConfig = {
-        redirects,
-        build: {
-          environment: {
-            CLOUDINARY_ASSETS: {
-              images: [
-                {
-                  publishPath: `${imagesPath}/publicid.jpeg`,
-                  cloudinaryUrl: `https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/publicid-1234`
-                }
-              ]
-            }
-          }
-        }
-      };
-
-      await onBuild({
-        netlifyConfig,
-        constants: {
-        },
-        inputs: {
-          cloudName,
-          deliveryType,
-          imagesPath,
-          folder,
-          uploadPreset
-        }
-      });
-
-      expect(redirects[0]).toEqual({
-        from: `${netlifyConfig.build.environment.CLOUDINARY_ASSETS.images[0].publishPath}*`,
-        to: netlifyConfig.build.environment.CLOUDINARY_ASSETS.images[0].cloudinaryUrl,
-        status: 302,
-        force: true
-      });
-
-      expect(redirects[1]).toEqual(defaultRedirect);
     });
 
   });
