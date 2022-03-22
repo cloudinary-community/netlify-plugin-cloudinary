@@ -124,6 +124,8 @@ Default - no additional configuration needed.
 
 The fetch method allows you to use Cloudinary delivery by providing a remote URL. Learn more about using delivering remote images with [fetch](https://cloudinary.com/documentation/fetch_remote_images).
 
+> Note: if you are currently restricting Fetched URLs, you need to ensure your Netlify URL is listed under allowed fetch domains. Older accounts may restrict fetched images by default. Read more about [restricting the allowed fetch domains](https://cloudinary.com/documentation/fetch_remote_images#restricting_the_allowed_fetch_domains).
+
 **upload - Unsigned**
 
 Unsigned uploads require an additional [Upload Preset](https://cloudinary.com/documentation/upload_presets) set up and configured in your Cloudinary account.
