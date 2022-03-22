@@ -12,6 +12,7 @@ tl;dr automatically serve smaller images in modern formats
 
 - [Getting Started](#%EF%B8%8F-getting-started)
 - [Configuration](#-configuration)
+- [Common Questions & Issues](#%EF%B8%8F%EF%B8%8F-common-questions--issues)
 - [How It Works](#%EF%B8%8F-how-it-works)
 - [Development](#-development)
 
@@ -182,6 +183,18 @@ Inside your Netlify config:
   cloudName = "[Your Cloudinary Cloud Name]"
   imagesPath = "/my-path"
 ```
+
+## 🕵️‍♀️ Common Questions & Issues
+
+### I'm using the default settings but my images 404
+
+The plugin uses the fetch method by default and if you're receiving a 404 with a valid URL and valid Cloudinary account, you may be currently restricting fetched URLs.
+
+You have two options to resolve this: adding your Netlify domain to the list of "allowed fetch domains" and removing the fetched URL restriction.
+
+Adding your domain to the "allowed fetch domains" list is more secure by not allowing others to use your Cloudinary account with their own images. You can do this under Settings > Security > Allowed fetch domains.
+
+Alternatively, you can remove the restriction and allow all fetched images to work by going to Settings > Security > Restricted media types and unchecking the box for Fetched URL.
 
 ## ⚙️ How It Works
 
