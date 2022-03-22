@@ -21,13 +21,7 @@ const CLOUDINARY_ASSET_DIRECTORIES = [
 
 module.exports = {
   async onPreBuild({ netlifyConfig, constants, inputs, utils }) {
-    const host = process.env.DEPLOY_PRIME_URL || process.env.NETLIFY_HOST;
-
-    if ( !host ) {
-      console.warn('Cannot determine Netlify host, not proceeding with on-page image replacement.');
-      console.log('Note: The Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
-      return;
-    }
+    console.log('Collecting Cloudinary asset configurations...')
 
     const { PUBLISH_DIR } = constants;
 
@@ -69,22 +63,17 @@ module.exports = {
     try {
       await Promise.all(imagesFiles.map(async image => {
         const publishPath = image.replace(PUBLISH_DIR, '');
-        const publishUrl = `${host}${publishPath}`;
-        const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, publishPath)}`;
-        const cldAssetUrl = `${host}${cldAssetPath}`;
 
         const cloudinary = await getCloudinaryUrl({
           deliveryType,
           folder,
           path: publishPath,
           localDir: PUBLISH_DIR,
-          uploadPreset,
-          remoteHost: host,
+          uploadPreset
         });
 
         return {
           publishPath,
-          publishUrl,
           ...cloudinary
         }
       }));
@@ -96,24 +85,26 @@ module.exports = {
     netlifyConfig.build.environment.CLOUDINARY_ASSETS = {
       images
     }
+
+    console.log('Done.');
   },
 
-  async onBuild({ netlifyConfig, constants, inputs, utils }) {
+  async onBuild({ netlifyConfig, inputs, utils }) {
+    console.log('Creating redirects...');
+
     const host = process.env.DEPLOY_PRIME_URL || process.env.NETLIFY_HOST;
-
-    if ( !host ) {
-      console.warn('Cannot determine Netlify host, not proceeding with on-page image replacement.');
-      console.log('Note: The Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
-      return;
-    }
-
-    const { PUBLISH_DIR } = constants;
 
     const {
       deliveryType,
       uploadPreset,
       folder = process.env.SITE_NAME
     } = inputs;
+
+    if ( !host && deliveryType === 'fetch' ) {
+      console.warn('Cannot determine Netlify host, can not proceed with creating redirects for fetch delivery type.');
+      console.log('Note: The Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
+      return;
+    }
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME || inputs.cloudName;
     const apiKey = process.env.CLOUDINARY_API_KEY;
@@ -135,8 +126,15 @@ module.exports = {
     // for each asset uploaded
 
     if ( deliveryType === 'upload' ) {
-      await Promise.all(Object.keys(netlifyConfig.build.environment.CLOUDINARY_ASSETS).flatMap(mediaType => {
-        return netlifyConfig.build.environment.CLOUDINARY_ASSETS[mediaType].map(async asset => {
+      const assets = netlifyConfig.build.environment.CLOUDINARY_ASSETS;
+
+      if ( !assets ) {
+        utils.build.failBuild('Can not find build assets.');
+        return;
+      }
+
+      await Promise.all(Object.keys(assets).flatMap(mediaType => {
+        return assets[mediaType].map(async asset => {
           const { publishPath, cloudinaryUrl } = asset;
 
           netlifyConfig.redirects.unshift({
@@ -154,7 +152,7 @@ module.exports = {
     // path, so that we can safely allow Cloudinary to fetch the media remotely
 
     if ( deliveryType === 'fetch' ) {
-      await Promise.all(CLOUDINARY_ASSET_DIRECTORIES.map(async ({ name: mediaName, inputKey, path: defaultPath }) => {
+      await Promise.all(CLOUDINARY_ASSET_DIRECTORIES.map(async ({ inputKey, path: defaultPath }) => {
         const mediaPath = inputs[inputKey] || defaultPath;
         const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, mediaPath)}`;
         const cldAssetUrl = `${host}/${cldAssetPath}`;
@@ -182,16 +180,19 @@ module.exports = {
       }));
     }
 
+    console.log('Done.');
   },
 
   // Post build looks through all of the output HTML and rewrites any src attributes to use a cloudinary URL
   // This only solves on-page references until any JS refreshes the DOM
 
   async onPostBuild({ netlifyConfig, constants, inputs, utils }) {
+    console.log('Replacing on-page images with Cloudinary URLs...');
+
     const host = process.env.DEPLOY_PRIME_URL || process.env.NETLIFY_HOST;
 
     if ( !host ) {
-      console.warn('Cannot determine Netlify host, not proceeding with on-page image replacement.');
+      console.warn('Cannot determine Netlify host. Can not proceed with on-page image replacement.');
       console.log('Note: The Netlify CLI does not currently support the ability to determine the host locally, try deploying on Netlify.');
       return;
     }
