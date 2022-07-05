@@ -34,7 +34,7 @@ export default function Home({ images }) {
 
         <ul className={styles.description}>
           <li>
-            ✅ <a href="https://app.netlify.com/plugins/netlify-plugin-cloudinary/install">Install the plugin on Netlify</a> (or search for "cloudinary")
+            ✅ <a href="https://app.netlify.com/plugins/netlify-plugin-cloudinary/install">Install the plugin on Netlify</a> (or search for &quot;cloudinary&quot;)
           </li>
           <li>
             ✅ Add <code>CLOUDINARY_CLOUD_NAME</code> as a Build Variable
