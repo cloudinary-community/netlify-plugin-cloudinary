@@ -25,10 +25,34 @@ export default function Home({ images }) {
         </h1>
 
         <p className={styles.description}>
-          <a href="https://github.com/colbyfayock/netlify-plugin-cloudinary">https://github.com/colbyfayock/netlify-plugin-cloudinary</a>
+          Supercharge images on your Netlify site with Cloudinary!
         </p>
 
-        <div className={styles.grid}>
+        <h2 className={styles.title}>
+          Getting Started
+        </h2>
+
+        <ul className={styles.description}>
+          <li>
+            ✅ <a href="https://app.netlify.com/plugins/netlify-plugin-cloudinary/install">Install the plugin on Netlify</a> (or search for "cloudinary")
+          </li>
+          <li>
+            ✅ Add <code>CLOUDINARY_CLOUD_NAME</code> as a Build Variable
+          </li>
+          <li>
+            ✅ Trigger a new Netlify build
+          </li>
+        </ul>
+
+        <p className={styles.description}>
+          <a href="https://github.com/colbyfayock/netlify-plugin-cloudinary">More details and advanced configuration on GitHub</a>
+        </p>
+
+        <h2 className={styles.title}>
+          Images Transformed to Use Cloudinary
+        </h2>
+
+        <ul className={styles.grid}>
           {images.map(image => {
             return (
               <li key={image.src}>
@@ -36,18 +60,19 @@ export default function Home({ images }) {
               </li>
             );
           })}
-        </div>
-          {isLoaded && (
-            <div className={styles.grid}>
-              {images.map(image => {
-                return (
-                  <li key={image.src}>
-                    <img src={image.src} width={image.width} height={image.height} alt={image.title} />
-                  </li>
-                );
-              })}
-            </div>
-          )}
+        </ul>
+
+        {isLoaded && (
+          <ul className={styles.grid}>
+            {images.map(image => {
+              return (
+                <li key={image.src}>
+                  <img src={image.src} width={image.width} height={image.height} alt={image.title} />
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </main>
     </div>
   )
