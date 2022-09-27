@@ -1,8 +1,12 @@
+<img height="50" src="https://res.cloudinary.com/cloudinary-marketing/image/upload/f_auto,q_auto,h_100/v1595456749/creative_source/Logo/PNG/cloudinary_logo_blue_0720_2x.png" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="50" src="https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto,h_100/v1645122900/logos/netlify_ucvb40.png" />
+
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
 # Cloudinary Netlify Plugin
 
 Optimize and serve all images served in your Netlify site deploy with [Cloudinary](https://cloudinary.com/).
-
-<img height="50" src="https://res.cloudinary.com/cloudinary-marketing/image/upload/f_auto,q_auto,h_100/v1595456749/creative_source/Logo/PNG/cloudinary_logo_blue_0720_2x.png" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="50" src="https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto,h_100/v1645122900/logos/netlify_ucvb40.png" />
 
 The Cloudinary plugin hooks into your Netlify build process and sets up images for optimization and delivery. First, the plugin replaces all your on-page, post-compilation images with a Cloudinary-sourced URL, greatly accelerating your initial page load. Next, for comprehensive coverage, Cloudinary redirects assets requested from your images directory to a Cloudinary URL with the default fetch feature or the upload delivery type.
 
@@ -258,3 +262,14 @@ Once set, tests can be ran with:
 ```
 yarn test
 ```
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
