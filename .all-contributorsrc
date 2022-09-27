@@ -25,6 +25,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ascorbic",
+      "name": "Matt Kane",
+      "avatar_url": "https://avatars.githubusercontent.com/u/213306?v=4",
+      "profile": "http://mk.gg",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
