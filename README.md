@@ -1,6 +1,6 @@
 <img height="50" src="https://res.cloudinary.com/cloudinary-marketing/image/upload/f_auto,q_auto,h_100/v1595456749/creative_source/Logo/PNG/cloudinary_logo_blue_0720_2x.png" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="50" src="https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto,h_100/v1645122900/logos/netlify_ucvb40.png" />
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # Cloudinary Netlify Plugin
@@ -270,11 +270,15 @@ yarn test
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://colbyfayock.com/newsletter"><img src="https://avatars.githubusercontent.com/u/1045274?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Colby Fayock</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=colbyfayock" title="Code">💻</a> <a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=colbyfayock" title="Documentation">📖</a> <a href="#example-colbyfayock" title="Examples">💡</a></td>
-      <td align="center"><a href="https://github.com/Chuloo"><img src="https://avatars.githubusercontent.com/u/22301208?v=4?s=100" width="100px;" alt=""/><br /><sub><b>William</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=Chuloo" title="Code">💻</a></td>
-      <td align="center"><a href="http://mk.gg"><img src="https://avatars.githubusercontent.com/u/213306?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matt Kane</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/pulls?q=is%3Apr+reviewed-by%3Aascorbic" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center"><a href="https://colbyfayock.com/newsletter"><img src="https://avatars.githubusercontent.com/u/1045274?v=4?s=100" width="100px;" alt="Colby Fayock"/><br /><sub><b>Colby Fayock</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=colbyfayock" title="Code">💻</a> <a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=colbyfayock" title="Documentation">📖</a> <a href="#example-colbyfayock" title="Examples">💡</a></td>
+      <td align="center"><a href="https://github.com/Chuloo"><img src="https://avatars.githubusercontent.com/u/22301208?v=4?s=100" width="100px;" alt="William"/><br /><sub><b>William</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=Chuloo" title="Code">💻</a></td>
+      <td align="center"><a href="http://mk.gg"><img src="https://avatars.githubusercontent.com/u/213306?v=4?s=100" width="100px;" alt="Matt Kane"/><br /><sub><b>Matt Kane</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/pulls?q=is%3Apr+reviewed-by%3Aascorbic" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center"><a href="https://donno2048.github.io/Portfolio/"><img src="https://avatars.githubusercontent.com/u/61805754?v=4?s=100" width="100px;" alt="Elisha Hollander"/><br /><sub><b>Elisha Hollander</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=donno2048" title="Code">💻</a></td>
     </tr>
   </tbody>
+  <tfoot>
+    
+  </tfoot>
 </table>
 
 <!-- markdownlint-restore -->
