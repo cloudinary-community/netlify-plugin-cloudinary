@@ -1,5 +1,7 @@
 name: Test and release
 on: [push, pull_request]
+env:
+  CI: false
 jobs:
   tests:
     name: Test
