@@ -1,0 +1,38 @@
+name: Test and release
+on: [push, pull_request]
+jobs:
+  tests:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ '12', '14', '16' ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+      - run: yarn install --frozen-lockfile
+      - run: yarn test
+        env:
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          NETLIFY_HOST: ${{ secrets.NETLIFY_HOST }} # Used to test functionality outside of the Netlify environment
+  release:
+    name: Release
+    if: github.event_name == "push" && env.GITHUB_REF_NAME == "main"
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: yarn install --frozen-lockfile
+      - run: npx semantic-release --branches main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
