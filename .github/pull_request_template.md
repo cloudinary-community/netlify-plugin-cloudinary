@@ -16,8 +16,8 @@ Fixes [Issue #]
 ---
 # Checklist:
 - [ ] I have followed the contributing guidelines of this project as mentioned in [CONTRIBUTING.md](/CONTRIBUTING.md)
-- [ ] I have created an [issue](https://github.com/colbyfayock/next-cloudinary/issues) ticket for this PR
-- [ ] I have checked to ensure there aren't other open [Pull Requests](https://github.com/colbyfayock/next-cloudinary/pulls) for the same update/change?
+- [ ] I have created an [issue](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues) ticket for this PR
+- [ ] I have checked to ensure there aren't other open [Pull Requests](https://github.com/colbyfayock/netlify-plugin-cloudinary/pulls) for the same update/change?
 - [ ] I have performed a self-review of my own code
 - [ ] I have run tests locally to ensure they all pass
 - [ ] I have commented my code, particularly in hard-to-understand areas
