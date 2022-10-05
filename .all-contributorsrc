@@ -43,6 +43,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Kunal-8789",
+      "name": "Kunal Kaushik",
+      "avatar_url": "https://avatars.githubusercontent.com/u/76679262?v=4",
+      "profile": "https://github.com/Kunal-8789",
+      "contributions": [
+        "tool"
+      ]
     }
   ],
   "contributorsPerLine": 7,
