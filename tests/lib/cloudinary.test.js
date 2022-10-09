@@ -108,6 +108,18 @@ describe('lib/util', () => {
       expect(html).toEqual('<html><head></head><body><p><img src=\"https://res.cloudinary.com/colbycloud/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png\"></p></body></html>')
     });
 
-  })
+  
+    it('should replace a local image with a Cloudinary URL in a srcset', async () => {
+      const sourceHtml = '<html><head></head><body><p><img src="/images/stranger-things-dustin.jpeg" srcset="/images/stranger-things-dustin.jpeg 1x, /images/stranger-things-eleven.jpeg 2x"></p></body></html>'
+
+      const { html } = await updateHtmlImagesToCloudinary(sourceHtml, {
+        deliveryType: 'fetch',
+        localDir: 'tests',
+        remoteHost: 'https://cloudinary.netlify.app'
+      });
+      console.log(html.toString());
+      expect(html).toEqual('<html><head></head><body><p><img srcset=\"https://res.cloudinary.com/colbycloud/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 1x, https://res.cloudinary.com/colbycloud/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 2x\"></p></body></html>')
+    });
+  });
 
 });
