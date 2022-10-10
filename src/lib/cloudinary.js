@@ -167,8 +167,8 @@ module.exports.getCloudinaryUrl = getCloudinaryUrl;
  * updateHtmlImagesToCloudinary
  */
 
-// function to check for assets
-function asset(imgUrl,assets){
+// function to check for assets previously build by Cloudinary
+function getAsset(imgUrl,assets){
   
   const cloudinaryAsset= assets && Array.isArray(assets.images) && assets.images.find(({ publishPath, publishUrl } = {}) => {
       return [publishPath, publishUrl].includes(imgUrl);
@@ -206,7 +206,7 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
 
     
 
-    if ( asset(imgSrc,assets) && deliveryType === 'upload' ) {
+    if ( getAsset(imgSrc,assets) && deliveryType === 'upload' ) {
       cloudinaryUrl = asset.cloudinaryUrl;
     }
 
@@ -241,7 +241,7 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
       // convert all srcset urls to cloudinary urls using getCloudinaryUrl function in a Promise.all
       const srcsetUrls = srcset.split(',').map((url) => url.trim().split(' '));
       const srcsetUrlsPromises = srcsetUrls.map((url) =>{ 
-          const exists = asset(url[0],assets);
+          const exists = getAsset(url[0],assets);
           if ( exists && deliveryType === 'upload' ) {
             return exists.cloudinaryUrl;
           }
