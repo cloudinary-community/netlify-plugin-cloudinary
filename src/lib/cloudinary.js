@@ -167,6 +167,18 @@ module.exports.getCloudinaryUrl = getCloudinaryUrl;
  * updateHtmlImagesToCloudinary
  */
 
+// function to check for assets
+function asset(imgUrl,assets){
+  
+  const cloudinaryAsset= assets && Array.isArray(assets.images) && assets.images.find(({ publishPath, publishUrl } = {}) => {
+      return [publishPath, publishUrl].includes(imgUrl);
+    });
+
+    return cloudinaryAsset;
+  }
+
+
+
 async function updateHtmlImagesToCloudinary(html, options = {}) {
   const {
     assets,
@@ -192,11 +204,9 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
     // Check to see if we have an existing asset already to pick from
     // Look at both the path and full URL
 
-    const asset =(imgUrl)=>assets && Array.isArray(assets.images) && assets.images.find(({ publishPath, publishUrl } = {}) => {
-      return [publishPath, publishUrl].includes(imgUrl);
-    });
+    
 
-    if ( asset(imgSrc) && deliveryType === 'upload' ) {
+    if ( asset(imgSrc,assets) && deliveryType === 'upload' ) {
       cloudinaryUrl = asset.cloudinaryUrl;
     }
 
@@ -231,18 +241,18 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
       // convert all srcset urls to cloudinary urls using getCloudinaryUrl function in a Promise.all
       const srcsetUrls = srcset.split(',').map((url) => url.trim().split(' '));
       const srcsetUrlsPromises = srcsetUrls.map((url) =>{ 
-        const exists = asset(url[0]);
-        if ( exists && deliveryType === 'upload' ) {
-          return exists.cloudinaryUrl;
-        }
-        return getCloudinaryUrl({
-        deliveryType,
-        folder,
-        path: url[0],
-        localDir,
-        uploadPreset,
-        remoteHost
-      })
+          const exists = asset(url[0],assets);
+          if ( exists && deliveryType === 'upload' ) {
+            return exists.cloudinaryUrl;
+          }
+          return getCloudinaryUrl({
+          deliveryType,
+          folder,
+          path: url[0],
+          localDir,
+          uploadPreset,
+          remoteHost
+        })
     });
 
       const srcsetUrlsCloudinary = await Promise.all(srcsetUrlsPromises);
