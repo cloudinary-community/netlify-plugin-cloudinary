@@ -124,10 +124,23 @@ describe('lib/util', () => {
       const { html } = await updateHtmlImagesToCloudinary(sourceHtml, {
         deliveryType: 'fetch',
         localDir: 'tests',
-        remoteHost: 'https://cloudinary.netlify.app'
+        remoteHost: 'https://cloudinary.netlify.app',
       });
 
       expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/testcloud/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" srcset=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 1x, https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 2x\"></p></body></html>`);
+    });
+
+    it('should add lazy loading to image', async () => {
+      const sourceHtml = '<html><head></head><body><p><img src="https://i.imgur.com/vtYmp1x.png"></p></body></html>';
+
+      const { html } = await updateHtmlImagesToCloudinary(sourceHtml, {
+        deliveryType: 'fetch',
+        localDir: 'tests',
+        remoteHost: 'https://cloudinary.netlify.app',
+        loadingStrategy: true
+      });
+
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png\" loading=\"lazy"\></p></body></html>`);
     });
   });
 
