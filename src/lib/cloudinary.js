@@ -167,6 +167,18 @@ module.exports.getCloudinaryUrl = getCloudinaryUrl;
  * updateHtmlImagesToCloudinary
  */
 
+// function to check for assets previously build by Cloudinary
+function getAsset(imgUrl,assets){
+  
+  const cloudinaryAsset= assets && Array.isArray(assets.images) && assets.images.find(({ publishPath, publishUrl } = {}) => {
+      return [publishPath, publishUrl].includes(imgUrl);
+    });
+
+    return cloudinaryAsset;
+  }
+
+
+
 async function updateHtmlImagesToCloudinary(html, options = {}) {
   const {
     assets,
@@ -192,11 +204,9 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
     // Check to see if we have an existing asset already to pick from
     // Look at both the path and full URL
 
-    const asset = assets && Array.isArray(assets.images) && assets.images.find(({ publishPath, publishUrl } = {}) => {
-      return [publishPath, publishUrl].includes(imgSrc);
-    });
+    
 
-    if ( asset && deliveryType === 'upload' ) {
+    if ( getAsset(imgSrc,assets) && deliveryType === 'upload' ) {
       cloudinaryUrl = asset.cloudinaryUrl;
     }
 
@@ -224,7 +234,32 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
       }
     }
 
-    $img.setAttribute('src', cloudinaryUrl)
+    $img.setAttribute('src', cloudinaryUrl);
+     // convert srcset images to cloudinary
+    const srcset = $img.getAttribute('srcset');
+    if (srcset) {
+      // convert all srcset urls to cloudinary urls using getCloudinaryUrl function in a Promise.all
+      const srcsetUrls = srcset.split(',').map((url) => url.trim().split(' '));
+      const srcsetUrlsPromises = srcsetUrls.map((url) =>{ 
+          const exists = getAsset(url[0],assets);
+          if ( exists && deliveryType === 'upload' ) {
+            return exists.cloudinaryUrl;
+          }
+          return getCloudinaryUrl({
+          deliveryType,
+          folder,
+          path: url[0],
+          localDir,
+          uploadPreset,
+          remoteHost
+        })
+    });
+
+      const srcsetUrlsCloudinary = await Promise.all(srcsetUrlsPromises);
+      const srcsetUrlsCloudinaryString = srcsetUrlsCloudinary.map((urlCloudinary, index) => `${urlCloudinary.cloudinaryUrl} ${srcsetUrls[index][1]}`).join(', ');
+      $img.setAttribute('srcset', srcsetUrlsCloudinaryString);
+        
+    }
   }
 
   return {
