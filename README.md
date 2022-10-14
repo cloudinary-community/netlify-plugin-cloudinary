@@ -84,6 +84,7 @@ yarn add netlify-plugin-cloudinary
 | imagesPath       | No      | /assets   | Local path application serves image assets from |
 | folder          | No       | myfolder  | Folder all media will be stored in. Defaults to Netlify site name |
 | uploadPreset    | No       | my-preset | Defined set of asset upload defaults in Cloudinary |
+| loadingStrategy | No       | eager     | The method in which in which images are loaded (Ex: lazy, eager) |
 
 *Cloud Name must be set as an environment variable if not as an input
 
