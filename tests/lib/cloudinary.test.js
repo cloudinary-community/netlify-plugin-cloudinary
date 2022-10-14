@@ -1,10 +1,13 @@
 const { getCloudinary, createPublicId, getCloudinaryUrl, updateHtmlImagesToCloudinary } = require('../../src/lib/cloudinary');
 
+const mockDemo = require('../mocks/demo.json');
+
 const cloudinary = getCloudinary();
 
-const CLOUDINARY_CLOUD_NAME = 'testcloud';
-// const CLOUDINARY_API_KEY = '1234567890';
-// const CLOUDINARY_API_SECRET = '0987654321';
+
+const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
+const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 
 describe('lib/util', () => {
   const ENV_ORIGINAL = process.env;
@@ -16,8 +19,8 @@ describe('lib/util', () => {
 
     cloudinary.config({
       cloud_name: CLOUDINARY_CLOUD_NAME,
-      // api_key: CLOUDINARY_API_KEY,
-      // api_secret: CLOUDINARY_API_SECRET
+      api_key: CLOUDINARY_API_KEY,
+      api_secret: CLOUDINARY_API_SECRET
     });
   });
 
@@ -69,16 +72,16 @@ describe('lib/util', () => {
 
     // TODO: Mock functions to test Cloudinary uploads without actual upload
 
-    // test('should create a Cloudinary URL with delivery type of upload from a local image', async () => {
-    //   const { cloudinaryUrl } = await getCloudinaryUrl({
-    //     deliveryType: 'upload',
-    //     path: '/images/stranger-things-dustin.jpeg',
-    //     localDir: 'tests',
-    //     remoteHost: 'https://cloudinary.netlify.app'
-    //   });
+    test('should create a Cloudinary URL with delivery type of upload from a local image', async () => {
+      const { cloudinaryUrl } = await getCloudinaryUrl({
+        deliveryType: 'upload',
+        path: '/images/stranger-things-dustin.jpeg',
+        localDir: 'tests',
+        remoteHost: 'https://cloudinary.netlify.app'
+      });
 
-    //   expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d`);
-    // });
+      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d`);
+    });
 
     // TODO: Mock functions to test Cloudinary uploads without actual upload
 
@@ -127,7 +130,7 @@ describe('lib/util', () => {
         remoteHost: 'https://cloudinary.netlify.app',
       });
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/testcloud/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" srcset=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 1x, https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 2x\" loading=\"lazy"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" srcset=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 1x, https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 2x\" loading=\"lazy"\></p></body></html>`);
     });
 
     it('should add lazy loading to image when no option is provided', async () => {
@@ -153,6 +156,20 @@ describe('lib/util', () => {
       });
 
       expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png\" loading=\"eager"\></p></body></html>`);
+    });
+
+    it('should test uploading multiple assets', async () => {
+      // This is meant to replicate the current demo
+
+      const { html } = await updateHtmlImagesToCloudinary(mockDemo.htmlBefore, {
+        deliveryType: 'upload',
+        localDir: 'demo/.next',
+        remoteHost: 'https://main--netlify-plugin-cloudinary.netlify.app',
+        folder: 'netlify-plugin-cloudinary',
+        assets: mockDemo.assets
+      });
+
+      expect(html).toEqual(mockDemo.htmlAfter);
     });
 
   });

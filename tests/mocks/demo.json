@@ -1,0 +1,62 @@
+{
+  "assets": {
+    "images": [
+      {
+        "publishPath": "/images/beach.jpeg",
+        "sourceUrl": "demo/.next/images/beach.jpeg",
+        "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/beach-b7ec1e3b78cccfac8658924c0728c095",
+        "publicId": "netlify-plugin-cloudinary/beach-b7ec1e3b78cccfac8658924c0728c095"
+      },
+      {
+        "publishPath": "/images/city.jpeg",
+        "sourceUrl": "demo/.next/images/city.jpeg",
+        "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/city-870b0b21d7a4d2c4d93a41e92c7ec0cc",
+        "publicId": "netlify-plugin-cloudinary/city-870b0b21d7a4d2c4d93a41e92c7ec0cc"
+      },
+      {
+        "publishPath": "/images/earth.jpeg",
+        "sourceUrl": "demo/.next/images/earth.jpeg",
+        "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/earth-c41e0d112194fa40bdb770b0fbd60d9d",
+        "publicId": "netlify-plugin-cloudinary/earth-c41e0d112194fa40bdb770b0fbd60d9d"
+      },
+      {
+        "publishPath": "/images/galaxy.jpeg",
+        "sourceUrl": "demo/.next/images/galaxy.jpeg",
+        "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/galaxy-87aed886f0383f55c4cb8856f22d6aae",
+        "publicId": "netlify-plugin-cloudinary/galaxy-87aed886f0383f55c4cb8856f22d6aae"
+      },
+      {
+        "publishPath": "/images/iceberg.jpeg",
+        "sourceUrl": "demo/.next/images/iceberg.jpeg",
+        "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/iceberg-c53e3eed54890f447da5dacdcf83311c",
+        "publicId": "netlify-plugin-cloudinary/iceberg-c53e3eed54890f447da5dacdcf83311c"
+      },
+      {
+        "publishPath": "/images/jungle.jpeg",
+        "sourceUrl": "demo/.next/images/jungle.jpeg",
+        "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/jungle-cc016c24ce648db203fb40121933e136",
+        "publicId": "netlify-plugin-cloudinary/jungle-cc016c24ce648db203fb40121933e136"
+      },
+      {
+        "publishPath": "/images/mountain.jpeg",
+        "sourceUrl": "demo/.next/images/mountain.jpeg",
+        "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/mountain-e223899d7cf3204e889bed345a976bba",
+        "publicId": "netlify-plugin-cloudinary/mountain-e223899d7cf3204e889bed345a976bba"
+      },
+      {
+        "publishPath": "/images/test/beach.jpeg",
+        "sourceUrl": "demo/.next/images/test/beach.jpeg",
+        "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/beach-b4117f2f07d500ea89a3ae7103bf98be",
+        "publicId": "netlify-plugin-cloudinary/beach-b4117f2f07d500ea89a3ae7103bf98be"
+      },
+      {
+        "publishPath": "/images/waterfall.jpeg",
+        "sourceUrl": "demo/.next/images/waterfall.jpeg",
+        "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/waterfall-0f890be5ceb2f8248693f1300cf1ce9d",
+        "publicId": "netlify-plugin-cloudinary/waterfall-0f890be5ceb2f8248693f1300cf1ce9d"
+      }
+    ]
+  },
+  "htmlBefore": "<!DOCTYPE html><html><head><meta name=\"viewport\" content=\"width=device-width\"/><meta charSet=\"utf-8\"/><title>Cloudinary Netlify Plugin</title><meta name=\"description\" content=\"Cloudinary Netlify Plugin\"/><meta name=\"next-head-count\" content=\"4\"/><link rel=\"preload\" href=\"/_next/static/css/8889a1a5c56077a8.css\" as=\"style\"/><link rel=\"stylesheet\" href=\"/_next/static/css/8889a1a5c56077a8.css\" data-n-g=\"\"/><link rel=\"preload\" href=\"/_next/static/css/56460e7b5b3d2146.css\" as=\"style\"/><link rel=\"stylesheet\" href=\"/_next/static/css/56460e7b5b3d2146.css\" data-n-p=\"\"/><noscript data-n-css=\"\"></noscript><script defer=\"\" nomodule=\"\" src=\"/_next/static/chunks/polyfills-5cd94c89d3acac5f.js\"></script><script src=\"/_next/static/chunks/webpack-69bfa6990bb9e155.js\" defer=\"\"></script><script src=\"/_next/static/chunks/framework-6e4ba497ae0c8a3f.js\" defer=\"\"></script><script src=\"/_next/static/chunks/main-101cfeaa18eb0e64.js\" defer=\"\"></script><script src=\"/_next/static/chunks/pages/_app-9cd1d19dd7237c4c.js\" defer=\"\"></script><script src=\"/_next/static/chunks/pages/index-f75ceca3e12fe4a1.js\" defer=\"\"></script><script src=\"/_next/static/rtjvSRsplRQ6AEYeZb5qE/_buildManifest.js\" defer=\"\"></script><script src=\"/_next/static/rtjvSRsplRQ6AEYeZb5qE/_ssgManifest.js\" defer=\"\"></script><script src=\"/_next/static/rtjvSRsplRQ6AEYeZb5qE/_middlewareManifest.js\" defer=\"\"></script></head><body><div id=\"__next\" data-reactroot=\"\"><div class=\"Home_container__bCOhY\"><main class=\"Home_main__nLjiQ\"><h1 class=\"Home_title__T09hD\">Cloudinary Netlify Plugin</h1><p class=\"Home_description__41Owk\">Supercharge images on your Netlify site with Cloudinary!</p><h2 class=\"Home_title__T09hD\">Getting Started</h2><ul class=\"Home_description__41Owk\"><li>✅ <a href=\"https://app.netlify.com/plugins/netlify-plugin-cloudinary/install\">Install the plugin on Netlify</a> (or search for &quot;cloudinary&quot;)</li><li>✅ Add <code>CLOUDINARY_CLOUD_NAME</code> as a Build Variable</li><li>✅ Trigger a new Netlify build</li></ul><p class=\"Home_description__41Owk\"><a href=\"https://github.com/colbyfayock/netlify-plugin-cloudinary\">More details and advanced configuration on GitHub</a></p><h2 class=\"Home_title__T09hD\">Images Transformed to Use Cloudinary</h2><ul class=\"Home_grid__GxQ85\"><li><img src=\"/images/beach.jpeg\" width=\"2376\" height=\"1574\" alt=\"Beach\"/></li><li><img src=\"/images/city.jpeg\" width=\"1364\" height=\"1705\" alt=\"City\"/></li><li><img src=\"/images/earth.jpeg\" width=\"2344\" height=\"1560\" alt=\"Earth\"/></li><li><img src=\"/images/galaxy.jpeg\" width=\"2340\" height=\"1560\" alt=\"Galaxy\"/></li><li><img src=\"/images/iceberg.jpeg\" width=\"2148\" height=\"1611\" alt=\"Iceberg\"/></li><li><img src=\"/images/jungle.jpeg\" width=\"1364\" height=\"1705\" alt=\"Jungle\"/></li><li><img src=\"/images/mountain.jpeg\" width=\"2340\" height=\"1561\" alt=\"Mountain\"/></li><li><img src=\"/images/waterfall.jpeg\" width=\"2340\" height=\"1560\" alt=\"Waterfall\"/></li></ul></main></div></div><script id=\"__NEXT_DATA__\" type=\"application/json\">{\"props\":{\"pageProps\":{\"images\":[{\"width\":2376,\"height\":1574,\"src\":\"/images/beach.jpeg\",\"title\":\"Beach\"},{\"width\":1364,\"height\":1705,\"src\":\"/images/city.jpeg\",\"title\":\"City\"},{\"width\":2344,\"height\":1560,\"src\":\"/images/earth.jpeg\",\"title\":\"Earth\"},{\"width\":2340,\"height\":1560,\"src\":\"/images/galaxy.jpeg\",\"title\":\"Galaxy\"},{\"width\":2148,\"height\":1611,\"src\":\"/images/iceberg.jpeg\",\"title\":\"Iceberg\"},{\"width\":1364,\"height\":1705,\"src\":\"/images/jungle.jpeg\",\"title\":\"Jungle\"},{\"width\":2340,\"height\":1561,\"src\":\"/images/mountain.jpeg\",\"title\":\"Mountain\"},{\"width\":2340,\"height\":1560,\"src\":\"/images/waterfall.jpeg\",\"title\":\"Waterfall\"}]},\"__N_SSG\":true},\"page\":\"/\",\"query\":{},\"buildId\":\"rtjvSRsplRQ6AEYeZb5qE\",\"isFallback\":false,\"gsp\":true,\"scriptLoader\":[]}</script></body></html>",
+  "htmlAfter": "<!DOCTYPE html><html><head><meta name=\"viewport\" content=\"width=device-width\"><meta charset=\"utf-8\"><title>Cloudinary Netlify Plugin</title><meta name=\"description\" content=\"Cloudinary Netlify Plugin\"><meta name=\"next-head-count\" content=\"4\"><link rel=\"preload\" href=\"/_next/static/css/8889a1a5c56077a8.css\" as=\"style\"><link rel=\"stylesheet\" href=\"/_next/static/css/8889a1a5c56077a8.css\" data-n-g=\"\"><link rel=\"preload\" href=\"/_next/static/css/56460e7b5b3d2146.css\" as=\"style\"><link rel=\"stylesheet\" href=\"/_next/static/css/56460e7b5b3d2146.css\" data-n-p=\"\"><noscript data-n-css=\"\"></noscript><script defer=\"\" nomodule=\"\" src=\"/_next/static/chunks/polyfills-5cd94c89d3acac5f.js\"></script><script src=\"/_next/static/chunks/webpack-69bfa6990bb9e155.js\" defer=\"\"></script><script src=\"/_next/static/chunks/framework-6e4ba497ae0c8a3f.js\" defer=\"\"></script><script src=\"/_next/static/chunks/main-101cfeaa18eb0e64.js\" defer=\"\"></script><script src=\"/_next/static/chunks/pages/_app-9cd1d19dd7237c4c.js\" defer=\"\"></script><script src=\"/_next/static/chunks/pages/index-f75ceca3e12fe4a1.js\" defer=\"\"></script><script src=\"/_next/static/rtjvSRsplRQ6AEYeZb5qE/_buildManifest.js\" defer=\"\"></script><script src=\"/_next/static/rtjvSRsplRQ6AEYeZb5qE/_ssgManifest.js\" defer=\"\"></script><script src=\"/_next/static/rtjvSRsplRQ6AEYeZb5qE/_middlewareManifest.js\" defer=\"\"></script></head><body><div id=\"__next\" data-reactroot=\"\"><div class=\"Home_container__bCOhY\"><main class=\"Home_main__nLjiQ\"><h1 class=\"Home_title__T09hD\">Cloudinary Netlify Plugin</h1><p class=\"Home_description__41Owk\">Supercharge images on your Netlify site with Cloudinary!</p><h2 class=\"Home_title__T09hD\">Getting Started</h2><ul class=\"Home_description__41Owk\"><li>✅ <a href=\"https://app.netlify.com/plugins/netlify-plugin-cloudinary/install\">Install the plugin on Netlify</a> (or search for \"cloudinary\")</li><li>✅ Add <code>CLOUDINARY_CLOUD_NAME</code> as a Build Variable</li><li>✅ Trigger a new Netlify build</li></ul><p class=\"Home_description__41Owk\"><a href=\"https://github.com/colbyfayock/netlify-plugin-cloudinary\">More details and advanced configuration on GitHub</a></p><h2 class=\"Home_title__T09hD\">Images Transformed to Use Cloudinary</h2><ul class=\"Home_grid__GxQ85\"><li><img src=\"https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/beach-b7ec1e3b78cccfac8658924c0728c095\" width=\"2376\" height=\"1574\" alt=\"Beach\" loading=\"lazy\"></li><li><img src=\"https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/city-870b0b21d7a4d2c4d93a41e92c7ec0cc\" width=\"1364\" height=\"1705\" alt=\"City\" loading=\"lazy\"></li><li><img src=\"https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/earth-c41e0d112194fa40bdb770b0fbd60d9d\" width=\"2344\" height=\"1560\" alt=\"Earth\" loading=\"lazy\"></li><li><img src=\"https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/galaxy-87aed886f0383f55c4cb8856f22d6aae\" width=\"2340\" height=\"1560\" alt=\"Galaxy\" loading=\"lazy\"></li><li><img src=\"https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/iceberg-c53e3eed54890f447da5dacdcf83311c\" width=\"2148\" height=\"1611\" alt=\"Iceberg\" loading=\"lazy\"></li><li><img src=\"https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/jungle-cc016c24ce648db203fb40121933e136\" width=\"1364\" height=\"1705\" alt=\"Jungle\" loading=\"lazy\"></li><li><img src=\"https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/mountain-e223899d7cf3204e889bed345a976bba\" width=\"2340\" height=\"1561\" alt=\"Mountain\" loading=\"lazy\"></li><li><img src=\"https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/waterfall-0f890be5ceb2f8248693f1300cf1ce9d\" width=\"2340\" height=\"1560\" alt=\"Waterfall\" loading=\"lazy\"></li></ul></main></div></div><script id=\"__NEXT_DATA__\" type=\"application/json\">{\"props\":{\"pageProps\":{\"images\":[{\"width\":2376,\"height\":1574,\"src\":\"/images/beach.jpeg\",\"title\":\"Beach\"},{\"width\":1364,\"height\":1705,\"src\":\"/images/city.jpeg\",\"title\":\"City\"},{\"width\":2344,\"height\":1560,\"src\":\"/images/earth.jpeg\",\"title\":\"Earth\"},{\"width\":2340,\"height\":1560,\"src\":\"/images/galaxy.jpeg\",\"title\":\"Galaxy\"},{\"width\":2148,\"height\":1611,\"src\":\"/images/iceberg.jpeg\",\"title\":\"Iceberg\"},{\"width\":1364,\"height\":1705,\"src\":\"/images/jungle.jpeg\",\"title\":\"Jungle\"},{\"width\":2340,\"height\":1561,\"src\":\"/images/mountain.jpeg\",\"title\":\"Mountain\"},{\"width\":2340,\"height\":1560,\"src\":\"/images/waterfall.jpeg\",\"title\":\"Waterfall\"}]},\"__N_SSG\":true},\"page\":\"/\",\"query\":{},\"buildId\":\"rtjvSRsplRQ6AEYeZb5qE\",\"isFallback\":false,\"gsp\":true,\"scriptLoader\":[]}</script></body></html>"
+}
