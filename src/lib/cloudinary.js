@@ -187,7 +187,7 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
     folder,
     localDir,
     remoteHost,
-    loadingStrategy
+    loadingStrategy='lazy',
   } = options;
 
   const errors = [];
@@ -237,9 +237,7 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
     }
 
     $img.setAttribute('src', cloudinaryUrl);
-    if (loadingStrategy) {
-      $img.setAttribute('loading', 'lazy');
-    }
+    $img.setAttribute('loading', loadingStrategy);
     
      // convert srcset images to cloudinary
     const srcset = $img.getAttribute('srcset');
