@@ -186,7 +186,8 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
     uploadPreset,
     folder,
     localDir,
-    remoteHost
+    remoteHost,
+    loadingStrategy='lazy',
   } = options;
 
   const errors = [];
@@ -221,7 +222,8 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
           path: imgSrc,
           localDir,
           uploadPreset,
-          remoteHost
+          remoteHost,
+          loadingStrategy
         });
         cloudinaryUrl = url;
       } catch(e) {
@@ -235,6 +237,8 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
     }
 
     $img.setAttribute('src', cloudinaryUrl);
+    $img.setAttribute('loading', loadingStrategy);
+    
      // convert srcset images to cloudinary
     const srcset = $img.getAttribute('srcset');
     if (srcset) {

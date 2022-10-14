@@ -163,6 +163,7 @@ module.exports = {
     const { PUBLISH_DIR } = constants;
     const {
       deliveryType,
+      loadingStrategy,
       uploadPreset,
       folder = process.env.SITE_NAME
     } = inputs;
