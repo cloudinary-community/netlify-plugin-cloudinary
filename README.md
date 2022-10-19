@@ -1,4 +1,17 @@
-<img height="50" src="https://res.cloudinary.com/cloudinary-marketing/image/upload/f_auto,q_auto,h_100/v1595456749/creative_source/Logo/PNG/cloudinary_logo_blue_0720_2x.png" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="50" src="https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto,h_100/v1645122900/logos/netlify_ucvb40.png" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/62209650/196528621-b68e9e10-7e55-4c7d-9177-904cadbb4296.png" align="center" height=50>
+  <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/62209650/196528761-a815025a-271a-4d8e-ac7e-cea833728bf9.png" align="center" height=50>
+  <img alt="Cloudinary" src="https://user-images.githubusercontent.com/62209650/196528761-a815025a-271a-4d8e-ac7e-cea833728bf9.png" align="center" height=30>
+</picture>
+&ensp;&ensp;
+<picture style="padding: 50px">
+  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/62209650/196580077-8decb083-1556-4e10-99af-84b79e909229.png" align="center" height=50>
+  <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/62209650/196579993-14e2a5e4-da8d-46a9-87ba-3a76d54975fb.png" align="center" height=50>
+  <img alt="Netlify" src="https://user-images.githubusercontent.com/62209650/196579993-14e2a5e4-da8d-46a9-87ba-3a76d54975fb.png" align="center" height=30>
+</picture>
+
+######
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
