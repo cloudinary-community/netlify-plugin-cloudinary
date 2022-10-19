@@ -1,6 +1,6 @@
 <img height="50" src="https://res.cloudinary.com/cloudinary-marketing/image/upload/f_auto,q_auto,h_100/v1595456749/creative_source/Logo/PNG/cloudinary_logo_blue_0720_2x.png" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="50" src="https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto,h_100/v1645122900/logos/netlify_ucvb40.png" />
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # Cloudinary Netlify Plugin
@@ -278,6 +278,9 @@ yarn test
       <td align="center"><a href="https://github.com/Kunal-8789"><img src="https://avatars.githubusercontent.com/u/76679262?v=4?s=100" width="100px;" alt="Kunal Kaushik"/><br /><sub><b>Kunal Kaushik</b></sub></a><br /><a href="#tool-Kunal-8789" title="Tools">🔧</a></td>
       <td align="center"><a href="https://portfolio-shikhar13012001.vercel.app/"><img src="https://avatars.githubusercontent.com/u/75368010?v=4?s=100" width="100px;" alt="Shikhar"/><br /><sub><b>Shikhar</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=shikhar13012001" title="Code">💻</a> <a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=shikhar13012001" title="Tests">⚠️</a></td>
       <td align="center"><a href="https://digantakrbanik.codes/"><img src="https://avatars.githubusercontent.com/u/65999534?v=4?s=100" width="100px;" alt="Diganta Kr Banik"/><br /><sub><b>Diganta Kr Banik</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=developer-diganta" title="Code">💻</a> <a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=developer-diganta" title="Documentation">📖</a> <a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=developer-diganta" title="Tests">⚠️</a></td>
+    </tr>
+    <tr>
+      <td align="center"><a href="https://github.com/3t8"><img src="https://avatars.githubusercontent.com/u/62209650?v=4?s=100" width="100px;" alt="3t8"/><br /><sub><b>3t8</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=3t8" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
