@@ -13,7 +13,7 @@
 ######
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # Cloudinary Netlify Plugin
@@ -294,6 +294,7 @@ yarn test
     </tr>
     <tr>
       <td align="center"><a href="https://github.com/3t8"><img src="https://avatars.githubusercontent.com/u/62209650?v=4?s=100" width="100px;" alt="3t8"/><br /><sub><b>3t8</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=3t8" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://github.com/Abubakrce19"><img src="https://avatars.githubusercontent.com/u/104122959?v=4?s=100" width="100px;" alt="Abubakrce19"/><br /><sub><b>Abubakrce19</b></sub></a><br /><a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/commits?author=Abubakrce19" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
