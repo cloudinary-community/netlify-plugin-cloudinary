@@ -22,7 +22,7 @@ Optimize and serve all images served in your Netlify site deploy with [Cloudinar
 
 The Cloudinary plugin hooks into your Netlify build process and sets up images for optimization and delivery. First, the plugin replaces all your on-page, post-compilation images with a Cloudinary-sourced URL, greatly accelerating your initial page load. Next, for comprehensive coverage, Cloudinary redirects assets requested from your images directory to a Cloudinary URL with the default fetch feature or the upload delivery type.
 
-tl;dr automatically serve smaller images in modern formats
+tl;dr automatically serves smaller images in modern formats
 
 **This plugin is not officially supported by Cloudinary.**
 
@@ -49,9 +49,9 @@ Name: CLOUDINARY_CLOUD_NAME
 Value: <Your Cloud Name>
 ```
 
-- Trigger a new deploy!
+- Trigger a new deployment!
 
-By default, your images will served via the [fetch delivery type](https://cloudinary.com/documentation/fetch_remote_images).
+By default, your images will be served via the [fetch delivery type](https://cloudinary.com/documentation/fetch_remote_images).
 
 ### File-based configuration
 
@@ -72,7 +72,7 @@ By default, your images will served via the [fetch delivery type](https://cloudi
   cloudName = "<Your Cloud Name>"
 ```
 
-By default, your images will served via the [fetch delivery type](https://cloudinary.com/documentation/fetch_remote_images).
+By default, your images will be served via the [fetch delivery type](https://cloudinary.com/documentation/fetch_remote_images).
 
 ### Installing locally
 
@@ -93,7 +93,7 @@ yarn add netlify-plugin-cloudinary
 | Name            | Required | Example   | Description |
 |-----------------|----------|-----------| ------------|
 | cloudName       | No*      | mycloud   | Cloudinary Cloud Name |
-| deliveryType    | No       | fetch     | The method in which Cloudinary stores and delivers images (Ex: fetch, upload) |
+| deliveryType    | No       | fetch     | The method by which Cloudinary stores and delivers images (Ex: fetch, upload) |
 | imagesPath       | No      | /assets   | Local path application serves image assets from |
 | folder          | No       | myfolder  | Folder all media will be stored in. Defaults to Netlify site name |
 | uploadPreset    | No       | my-preset | Defined set of asset upload defaults in Cloudinary |
@@ -256,9 +256,9 @@ Which will combine the build and deploy contexts and run through the full proces
 
 ### Demo
 
-The repository additionally includes a demo which uses the plugin. The demo is a simple Next.js application that lows a few images statically and those same images in a separate list once the page loads. This helps us test both the on-page image replacement and the redirecting of the images directory.
+The repository additionally includes a demo that uses the plugin. The demo is a simple Next.js application that lows a few images statically and those same images in a separate list once the page loads. This helps us test both the on-page image replacement and the redirecting of the images directory.
 
-You can link this project to your Netlify account for testing purposes by creating a new Netlify site in the root of this project and linking it to that new site.
+You can link this project to your Netlify account for testing purposes by creating a new Netlify site at the root of this project and linking it to that new site.
 
 Once linked, you can then run the build and deploy process with:
 
@@ -268,9 +268,9 @@ netlify deploy --build
 
 ### Tests
 
-Tests require all environment variables to be actively set in order to pass. See [configuration](#-configuration) above to see which variables need to be set.
+Tests require all environment variables to be actively set pass. See [configuration](#-configuration) above to see which variables need to be set.
 
-Once set, tests can be ran with:
+Once set, tests can be run with:
 
 ```
 yarn test
