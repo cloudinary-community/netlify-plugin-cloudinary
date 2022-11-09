@@ -1,13 +1,13 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/62209650/196528621-b68e9e10-7e55-4c7d-9177-904cadbb4296.png" align="center" height=50>
   <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/62209650/196528761-a815025a-271a-4d8e-ac7e-cea833728bf9.png" align="center" height=50>
-  <img alt="Cloudinary" src="https://user-images.githubusercontent.com/62209650/196528761-a815025a-271a-4d8e-ac7e-cea833728bf9.png" align="center" height=30>
+  <img alt="Cloudinary" src="https://user-images.githubusercontent.com/62209650/196528761-a815025a-271a-4d8e-ac7e-cea833728bf9.png" align="center" height=50>
 </picture>
 &ensp;&ensp;
 <picture style="padding: 50px">
   <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/62209650/196580077-8decb083-1556-4e10-99af-84b79e909229.png" align="center" height=50>
   <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/62209650/196579993-14e2a5e4-da8d-46a9-87ba-3a76d54975fb.png" align="center" height=50>
-  <img alt="Netlify" src="https://user-images.githubusercontent.com/62209650/196579993-14e2a5e4-da8d-46a9-87ba-3a76d54975fb.png" align="center" height=30>
+  <img alt="Netlify" src="https://user-images.githubusercontent.com/62209650/196579993-14e2a5e4-da8d-46a9-87ba-3a76d54975fb.png" align="center" height=50>
 </picture>
 
 ######
