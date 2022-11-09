@@ -12,9 +12,7 @@
 
 ######
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+<a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/actions/workflows/test_and_release.yml"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/colbyfayock/netlify-plugin-cloudinary/Test%20&%20Release?label=Test%20%26%20Release&style=flat-square"></a> <a href="https://www.npmjs.com/package/netlify-plugin-cloudinary"><img alt="npm" src="https://img.shields.io/npm/v/netlify-plugin-cloudinary?style=flat-square"></a> <a href="https://github.com/colbyfayock/netlify-plugin-cloudinary/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/colbyfayock/netlify-plugin-cloudinary?label=License&style=flat-square"></a>
 
 # Cloudinary Netlify Plugin
 
