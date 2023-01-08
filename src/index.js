@@ -33,7 +33,8 @@ module.exports = {
       deliveryType,
       uploadPreset,
       folder = process.env.SITE_NAME,
-      imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(({ inputKey }) => inputKey === 'imagesPath').path
+      imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(({ inputKey }) => inputKey === 'imagesPath').path,
+      sizes
     } = inputs;
 
     if ( !host && deliveryType === 'fetch' ) {
@@ -71,14 +72,14 @@ module.exports = {
     try {
       _cloudinaryAssets.images = await Promise.all(imagesFiles.map(async image => {
         const publishPath = image.replace(PUBLISH_DIR, '');
-
         const cloudinary = await getCloudinaryUrl({
           deliveryType,
           folder,
           path: publishPath,
           localDir: PUBLISH_DIR,
           uploadPreset,
-          remoteHost: host
+          remoteHost: host,
+          sizes
         });
 
         return {
@@ -86,7 +87,8 @@ module.exports = {
           ...cloudinary
         }
       }));
-    } catch(e) {
+    } catch (e) {
+      console.log(e)
       utils.build.failBuild(e.message);
       return;
     }
@@ -165,7 +167,8 @@ module.exports = {
       deliveryType,
       loadingStrategy,
       uploadPreset,
-      folder = process.env.SITE_NAME
+      folder = process.env.SITE_NAME,
+      sizes
     } = inputs;
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME || inputs.cloudName;
@@ -196,7 +199,8 @@ module.exports = {
         uploadPreset,
         folder,
         localDir: PUBLISH_DIR,
-        remoteHost: host
+        remoteHost: host,
+        sizes
       });
 
       await fs.writeFile(page, html);
