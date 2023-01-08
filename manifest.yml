@@ -21,3 +21,9 @@ inputs:
     required: false
     description: "The method in which in which images are loaded (Ex: lazy, eager)"
     default: "lazy"
+  - name: sizes
+    required: false
+    description: "The sizes attribute for the img tag"
+  - name: steps
+    required: false
+    description: "The steps attribute for the img tag"
