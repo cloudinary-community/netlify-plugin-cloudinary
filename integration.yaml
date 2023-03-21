@@ -1,0 +1,4 @@
+config:
+  slug: cloudinary
+  package_prefix: cloudinary
+  version: 1.2.7

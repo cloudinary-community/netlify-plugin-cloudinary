@@ -2,17 +2,15 @@
  * isRemoteUrl
  */
 
-function isRemoteUrl(url) {
+export function isRemoteUrl(url: string) {
   return url.startsWith('http');
 }
-
-module.exports.isRemoteUrl = isRemoteUrl;
 
 /**
  * determineRemoteUrl
  */
 
-function determineRemoteUrl(url, host) {
+export function determineRemoteUrl(url: string, host: string) {
   if ( isRemoteUrl(url) ) return url;
 
   if ( !url.startsWith('/') ) {
@@ -24,18 +22,16 @@ function determineRemoteUrl(url, host) {
   return url;
 }
 
-module.exports.determineRemoteUrl = determineRemoteUrl;
-
 /**
  * getQueryParams
  */
 
-function getQueryParams(url) {
+export function getQueryParams(url: string) {
   if ( typeof url !== 'string') {
     throw new Error('Can not getQueryParams. Invalid URL');
   }
 
-  const params = {};
+  const params: {[key: string]: any} = {};
 
   const urlSegments = url.split('?');
 
@@ -46,5 +42,3 @@ function getQueryParams(url) {
 
   return params;
 }
-
-module.exports.getQueryParams = getQueryParams;

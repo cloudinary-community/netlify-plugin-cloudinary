@@ -1,13 +1,10 @@
 [build]
-  command = "cd demo && yarn && yarn build"
-  publish = "demo/.next"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
-[[plugins]]
-  package = "."
-
-  [plugins.inputs]
-  cloudName = "colbycloud"
-  deliveryType = "upload"
+command="ntli build -s"
+functions=".ntli/site/netlify/functions"
+publish=".ntli/preview-ui"
+[[headers]]
+  for="/integration-ui*"
+  [headers.values]
+    Access-Control-Allow-Origin="*"
+    Access-Control-Allow-Headers="*"
+    Access-Control-Allow-Methods="*"

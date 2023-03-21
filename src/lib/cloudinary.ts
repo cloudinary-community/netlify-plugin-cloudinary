@@ -1,28 +1,26 @@
-const crypto = require('crypto');
-const path = require('path');
-const fetch = require('node-fetch');
-const { JSDOM } = require('jsdom');
-const cloudinary = require('cloudinary').v2;
+import crypto from 'crypto';
+import path from 'path';
+import fetch from 'node-fetch';
+import { JSDOM } from 'jsdom';
+import {v2 as cloudinary} from 'cloudinary';
 
-const { isRemoteUrl, determineRemoteUrl } = require('./util');
-const { ERROR_CLOUD_NAME } = require('../data/errors');
+import { isRemoteUrl, determineRemoteUrl } from './util';
+import { ERROR_CLOUD_NAME_REQUIRED } from'../data/errors';
 
 /**
  * getCloudinary
  */
 
-function getCloudinary(config) {
+export function getCloudinary(config: any) {
   if ( !config ) return cloudinary;
   return configureCloudinary(config);
 }
-
-module.exports.getCloudinary = getCloudinary;
 
 /**
  * configureCloudinary
  */
 
-function configureCloudinary(config = {}) {
+export function configureCloudinary(config = ({} as any)) {
   cloudinary.config({
     cloud_name: config.cloudName,
     api_key: config.apiKey,
@@ -31,13 +29,11 @@ function configureCloudinary(config = {}) {
   return cloudinary;
 }
 
-module.exports.configureCloudinary = configureCloudinary;
-
 /**
  * createPublicId
  */
 
-async function createPublicId({ path: filePath } = {}) {
+export async function createPublicId({ path: filePath } = ({} as any)) {
   let hash = crypto.createHash('md5');
 
   const { name: imgName } = path.parse(filePath);
@@ -50,18 +46,16 @@ async function createPublicId({ path: filePath } = {}) {
     hash.update(buffer);
   }
 
-  hash = hash.digest('hex');
+  hash = hash.digest('hex') as any;
 
   return `${imgName}-${hash}`
 }
-
-module.exports.createPublicId = createPublicId;
 
 /**
  * getCloudinaryUrl
  */
 
-async function getCloudinaryUrl(options = {}) {
+export async function getCloudinaryUrl(options = ({} as any)) {
   const {
     deliveryType,
     folder,
@@ -75,7 +69,7 @@ async function getCloudinaryUrl(options = {}) {
   const canSignUpload = apiKey && apiSecret;
 
   if ( !cloudName ) {
-    throw new Error(ERROR_CLOUD_NAME);
+    throw new Error(ERROR_CLOUD_NAME_REQUIRED);
   }
 
   if ( deliveryType === 'upload' && !canSignUpload && !uploadPreset ) {
@@ -116,7 +110,7 @@ async function getCloudinaryUrl(options = {}) {
     }
 
     if ( uploadPreset ) {
-      uploadOptions.upload_preset = uploadPreset;
+      (uploadOptions as any).upload_preset = uploadPreset;
     }
 
     let results;
@@ -161,15 +155,13 @@ async function getCloudinaryUrl(options = {}) {
   };
 }
 
-module.exports.getCloudinaryUrl = getCloudinaryUrl;
-
 /**
  * updateHtmlImagesToCloudinary
  */
 
 // function to check for assets previously build by Cloudinary
-function getAsset(imgUrl, assets){
-  const cloudinaryAsset= assets && Array.isArray(assets.images) && assets.images.find(({ publishPath, publishUrl } = {}) => {
+function getAsset(imgUrl: any, assets: any){
+  const cloudinaryAsset= assets && Array.isArray(assets.images) && assets.images.find(({ publishPath, publishUrl } = ({} as any)) => {
       return [publishPath, publishUrl].includes(imgUrl);
     });
 
@@ -178,7 +170,7 @@ function getAsset(imgUrl, assets){
 
 
 
-async function updateHtmlImagesToCloudinary(html, options = {}) {
+export async function updateHtmlImagesToCloudinary(html: any, options: any = {}) {
   const {
     assets,
     deliveryType,
@@ -198,7 +190,7 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
   const images = Array.from(dom.window.document.querySelectorAll('img'));
 
   for ( const $img of images ) {
-    let imgSrc = $img.getAttribute('src');
+    let imgSrc = ($img as any).getAttribute('src');
     let cloudinaryUrl;
 
     // Check to see if we have an existing asset already to pick from
@@ -225,7 +217,7 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
           loadingStrategy
         });
         cloudinaryUrl = url;
-      } catch(e) {
+      } catch(e: any) {
         const { error } = e;
         errors.push({
           imgSrc,
@@ -235,15 +227,15 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
       }
     }
 
-    $img.setAttribute('src', cloudinaryUrl);
-    $img.setAttribute('loading', loadingStrategy);
+    ($img as any).setAttribute('src', cloudinaryUrl);
+    ($img as any).setAttribute('loading', loadingStrategy);
 
      // convert srcset images to cloudinary
-    const srcset = $img.getAttribute('srcset');
+    const srcset = ($img as any).getAttribute('srcset');
     if (srcset) {
       // convert all srcset urls to cloudinary urls using getCloudinaryUrl function in a Promise.all
-      const srcsetUrls = srcset.split(',').map((url) => url.trim().split(' '));
-      const srcsetUrlsPromises = srcsetUrls.map((url) =>{
+      const srcsetUrls = srcset.split(',').map((url: string) => url.trim().split(' '));
+      const srcsetUrlsPromises = srcsetUrls.map((url: string) =>{
           const exists = getAsset(url[0],assets);
           if ( exists && deliveryType === 'upload' ) {
             return exists.cloudinaryUrl;
@@ -260,7 +252,7 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
 
       const srcsetUrlsCloudinary = await Promise.all(srcsetUrlsPromises);
       const srcsetUrlsCloudinaryString = srcsetUrlsCloudinary.map((urlCloudinary, index) => `${urlCloudinary.cloudinaryUrl} ${srcsetUrls[index][1]}`).join(', ');
-      $img.setAttribute('srcset', srcsetUrlsCloudinaryString);
+      ($img as any).setAttribute('srcset', srcsetUrlsCloudinaryString);
 
     }
   }
@@ -270,5 +262,3 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
     errors
   }
 }
-
-module.exports.updateHtmlImagesToCloudinary = updateHtmlImagesToCloudinary;
