@@ -10,4 +10,4 @@
 
   [plugins.inputs]
   cloudName = "colbycloud"
-  deliveryType = "upload"
+  # deliveryType = "upload"
