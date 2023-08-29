@@ -32,8 +32,10 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'
       - run: yarn install --frozen-lockfile
+      # Do not store semantic release dependencies in package.json to avoid lower node versions from failing tests
+      - run: yarn add @semantic-release/changelog @semantic-release/git semantic-release
       - run: npx semantic-release --branches main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

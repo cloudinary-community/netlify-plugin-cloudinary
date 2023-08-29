@@ -1,14 +1,16 @@
-const fs = require('fs-extra');
+const fs = require('fs').promises;
 const { onBuild } = require('../src/');
 
-jest.mock('fs-extra', () => ({
-  readdir: jest.fn(),
-  ensureDir: jest.fn(),
-  writeFile: jest.fn(),
-}));
-
-
 describe('onBuild', () => {
+  const readdir = fs.readdir;
+
+  beforeEach(() => {
+    fs.readdir = jest.fn();
+  });
+
+  afterEach(() => {
+    fs.readdir = readdir;
+  })
 
   describe('Redirects', () => {
 
