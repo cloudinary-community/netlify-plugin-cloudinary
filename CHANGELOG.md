@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.5.0...v1.5.1) (2023-08-29)
+
+
+### Bug Fixes
+
+* Fixes missing Netlify Host check ([#50](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/50)) ([646e1f3](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/646e1f3355530fc5a6b1458a5ef24e409f83c1be)), closes [#47](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/47) [#11](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/11) [#45](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/45)
+
 # [1.5.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.4.0...v1.5.0) (2023-08-29)
 
 
