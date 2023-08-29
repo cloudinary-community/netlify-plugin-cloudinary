@@ -1,3 +1,11 @@
+# [1.5.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.4.0...v1.5.0) (2023-08-29)
+
+
+### Features
+
+* updating package-lock ([2a89820](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/2a89820a35a6a2e72395640085c4bf83da11256c))
+* Use Netlify Host with Production Context ([#47](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/47)) ([896bcda](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/896bcda6f8ceeca2d33bb9463d6a0078db729a6c)), closes [#11](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/11) [#45](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/45)
+
 # [1.4.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.3.0...v1.4.0) (2023-08-29)
 
 
