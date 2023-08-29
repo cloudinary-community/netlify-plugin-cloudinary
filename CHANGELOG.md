@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.2.0...v1.3.0) (2023-08-29)
+
+
+### Features
+
+* Package updates, Remove fs-extra, Fix Jest ([#48](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/48)) ([65f8600](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/65f8600e65cbb8dd19feaa597cb8ba32a5d6e57e))
+
 # [1.2.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.1.0...v1.2.0) (2022-10-14)
 
 
