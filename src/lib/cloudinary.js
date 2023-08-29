@@ -69,6 +69,7 @@ async function getCloudinaryUrl(options = {}) {
     localDir,
     remoteHost,
     uploadPreset,
+    sizes
   } = options;
 
   const { cloud_name: cloudName, api_key: apiKey, api_secret: apiSecret } = cloudinary.config();
@@ -84,6 +85,7 @@ async function getCloudinaryUrl(options = {}) {
 
   let fileLocation;
   let publicId;
+  let srcset; //mine
 
   if ( deliveryType === 'fetch' ) {
     // fetch allows us to pass in a remote URL to the Cloudinary API
@@ -101,9 +103,10 @@ async function getCloudinaryUrl(options = {}) {
 
     let fullPath = filePath;
 
-    if ( !isRemoteUrl(fullPath) ) {
-      fullPath = path.join(localDir, fullPath);
-    }
+    // if ( !isRemoteUrl(fullPath) ) {
+    //   fullPath = path.join(localDir, fullPath);
+    // }
+
 
     const id = await createPublicId({
       path: fullPath
@@ -112,8 +115,13 @@ async function getCloudinaryUrl(options = {}) {
     const uploadOptions = {
       folder,
       public_id: id,
-      overwrite: false
-    }
+      overwrite: false,
+      eager: sizes.map(({ width, height, crop }) => ({
+        width,
+        height,
+        crop
+      }))
+    };
 
     if ( uploadPreset ) {
       uploadOptions.upload_preset = uploadPreset;
@@ -136,11 +144,15 @@ async function getCloudinaryUrl(options = {}) {
       });
     }
 
+    // console.log("RESULTS!!: ", results);
+
     // Finally use the stored public ID to grab the image URL
 
     const { public_id } = results;
     publicId = public_id;
     fileLocation = fullPath;
+    // srcset uses url from results
+    srcset = results.eager.map(({ url }) => url);
   }
 
   const cloudinaryUrl = cloudinary.url(publicId, {
@@ -157,7 +169,8 @@ async function getCloudinaryUrl(options = {}) {
   return {
     sourceUrl: fileLocation,
     cloudinaryUrl,
-    publicId
+    publicId,
+    srcset
   };
 }
 
@@ -187,11 +200,12 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
     localDir,
     remoteHost,
     loadingStrategy = 'lazy',
+    sizes
   } = options;
 
   const errors = [];
   const dom = new JSDOM(html);
-
+  console.log("SIZES:",sizes)
   // Loop through all images found in the DOM and swap the source with
   // a Cloudinary URL
 
@@ -210,21 +224,26 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
       cloudinaryUrl = asset.cloudinaryUrl;
     }
 
+    let urlsrcset;
+
     // If we don't have an asset and thus don't have a Cloudinary URL, create
     // one for our asset
 
     if ( !cloudinaryUrl ) {
       try {
-        const { cloudinaryUrl: url } = await getCloudinaryUrl({
+        const { cloudinaryUrl: url, srcset:srcset } = await getCloudinaryUrl({
           deliveryType,
           folder,
           path: imgSrc,
           localDir,
           uploadPreset,
           remoteHost,
-          loadingStrategy
+          loadingStrategy,
+          sizes
         });
         cloudinaryUrl = url;
+        urlsrcset = srcset;
+        // console.log(urlsrcset)
       } catch(e) {
         const { error } = e;
         errors.push({
@@ -234,6 +253,8 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
         continue;
       }
     }
+
+    console.log(urlsrcset)
 
     $img.setAttribute('src', cloudinaryUrl);
     $img.setAttribute('loading', loadingStrategy);
