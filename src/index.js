@@ -21,14 +21,14 @@ const CLOUDINARY_ASSET_DIRECTORIES = [
 
 const _cloudinaryAssets = {};
 
-const isProduction = process.env.CONTEXT === 'production';
-const host = isProduction ? process.env.NETLIFY_HOST : process.env.DEPLOY_PRIME_URL;
-
-console.log(`[Cloudinary] Using host: ${host}`);
-
 module.exports = {
   async onBuild({ netlifyConfig, constants, inputs, utils }) {
     console.log('[Cloudinary] Creating redirects...');
+
+    const isProduction = process.env.CONTEXT === 'production';
+    const host = isProduction ? process.env.NETLIFY_HOST : process.env.DEPLOY_PRIME_URL;
+
+    console.log(`[Cloudinary] Using host: ${host}`);
 
     const { PUBLISH_DIR } = constants;
 
@@ -154,6 +154,11 @@ module.exports = {
 
   async onPostBuild({ constants, inputs, utils }) {
     console.log('[Cloudinary] Replacing on-page images with Cloudinary URLs...');
+
+    const isProduction = process.env.CONTEXT === 'production';
+    const host = isProduction ? process.env.NETLIFY_HOST : process.env.DEPLOY_PRIME_URL;
+
+    console.log(`[Cloudinary] Using host: ${host}`);
 
     if ( !host ) {
       console.warn(`[Cloudinary] ${ERROR_NETLIFY_HOST_UNKNOWN}`);
