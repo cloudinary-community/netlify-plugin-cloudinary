@@ -8,14 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [ '14', '16', '18' ]
+        node: [ '16', '18', '20' ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
-      - run: yarn install --frozen-lockfile
-      - run: yarn test
+      - run: npm ci
+      - run: npm run test
         env:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
@@ -33,9 +33,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '18'
-      - run: yarn install --frozen-lockfile
+      - run: npm ci
       # Do not store semantic release dependencies in package.json to avoid lower node versions from failing tests
-      - run: yarn add @semantic-release/changelog @semantic-release/git semantic-release
+      - run: npm install @semantic-release/changelog @semantic-release/git semantic-release
       - run: npx semantic-release --branches main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
