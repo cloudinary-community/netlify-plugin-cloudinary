@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.3.0...v1.4.0) (2023-08-29)
+
+
+### Features
+
+* Yarn to npm ([#49](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/49)) ([c7d5126](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/c7d5126e2adbb7924b99e95d5fa8a83e83e1c6b5))
+
 # [1.3.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.2.0...v1.3.0) (2023-08-29)
 
 
