@@ -78,8 +78,6 @@ By default, your images will be served via the [fetch delivery type](https://clo
 
 ```shell
 npm install netlify-plugin-cloudinary
-# or
-yarn add netlify-plugin-cloudinary
 ```
 
 - Use a [file-based configuration](#file-based-configuration) to add the plugin to your builds
@@ -271,7 +269,7 @@ Tests require all environment variables to be actively set pass. See [configurat
 Once set, tests can be run with:
 
 ```
-yarn test
+npm run test
 ```
 
 ## Contributors
