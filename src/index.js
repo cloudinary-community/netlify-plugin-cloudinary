@@ -4,7 +4,7 @@ const glob = require('glob');
 
 const { configureCloudinary, updateHtmlImagesToCloudinary, getCloudinaryUrl } = require('./lib/cloudinary');
 const { PUBLIC_ASSET_PATH } = require('./data/cloudinary');
-const { ERROR_CLOUD_NAME_REQUIRED, ERROR_NETLIFY_HOST_UNKNOWN, EEROR_NETLIFY_HOST_CLI_SUPPORT } = require('./data/errors');
+const { ERROR_CLOUD_NAME_REQUIRED, ERROR_NETLIFY_HOST_UNKNOWN, ERROR_NETLIFY_HOST_CLI_SUPPORT } = require('./data/errors');
 
 const CLOUDINARY_ASSET_DIRECTORIES = [
   {
@@ -23,11 +23,14 @@ const _cloudinaryAssets = {};
 
 module.exports = {
   async onBuild({ netlifyConfig, constants, inputs, utils }) {
-    console.log('Creating redirects...');
+    console.log('[Cloudinary] Creating redirects...');
 
     const { PUBLISH_DIR } = constants;
 
-    const host = process.env.DEPLOY_PRIME_URL || process.env.NETLIFY_HOST;
+    const isProduction = process.env.CONTEXT === 'production';
+    const host = isProduction ? process.env.NETLIFY_HOST : process.env.DEPLOY_PRIME_URL;
+
+    console.log(`[Cloudinary] Using host: ${host}`);
 
     const {
       deliveryType,
@@ -37,8 +40,8 @@ module.exports = {
     } = inputs;
 
     if ( !host && deliveryType === 'fetch' ) {
-      console.warn(ERROR_NETLIFY_HOST_UNKNOWN);
-      console.log(EEROR_NETLIFY_HOST_CLI_SUPPORT);
+      console.warn(`[Cloudinary] ${ERROR_NETLIFY_HOST_UNKNOWN}`);
+      console.log(`[Cloudinary] ${ERROR_NETLIFY_HOST_CLI_SUPPORT}`);
       return;
     }
 
@@ -64,8 +67,8 @@ module.exports = {
     const imagesFiles = imagesDirectory.filter(file => !!path.extname(file));
 
     if ( imagesFiles.length === 0 ) {
-      console.warn(`No image files found in ${imagesPath}`);
-      console.log(`Did you update your images path? You can set the imagesPath input in your Netlify config.`);
+      console.warn(`[Cloudinary] No image files found in ${imagesPath}`);
+      console.log(`[Cloudinary] Did you update your images path? You can set the imagesPath input in your Netlify config.`);
     }
 
     try {
@@ -143,20 +146,20 @@ module.exports = {
       }));
     }
 
-    console.log('Done.');
+    console.log('[Cloudinary] Done.');
   },
 
   // Post build looks through all of the output HTML and rewrites any src attributes to use a cloudinary URL
   // This only solves on-page references until any JS refreshes the DOM
 
   async onPostBuild({ constants, inputs, utils }) {
-    console.log('Replacing on-page images with Cloudinary URLs...');
+    console.log('[Cloudinary] Replacing on-page images with Cloudinary URLs...');
 
     const host = process.env.DEPLOY_PRIME_URL || process.env.NETLIFY_HOST;
 
     if ( !host ) {
-      console.warn(ERROR_NETLIFY_HOST_UNKNOWN);
-      console.log(EEROR_NETLIFY_HOST_CLI_SUPPORT);
+      console.warn(`[Cloudinary] ${ERROR_NETLIFY_HOST_UNKNOWN}`);
+      console.log(`[Cloudinary] ${ERROR_NETLIFY_HOST_CLI_SUPPORT}`);
       return;
     }
 
@@ -210,10 +213,10 @@ module.exports = {
     const errors = results.filter(({ errors }) => errors.length > 0);
 
     if ( errors.length > 0) {
-      console.log(`Done with ${errors.length} errors...`);
+      console.log(`[Cloudinary] Done with ${errors.length} errors...`);
       console.log(JSON.stringify(errors, null, 2));
     } else {
-      console.log('Done.');
+      console.log('[Cloudinary] Done.');
     }
   }
 
