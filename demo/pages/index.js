@@ -9,7 +9,9 @@ export default function Home({ images }) {
   const [isLoaded, setIsLoaded] = useState();
 
   useEffect(() => {
-    setIsLoaded(true);
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 1000)
   }, [])
 
   return (
@@ -57,6 +59,16 @@ export default function Home({ images }) {
             return (
               <li key={image.src}>
                 <img src={image.src} width={image.width} height={image.height} alt={image.title} />
+              </li>
+            );
+          })}
+        </ul>
+
+        <ul className={styles.grid}>
+          {images.map(image => {
+            return (
+              <li key={image.src}>
+                <Image src={image.src} width={image.width} height={image.height} alt={image.title} />
               </li>
             );
           })}

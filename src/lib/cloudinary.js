@@ -222,7 +222,6 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
           localDir,
           uploadPreset,
           remoteHost,
-          loadingStrategy
         });
         cloudinaryUrl = url;
       } catch(e) {
@@ -239,16 +238,20 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
     $img.setAttribute('loading', loadingStrategy);
 
      // convert srcset images to cloudinary
+    
     const srcset = $img.getAttribute('srcset');
+
     if (srcset) {
       // convert all srcset urls to cloudinary urls using getCloudinaryUrl function in a Promise.all
+      
       const srcsetUrls = srcset.split(',').map((url) => url.trim().split(' '));
+
       const srcsetUrlsPromises = srcsetUrls.map((url) =>{
-          const exists = getAsset(url[0],assets);
-          if ( exists && deliveryType === 'upload' ) {
-            return exists.cloudinaryUrl;
-          }
-          return getCloudinaryUrl({
+        const exists = getAsset(url[0],assets);
+        if ( exists && deliveryType === 'upload' ) {
+          return exists.cloudinaryUrl;
+        }
+        return getCloudinaryUrl({
           deliveryType,
           folder,
           path: url[0],
@@ -256,12 +259,21 @@ async function updateHtmlImagesToCloudinary(html, options = {}) {
           uploadPreset,
           remoteHost
         })
-    });
+      });
 
       const srcsetUrlsCloudinary = await Promise.all(srcsetUrlsPromises);
       const srcsetUrlsCloudinaryString = srcsetUrlsCloudinary.map((urlCloudinary, index) => `${urlCloudinary.cloudinaryUrl} ${srcsetUrls[index][1]}`).join(', ');
-      $img.setAttribute('srcset', srcsetUrlsCloudinaryString);
 
+      $img.setAttribute('srcset', srcsetUrlsCloudinaryString);
+    }
+
+    // Look for any preload tags that reference the image URLs. A specific use case here
+    // is Next.js App Router hen using the Image component.
+
+    const $preload = dom.window.document.querySelector(`link[rel="preload"][as="image"][href="${imgSrc}"]`);
+
+    if ( $preload ) {
+      $preload.setAttribute('href', cloudinaryUrl);
     }
   }
 
