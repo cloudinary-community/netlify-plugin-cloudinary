@@ -2,6 +2,7 @@ const fs = require('fs').promises
 const path = require('path');
 const glob = require('glob');
 
+const { getNetlifyHost } = require('./lib/netlify');
 const { configureCloudinary, updateHtmlImagesToCloudinary, getCloudinaryUrl } = require('./lib/cloudinary');
 const { PUBLIC_ASSET_PATH } = require('./data/cloudinary');
 const { ERROR_CLOUD_NAME_REQUIRED, ERROR_NETLIFY_HOST_UNKNOWN, ERROR_NETLIFY_HOST_CLI_SUPPORT } = require('./data/errors');
@@ -21,12 +22,12 @@ const CLOUDINARY_ASSET_DIRECTORIES = [
 
 const _cloudinaryAssets = {};
 
+
 module.exports = {
   async onBuild({ netlifyConfig, constants, inputs, utils }) {
     console.log('[Cloudinary] Creating redirects...');
 
-    const isProduction = process.env.CONTEXT === 'production';
-    const host = isProduction ? process.env.NETLIFY_HOST : process.env.DEPLOY_PRIME_URL;
+    const host = getNetlifyHost(process.env.CONTEXT);
 
     console.log(`[Cloudinary] Using host: ${host}`);
 
@@ -155,8 +156,7 @@ module.exports = {
   async onPostBuild({ constants, inputs, utils }) {
     console.log('[Cloudinary] Replacing on-page images with Cloudinary URLs...');
 
-    const isProduction = process.env.CONTEXT === 'production';
-    const host = isProduction ? process.env.NETLIFY_HOST : process.env.DEPLOY_PRIME_URL;
+    const host = getNetlifyHost(process.env.CONTEXT);
 
     console.log(`[Cloudinary] Using host: ${host}`);
 

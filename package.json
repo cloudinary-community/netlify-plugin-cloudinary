@@ -4,6 +4,7 @@
   "description": "Supercharge images on your Netlify site with Cloudinary!",
   "main": "src/index.js",
   "scripts": {
+    "build": "cd docs && netlify deploy --build",
     "test": "jest"
   },
   "author": {
