@@ -250,7 +250,7 @@ Which will combine the build and deploy contexts and run through the full proces
 #### Caveats
 * The Netlify CLI doesn't support all input and environment variables for build plugins, primarily `process.env.DEPLOY_PRIME_URL` meaning the `onPostBuild` image replacement will not occur locally.
 
-### Demo
+### Docs & Examples
 
 The repository additionally includes a demo that uses the plugin. The demo is a simple Next.js application that lows a few images statically and those same images in a separate list once the page loads. This helps us test both the on-page image replacement and the redirecting of the images directory.
 

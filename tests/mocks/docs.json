@@ -3,55 +3,55 @@
     "images": [
       {
         "publishPath": "/images/beach.jpeg",
-        "sourceUrl": "demo/.next/images/beach.jpeg",
+        "sourceUrl": "docs/.next/images/beach.jpeg",
         "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/beach-b7ec1e3b78cccfac8658924c0728c095",
         "publicId": "netlify-plugin-cloudinary/beach-b7ec1e3b78cccfac8658924c0728c095"
       },
       {
         "publishPath": "/images/city.jpeg",
-        "sourceUrl": "demo/.next/images/city.jpeg",
+        "sourceUrl": "docs/.next/images/city.jpeg",
         "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/city-870b0b21d7a4d2c4d93a41e92c7ec0cc",
         "publicId": "netlify-plugin-cloudinary/city-870b0b21d7a4d2c4d93a41e92c7ec0cc"
       },
       {
         "publishPath": "/images/earth.jpeg",
-        "sourceUrl": "demo/.next/images/earth.jpeg",
+        "sourceUrl": "docs/.next/images/earth.jpeg",
         "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/earth-c41e0d112194fa40bdb770b0fbd60d9d",
         "publicId": "netlify-plugin-cloudinary/earth-c41e0d112194fa40bdb770b0fbd60d9d"
       },
       {
         "publishPath": "/images/galaxy.jpeg",
-        "sourceUrl": "demo/.next/images/galaxy.jpeg",
+        "sourceUrl": "docs/.next/images/galaxy.jpeg",
         "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/galaxy-87aed886f0383f55c4cb8856f22d6aae",
         "publicId": "netlify-plugin-cloudinary/galaxy-87aed886f0383f55c4cb8856f22d6aae"
       },
       {
         "publishPath": "/images/iceberg.jpeg",
-        "sourceUrl": "demo/.next/images/iceberg.jpeg",
+        "sourceUrl": "docs/.next/images/iceberg.jpeg",
         "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/iceberg-c53e3eed54890f447da5dacdcf83311c",
         "publicId": "netlify-plugin-cloudinary/iceberg-c53e3eed54890f447da5dacdcf83311c"
       },
       {
         "publishPath": "/images/jungle.jpeg",
-        "sourceUrl": "demo/.next/images/jungle.jpeg",
+        "sourceUrl": "docs/.next/images/jungle.jpeg",
         "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/jungle-cc016c24ce648db203fb40121933e136",
         "publicId": "netlify-plugin-cloudinary/jungle-cc016c24ce648db203fb40121933e136"
       },
       {
         "publishPath": "/images/mountain.jpeg",
-        "sourceUrl": "demo/.next/images/mountain.jpeg",
+        "sourceUrl": "docs/.next/images/mountain.jpeg",
         "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/mountain-e223899d7cf3204e889bed345a976bba",
         "publicId": "netlify-plugin-cloudinary/mountain-e223899d7cf3204e889bed345a976bba"
       },
       {
         "publishPath": "/images/test/beach.jpeg",
-        "sourceUrl": "demo/.next/images/test/beach.jpeg",
+        "sourceUrl": "docs/.next/images/test/beach.jpeg",
         "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/beach-b4117f2f07d500ea89a3ae7103bf98be",
         "publicId": "netlify-plugin-cloudinary/beach-b4117f2f07d500ea89a3ae7103bf98be"
       },
       {
         "publishPath": "/images/waterfall.jpeg",
-        "sourceUrl": "demo/.next/images/waterfall.jpeg",
+        "sourceUrl": "docs/.next/images/waterfall.jpeg",
         "cloudinaryUrl": "https://res.cloudinary.com/colbycloud/image/upload/f_auto,q_auto/v1/netlify-plugin-cloudinary/waterfall-0f890be5ceb2f8248693f1300cf1ce9d",
         "publicId": "netlify-plugin-cloudinary/waterfall-0f890be5ceb2f8248693f1300cf1ce9d"
       }

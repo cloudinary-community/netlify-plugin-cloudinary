@@ -1,6 +1,6 @@
 const { getCloudinary, createPublicId, getCloudinaryUrl, updateHtmlImagesToCloudinary } = require('../../src/lib/cloudinary');
 
-const mockDemo = require('../mocks/demo.json');
+const mockDocs = require('../mocks/docs.json');
 
 const cloudinary = getCloudinary();
 
@@ -159,17 +159,17 @@ describe('lib/util', () => {
     });
 
     it('should test uploading multiple assets', async () => {
-      // This is meant to replicate the current demo
+      // This is meant to replicate the current docs
 
-      const { html } = await updateHtmlImagesToCloudinary(mockDemo.htmlBefore, {
+      const { html } = await updateHtmlImagesToCloudinary(mockDocs.htmlBefore, {
         deliveryType: 'upload',
-        localDir: 'demo/.next',
+        localDir: 'docs/.next',
         remoteHost: 'https://main--netlify-plugin-cloudinary.netlify.app',
         folder: 'netlify-plugin-cloudinary',
-        assets: mockDemo.assets
+        assets: mockDocs.assets
       });
 
-      expect(html).toEqual(mockDemo.htmlAfter);
+      expect(html).toEqual(mockDocs.htmlAfter);
     });
 
   });

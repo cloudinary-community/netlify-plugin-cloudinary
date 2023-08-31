@@ -2,7 +2,8 @@
 .github
 .netlify
 _next
-demo
+docs
+examples
 jest.config.js
 node_modules
 netlify.toml

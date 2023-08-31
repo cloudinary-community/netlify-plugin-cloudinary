@@ -1,5 +1,5 @@
 {
-  "name": "demo",
+  "name": "docs",
   "private": true,
   "scripts": {
     "dev": "next dev",
