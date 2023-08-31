@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.5.1...v1.6.0) (2023-08-31)
+
+
+### Features
+
+* Replace preload tags for related image source if exists ([#55](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/55)) ([aaa030f](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/aaa030f2ee71225b1a4b833e9a573ff42d940461)), closes [#11](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/11) [#54](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/54)
+
 ## [1.5.1](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.5.0...v1.5.1) (2023-08-29)
 
 
