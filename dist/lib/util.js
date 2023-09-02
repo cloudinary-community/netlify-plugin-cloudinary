@@ -1,13 +1,17 @@
+"use strict";
 /**
  * isRemoteUrl
  */
-export function isRemoteUrl(url) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getQueryParams = exports.determineRemoteUrl = exports.isRemoteUrl = void 0;
+function isRemoteUrl(url) {
     return url.startsWith('http');
 }
+exports.isRemoteUrl = isRemoteUrl;
 /**
  * determineRemoteUrl
  */
-export function determineRemoteUrl(url, host) {
+function determineRemoteUrl(url, host) {
     if (isRemoteUrl(url))
         return url;
     if (!url.startsWith('/')) {
@@ -16,10 +20,11 @@ export function determineRemoteUrl(url, host) {
     url = `${host}${url}`;
     return url;
 }
+exports.determineRemoteUrl = determineRemoteUrl;
 /**
  * getQueryParams
  */
-export function getQueryParams(url) {
+function getQueryParams(url) {
     if (typeof url !== 'string') {
         throw new Error('Can not getQueryParams. Invalid URL');
     }
@@ -33,3 +38,4 @@ export function getQueryParams(url) {
         });
     return params;
 }
+exports.getQueryParams = getQueryParams;
