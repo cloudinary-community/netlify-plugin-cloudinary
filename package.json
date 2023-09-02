@@ -7,7 +7,9 @@
   "scripts": {
     "test": "jest",
     "typecheck": "tsc --noEmit -p ./tsconfig.json",
-    "build": "tsc -p ./tsconfig.json",
+    "compile": "tsc -p ./tsconfig.json",
+    "build": "npm run compile && netlify build",
+    "deploy": "npm run compile && netlify deploy --build",
     "lint": "eslint . --ext .ts",
     "format": "prettier  --write \"(src|test)/*.+(js|ts|json)\""
   },
@@ -28,6 +30,7 @@
     "semantic-release": "^21.1.1"
   },
   "devDependencies": {
+    "@netlify/config": "20.8.1",
     "@types/fs-extra": "11.0.1",
     "@types/glob": "8.1.0",
     "@types/jsdom": "21.1.2",

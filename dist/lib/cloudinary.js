@@ -28,7 +28,7 @@ export function configureCloudinary(config) {
  * createPublicId
  */
 export async function createPublicId({ path: filePath }) {
-    let hash = crypto.createHash('md5');
+    const hash = crypto.createHash('md5');
     const { name: imgName } = path.parse(filePath);
     if (!isRemoteUrl(filePath)) {
         hash.update(filePath);
@@ -53,10 +53,6 @@ export async function getCloudinaryUrl(options) {
     }
     if (deliveryType === 'upload' && !canSignUpload && !uploadPreset) {
         throw new Error(`To use deliveryType ${deliveryType}, please use an uploadPreset for unsigned requests or an API Key and Secret for signed requests.`);
-    }
-    console.log({ deliveryType, remoteHost });
-    if (deliveryType === 'fetch' && !remoteHost) {
-        throw new Error(`To use deliveryType ${deliveryType}, please provide a remoteHost.`);
     }
     let fileLocation;
     let publicId;
@@ -122,9 +118,6 @@ export async function getCloudinaryUrl(options) {
         publicId,
     };
 }
-/**
- * updateHtmlImagesToCloudinary
- */
 // function to check for assets previously build by Cloudinary
 function getAsset(imgUrl, assets) {
     const cloudinaryAsset = assets &&
@@ -142,7 +135,7 @@ export async function updateHtmlImagesToCloudinary(html, options) {
     // a Cloudinary URL
     const images = Array.from(dom.window.document.querySelectorAll('img'));
     for (const $img of images) {
-        let imgSrc = $img.getAttribute('src'); // @TODO can this be really be null at this point?
+        const imgSrc = $img.getAttribute('src'); // @TODO can this be really be null at this point?
         let cloudinaryUrl;
         // Check to see if we have an existing asset already to pick from
         // Look at both the path and full URL

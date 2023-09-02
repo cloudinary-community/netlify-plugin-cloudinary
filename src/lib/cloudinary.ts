@@ -56,6 +56,17 @@ type CloudinaryOptions = {
   localDir?: string;
   uploadPreset: string;
 } & (FetchDelivery | OtherDelivery)
+
+export type Assets = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  images: Array<any>
+}
+
+type UpdateCloudinaryOptions = Omit<CloudinaryOptions, 'path'> & {
+  assets: Assets;
+  loadingStrategy?: "lazy"
+}
+
 /**
  * getCloudinary
  */
@@ -84,7 +95,7 @@ export function configureCloudinary(config: CloudinaryConfig) {
  */
 
 export async function createPublicId({ path: filePath }: { path: string }) {
-  let hash = crypto.createHash('md5')
+  const hash = crypto.createHash('md5')
 
   const { name: imgName } = path.parse(filePath)
 
@@ -130,12 +141,6 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
   if (deliveryType === 'upload' && !canSignUpload && !uploadPreset) {
     throw new Error(
       `To use deliveryType ${deliveryType}, please use an uploadPreset for unsigned requests or an API Key and Secret for signed requests.`,
-    )
-  }
-  console.log({ deliveryType, remoteHost})
-  if (deliveryType === 'fetch' && !remoteHost) {
-    throw new Error(
-      `To use deliveryType ${deliveryType}, please provide a remoteHost.`
     )
   }
 
@@ -227,7 +232,7 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
  */
 
 // function to check for assets previously build by Cloudinary
-function getAsset(imgUrl: string, assets: { images: any[] }) {
+function getAsset(imgUrl: string, assets: Assets) {
   const cloudinaryAsset =
     assets &&
     Array.isArray(assets.images) &&
@@ -238,10 +243,6 @@ function getAsset(imgUrl: string, assets: { images: any[] }) {
   return cloudinaryAsset
 }
 
-type UpdateCloudinaryOptions = Omit<CloudinaryOptions, 'path'> & {
-  assets: any;
-  loadingStrategy?: "lazy"
-}
 export async function updateHtmlImagesToCloudinary(html: string, options: UpdateCloudinaryOptions) {
   const {
     assets,
@@ -262,7 +263,7 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
   const images = Array.from(dom.window.document.querySelectorAll('img'))
 
   for (const $img of images) {
-    let imgSrc = $img.getAttribute('src') as string // @TODO can this be really be null at this point?
+    const imgSrc = $img.getAttribute('src') as string // @TODO can this be really be null at this point?
     let cloudinaryUrl
 
     // Check to see if we have an existing asset already to pick from

@@ -6,6 +6,7 @@ import {
   configureCloudinary,
   updateHtmlImagesToCloudinary,
   getCloudinaryUrl,
+  Assets,
 } from './lib/cloudinary.js'
 import { PUBLIC_ASSET_PATH } from './data/cloudinary.js'
 import {
@@ -15,28 +16,27 @@ import {
   ERROR_SITE_NAME_REQUIRED,
 } from './data/errors.js'
 
-const CLOUDINARY_ASSET_DIRECTORIES = [
-  {
-    name: 'images',
-    inputKey: 'imagesPath',
-    path: '/images',
-  },
-]
-
-/**
- * TODO
- * - Handle srcset
- */
-
-const _cloudinaryAssets: Record<string, unknown>= {}
 
 /**
 * Type needs improvement
 * Information was found here <a href="https://docs.netlify.com/integrations/build-plugins/create-plugins/#netlifyconfig">Netlify Config</a>
 */
+
 type NetlifyConfig = {
-  redirects: Array<any>;
-  headers: Array<any>;
+  redirects: Array<{
+    from: string
+    to?: string
+    status?: number;
+    force?: boolean
+    signed?: string
+    query?: Partial<Record<string, string>>
+    headers?: Partial<Record<string, string>>
+    conditions?: Partial<Record<'Language' | 'Role' | 'Country' | 'Cookie', readonly string[]>>
+  }>
+  headers: Array<{
+    for: string
+    values: unknown; // marked as unknown because is not required here.
+  }>;
   functions: {
     directory: string;
   };
@@ -62,7 +62,7 @@ type Constants = {
 * this type is built based on the content of the plugin manifest file
 * Information found here https://docs.netlify.com/integrations/build-plugins/create-plugins/#inputs
 */
-type Inputs =  {
+type Inputs = {
   cloudName: string;
   deliveryType: string;
   imagesPath: string;
@@ -73,12 +73,12 @@ type Inputs =  {
 
 type Utils = {
   build: {
-    failBuild: (message: string, { error }?: { error: Error}) => void;
-    failPlugin: (message: string, { error }?: { error: Error}) => void;
-    cancelBuild: (message: string, { error }?: { error: Error}) => void;
+    failBuild: (message: string, { error }?: { error: Error }) => void;
+    failPlugin: (message: string, { error }?: { error: Error }) => void;
+    cancelBuild: (message: string, { error }?: { error: Error }) => void;
   };
   status: {
-    show: ({ title, summary, text}:{ title: string; summary: string; text: string}) => void;
+    show: ({ title, summary, text }: { title: string; summary: string; text: string }) => void;
   };
 }
 type OnBuildParams = {
@@ -87,6 +87,23 @@ type OnBuildParams = {
   inputs: Inputs;
   utils: Utils;
 }
+type OnPostBuildParams = Omit<OnBuildParams, 'netlifyConfig'>
+
+const CLOUDINARY_ASSET_DIRECTORIES = [
+  {
+    name: 'images',
+    inputKey: 'imagesPath',
+    path: '/images',
+  },
+]
+
+/**
+ * TODO
+ * - Handle srcset
+ */
+
+const _cloudinaryAssets = { images: {} } as Assets
+
 export async function onBuild({ netlifyConfig, constants, inputs, utils }: OnBuildParams) {
   console.log('[Cloudinary] Creating redirects...')
 
@@ -95,10 +112,10 @@ export async function onBuild({ netlifyConfig, constants, inputs, utils }: OnBui
     ? process.env.NETLIFY_HOST
     : process.env.DEPLOY_PRIME_URL
 
-  if(!host) {
-    utils.build.failBuild(ERROR_NETLIFY_HOST_UNKNOWN)
-    return;
-  }
+  // if(!host) {
+  //   utils.build.failBuild(ERROR_NETLIFY_HOST_UNKNOWN)
+  //   return;
+  // }
 
   console.log(`[Cloudinary] Using host: ${host}`)
 
@@ -108,10 +125,11 @@ export async function onBuild({ netlifyConfig, constants, inputs, utils }: OnBui
     deliveryType,
     uploadPreset,
     folder = process.env.SITE_NAME,
-    imagesPath = CLOUDINARY_ASSET_DIRECTORIES.at(0)?.path
+    // imagesPath = CLOUDINARY_ASSET_DIRECTORIES.at(0)?.path
+    imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(({ inputKey }) => inputKey === 'imagesPath')?.path
   } = inputs
 
-  if(!folder) {
+  if (!folder) {
     utils.build.failPlugin(ERROR_SITE_NAME_REQUIRED)
     return
   }
@@ -126,7 +144,7 @@ export async function onBuild({ netlifyConfig, constants, inputs, utils }: OnBui
   const apiKey = process.env.CLOUDINARY_API_KEY
   const apiSecret = process.env.CLOUDINARY_API_SECRET
 
-  if (!cloudName || !apiKey || !apiSecret){
+  if (!cloudName || !apiKey || !apiSecret) {
     utils.build.failBuild(ERROR_CLOUD_NAME_REQUIRED)
     return
   }
@@ -171,10 +189,10 @@ export async function onBuild({ netlifyConfig, constants, inputs, utils }: OnBui
       }),
     )
   } catch (e) {
-    if(e instanceof Error){
+    if (e instanceof Error) {
       utils.build.failBuild(e.message)
-    }else{
-     utils.build.failBuild(e as string)
+    } else {
+      utils.build.failBuild(e as string)
     }
     return
   }
@@ -244,7 +262,7 @@ export async function onBuild({ netlifyConfig, constants, inputs, utils }: OnBui
 // Post build looks through all of the output HTML and rewrites any src attributes to use a cloudinary URL
 // This only solves on-page references until any JS refreshes the DOM
 
-export async function onPostBuild({ constants, inputs, utils }: Omit<OnBuildParams, 'netlifyConfig'>){
+export async function onPostBuild({ constants, inputs, utils }: OnPostBuildParams ) {
   console.log('[Cloudinary] Replacing on-page images with Cloudinary URLs...')
 
   const isProduction = process.env.CONTEXT === 'production'
@@ -254,11 +272,11 @@ export async function onPostBuild({ constants, inputs, utils }: Omit<OnBuildPara
 
   console.log(`[Cloudinary] Using host: ${host}`)
 
-  if (!host) {
-    console.warn(`[Cloudinary] ${ERROR_NETLIFY_HOST_UNKNOWN}`)
-    console.log(`[Cloudinary] ${ERROR_NETLIFY_HOST_CLI_SUPPORT}`)
-    return
-  }
+  // if (!host) {
+  //   console.warn(`[Cloudinary] ${ERROR_NETLIFY_HOST_UNKNOWN}`)
+  //   console.log(`[Cloudinary] ${ERROR_NETLIFY_HOST_CLI_SUPPORT}`)
+  //   return
+  // }
 
   const { PUBLISH_DIR } = constants
   const {
@@ -267,7 +285,7 @@ export async function onPostBuild({ constants, inputs, utils }: Omit<OnBuildPara
     folder = process.env.SITE_NAME,
   } = inputs
 
-  if(!folder) {
+  if (!folder) {
     utils.build.failPlugin(ERROR_SITE_NAME_REQUIRED)
     return
   }
@@ -276,7 +294,7 @@ export async function onPostBuild({ constants, inputs, utils }: Omit<OnBuildPara
   const apiKey = process.env.CLOUDINARY_API_KEY
   const apiSecret = process.env.CLOUDINARY_API_SECRET
 
-  if (!cloudName || !apiKey || !apiSecret){
+  if (!cloudName || !apiKey || !apiSecret) {
     utils.build.failBuild(ERROR_CLOUD_NAME_REQUIRED)
     return
   }

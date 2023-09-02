@@ -15,20 +15,22 @@ const CLOUDINARY_ASSET_DIRECTORIES = [
  * TODO
  * - Handle srcset
  */
-const _cloudinaryAssets = {};
+const _cloudinaryAssets = { images: {} };
 export async function onBuild({ netlifyConfig, constants, inputs, utils }) {
     console.log('[Cloudinary] Creating redirects...');
     const isProduction = process.env.CONTEXT === 'production';
     const host = isProduction
         ? process.env.NETLIFY_HOST
         : process.env.DEPLOY_PRIME_URL;
-    if (!host) {
-        utils.build.failBuild(ERROR_NETLIFY_HOST_UNKNOWN);
-        return;
-    }
+    // if(!host) {
+    //   utils.build.failBuild(ERROR_NETLIFY_HOST_UNKNOWN)
+    //   return;
+    // }
     console.log(`[Cloudinary] Using host: ${host}`);
     const { PUBLISH_DIR } = constants;
-    const { deliveryType, uploadPreset, folder = process.env.SITE_NAME, imagesPath = CLOUDINARY_ASSET_DIRECTORIES.at(0)?.path } = inputs;
+    const { deliveryType, uploadPreset, folder = process.env.SITE_NAME, 
+    // imagesPath = CLOUDINARY_ASSET_DIRECTORIES.at(0)?.path
+    imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(({ inputKey }) => inputKey === 'imagesPath')?.path } = inputs;
     if (!folder) {
         utils.build.failPlugin(ERROR_SITE_NAME_REQUIRED);
         return;
@@ -42,7 +44,6 @@ export async function onBuild({ netlifyConfig, constants, inputs, utils }) {
     const apiKey = process.env.CLOUDINARY_API_KEY;
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
     if (!cloudName || !apiKey || !apiSecret) {
-        utils.build.failBuild(JSON.stringify({ env: process.env, netlifyConfig , NETLFY_HOST: process.env.NETLIFY_HOST, DEPLOY_PRIME_URL: process.env.DEPLOY_PRIME_URL }))
         utils.build.failBuild(ERROR_CLOUD_NAME_REQUIRED);
         return;
     }
@@ -141,11 +142,11 @@ export async function onPostBuild({ constants, inputs, utils }) {
         ? process.env.NETLIFY_HOST
         : process.env.DEPLOY_PRIME_URL;
     console.log(`[Cloudinary] Using host: ${host}`);
-    if (!host) {
-        console.warn(`[Cloudinary] ${ERROR_NETLIFY_HOST_UNKNOWN}`);
-        console.log(`[Cloudinary] ${ERROR_NETLIFY_HOST_CLI_SUPPORT}`);
-        return;
-    }
+    // if (!host) {
+    //   console.warn(`[Cloudinary] ${ERROR_NETLIFY_HOST_UNKNOWN}`)
+    //   console.log(`[Cloudinary] ${ERROR_NETLIFY_HOST_CLI_SUPPORT}`)
+    //   return
+    // }
     const { PUBLISH_DIR } = constants;
     const { deliveryType, uploadPreset, folder = process.env.SITE_NAME, } = inputs;
     if (!folder) {

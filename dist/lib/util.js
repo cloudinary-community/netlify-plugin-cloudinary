@@ -19,12 +19,6 @@ export function determineRemoteUrl(url, host) {
 /**
  * getQueryParams
  */
-class InvariantError extends Error {
-    constructor(message) {
-        super(message);
-        Object.setPrototypeOf(this, InvariantError.prototype);
-    }
-}
 export function getQueryParams(url) {
     if (typeof url !== 'string') {
         throw new Error('Can not getQueryParams. Invalid URL');
@@ -34,15 +28,8 @@ export function getQueryParams(url) {
     urlSegments[1] &&
         urlSegments[1].split('&').forEach(segment => {
             const [key, value] = segment.split('=');
-            //@ts-ignore TODO: fix this
+            //@ts-expect-error TS can't check if key is in effect key of params
             params[key] = value;
         });
     return params;
-}
-export function invariant(condition, message) {
-    if (condition) {
-        return;
-    }
-    const msg = typeof message === 'function' ? message() : message;
-    throw new InvariantError(msg || 'invariant error');
 }
