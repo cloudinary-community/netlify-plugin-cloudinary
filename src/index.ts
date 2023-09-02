@@ -1,19 +1,19 @@
 import fs from 'fs-extra'
 import path from 'path'
-import glob from 'glob'
+import { glob } from 'glob'
 
 import {
   configureCloudinary,
   updateHtmlImagesToCloudinary,
   getCloudinaryUrl,
-} from './lib/cloudinary'
-import { PUBLIC_ASSET_PATH } from './data/cloudinary'
+} from './lib/cloudinary.js'
+import { PUBLIC_ASSET_PATH } from './data/cloudinary.js'
 import {
   ERROR_CLOUD_NAME_REQUIRED,
   ERROR_NETLIFY_HOST_UNKNOWN,
   ERROR_NETLIFY_HOST_CLI_SUPPORT,
   ERROR_SITE_NAME_REQUIRED,
-} from './data/errors'
+} from './data/errors.js'
 
 const CLOUDINARY_ASSET_DIRECTORIES = [
   {

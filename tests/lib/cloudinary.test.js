@@ -1,11 +1,11 @@
-const {
+import {
   getCloudinary,
   createPublicId,
   getCloudinaryUrl,
   updateHtmlImagesToCloudinary,
-} = require('../../src/lib/cloudinary')
+} from '../../src/lib/cloudinary'
 
-const mockDemo = require('../mocks/demo.json')
+import mockDemo from '../mocks/demo.json'
 
 const cloudinary = getCloudinary()
 

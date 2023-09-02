@@ -2,10 +2,12 @@
   "name": "netlify-plugin-cloudinary",
   "version": "1.6.0",
   "description": "Supercharge images on your Netlify site with Cloudinary!",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "type": "module",
   "scripts": {
     "test": "jest",
-    "compile": "tsc --noEmit -p ./tsconfig.json",
+    "typecheck": "tsc --noEmit -p ./tsconfig.json",
+    "build": "tsc -p ./tsconfig.json",
     "lint": "eslint . --ext .ts",
     "format": "prettier  --write \"(src|test)/*.+(js|ts|json)\""
   },

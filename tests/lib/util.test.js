@@ -1,8 +1,8 @@
-const {
+import {
   isRemoteUrl,
   determineRemoteUrl,
   getQueryParams,
-} = require('../../src/lib/util')
+} from '../../src/lib/util'
 
 describe('lib/util', () => {
   describe('isRemoteUrl', () => {

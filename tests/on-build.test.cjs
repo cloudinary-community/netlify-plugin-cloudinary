@@ -1,5 +1,5 @@
-const fs = require('fs').promises
-const { onBuild } = require('../src/')
+import  fs  from 'fs-extr'
+import { onBuild } from '../src'
 
 describe('onBuild', () => {
   const readdir = fs.readdir
@@ -53,7 +53,7 @@ describe('onBuild', () => {
         to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.NETLIFY_HOST}/cld-assets${imagesPath}/:splat`,
         status: 302,
         force: true,
-      })
+     })
 
       expect(redirects[1]).toEqual({
         from: `/cld-assets${imagesPath}/*`,

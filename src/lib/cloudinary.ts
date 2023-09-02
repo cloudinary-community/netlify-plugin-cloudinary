@@ -4,8 +4,8 @@ import fetch from 'node-fetch'
 import { JSDOM } from 'jsdom'
 import { v2 as cloudinary } from 'cloudinary'
 
-import { isRemoteUrl, determineRemoteUrl } from './util'
-import { ERROR_CLOUD_NAME_REQUIRED } from '../data/errors'
+import { isRemoteUrl, determineRemoteUrl } from './util.js'
+import { ERROR_CLOUD_NAME_REQUIRED } from '../data/errors.js'
 
 type CloudinaryConfig = {
   cloudName: string;
@@ -132,6 +132,7 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
       `To use deliveryType ${deliveryType}, please use an uploadPreset for unsigned requests or an API Key and Secret for signed requests.`,
     )
   }
+  console.log({ deliveryType, remoteHost})
   if (deliveryType === 'fetch' && !remoteHost) {
     throw new Error(
       `To use deliveryType ${deliveryType}, please provide a remoteHost.`
