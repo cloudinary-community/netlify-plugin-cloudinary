@@ -7,14 +7,14 @@ import {
   updateHtmlImagesToCloudinary,
   getCloudinaryUrl,
   Assets,
-} from './lib/cloudinary.js'
-import { PUBLIC_ASSET_PATH } from './data/cloudinary.js'
+} from './lib/cloudinary'
+import { PUBLIC_ASSET_PATH } from './data/cloudinary'
 import {
   ERROR_CLOUD_NAME_REQUIRED,
   ERROR_NETLIFY_HOST_UNKNOWN,
   ERROR_NETLIFY_HOST_CLI_SUPPORT,
   ERROR_SITE_NAME_REQUIRED,
-} from './data/errors.js'
+} from './data/errors'
 
 
 /**
@@ -189,6 +189,7 @@ export async function onBuild({ netlifyConfig, constants, inputs, utils }: OnBui
       }),
     )
   } catch (e) {
+    console.error('Error', e)
     if (e instanceof Error) {
       utils.build.failBuild(e.message)
     } else {
@@ -229,7 +230,7 @@ export async function onBuild({ netlifyConfig, constants, inputs, utils }: OnBui
         async ({ inputKey, path: defaultPath }) => {
           const mediaPath = inputs[inputKey as keyof Inputs] || defaultPath
           const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, mediaPath)}`
-          const cldAssetUrl = `${host}/${cldAssetPath}`
+          const cldAssetUrl = `${host}${cldAssetPath}`
 
           const { cloudinaryUrl: assetRedirectUrl } = await getCloudinaryUrl({
             deliveryType: 'fetch',
@@ -271,12 +272,6 @@ export async function onPostBuild({ constants, inputs, utils }: OnPostBuildParam
     : process.env.DEPLOY_PRIME_URL
 
   console.log(`[Cloudinary] Using host: ${host}`)
-
-  // if (!host) {
-  //   console.warn(`[Cloudinary] ${ERROR_NETLIFY_HOST_UNKNOWN}`)
-  //   console.log(`[Cloudinary] ${ERROR_NETLIFY_HOST_CLI_SUPPORT}`)
-  //   return
-  // }
 
   const { PUBLISH_DIR } = constants
   const {

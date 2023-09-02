@@ -4,8 +4,8 @@ import fetch from 'node-fetch'
 import { JSDOM } from 'jsdom'
 import { v2 as cloudinary } from 'cloudinary'
 
-import { isRemoteUrl, determineRemoteUrl } from './util.js'
-import { ERROR_CLOUD_NAME_REQUIRED } from '../data/errors.js'
+import { isRemoteUrl, determineRemoteUrl } from './util'
+import { ERROR_CLOUD_NAME_REQUIRED } from '../data/errors'
 
 type CloudinaryConfig = {
   cloudName: string;
@@ -147,13 +147,13 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
   let fileLocation
   let publicId
 
-  if (deliveryType === 'fetch' && remoteHost) {
+  if (deliveryType === 'fetch') {
     // fetch allows us to pass in a remote URL to the Cloudinary API
     // which it will cache and serve from the CDN, but not store
 
-    fileLocation = determineRemoteUrl(filePath, remoteHost)
+    fileLocation = determineRemoteUrl(filePath, remoteHost as string)
     publicId = fileLocation
-  } else if (deliveryType === 'upload' && localDir) {
+  } else if (deliveryType === 'upload') {
     // upload will actually store the image in the Cloudinary account
     // and subsequently serve that stored image
 
@@ -164,7 +164,7 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
     let fullPath = filePath
 
     if (!isRemoteUrl(fullPath)) {
-      fullPath = path.join(localDir, fullPath)
+      fullPath = path.join(localDir ?? '', fullPath)
     }
 
     const id = await createPublicId({
