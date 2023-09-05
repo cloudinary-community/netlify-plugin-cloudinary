@@ -1,5 +1,5 @@
-import fs from 'fs-extra';
-import path from 'path';
+import fs from 'node:fs/promises'
+import path from 'node:path';
 import { glob } from 'glob';
 
 import {

@@ -4,13 +4,14 @@
   "description": "Supercharge images on your Netlify site with Cloudinary!",
   "main": "dist/index.js",
   "workspaces":[
-      "demo"
+      "demo",
+      "."
   ],
   "scripts": {
     "test": "jest",
     "typecheck": "tsc --noEmit -p ./tsconfig.json",
     "compile": "tsc -p ./tsconfig.json",
-    "build": "npm run compile && netlify build",
+    "build": "npm run compile && netlify build --filter netlify-plugin-cloudinary",
     "deploy": "npm run compile && netlify deploy --build",
     "lint": "eslint . --ext .ts && npm run lint -w ./demo",
     "format": "prettier  --write \"(src|test)/*.+(js|ts|json)\" && npm run format -w ./demo"
@@ -23,7 +24,6 @@
   "license": "MIT",
   "dependencies": {
     "cloudinary": "^1.40.0",
-    "fs-extra": "11.1.1",
     "glob": "^10.3.3",
     "jsdom": "21",
     "node-fetch": "2"
@@ -32,7 +32,6 @@
     "@netlify/config": "20.8.1",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "@types/fs-extra": "11.0.1",
     "@types/glob": "8.1.0",
     "@types/jsdom": "21.1.2",
     "@types/node-fetch": "2.6.4",

@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.onPostBuild = exports.onBuild = void 0;
-const fs_extra_1 = __importDefault(require("fs-extra"));
-const path_1 = __importDefault(require("path"));
+const promises_1 = __importDefault(require("node:fs/promises"));
+const node_path_1 = __importDefault(require("node:path"));
 const glob_1 = require("glob");
 const cloudinary_1 = require("./lib/cloudinary");
 const cloudinary_2 = require("./data/cloudinary");
@@ -22,7 +22,7 @@ const CLOUDINARY_ASSET_DIRECTORIES = [
  * - Handle srcset
  */
 const _cloudinaryAssets = { images: {} };
-async function onBuild({ netlifyConfig, constants, inputs, utils }) {
+async function onBuild({ netlifyConfig, constants, inputs, utils, }) {
     console.log('[Cloudinary] Creating redirects...');
     const isProduction = process.env.CONTEXT === 'production';
     const host = isProduction
@@ -36,7 +36,7 @@ async function onBuild({ netlifyConfig, constants, inputs, utils }) {
     const { PUBLISH_DIR } = constants;
     const { deliveryType, uploadPreset, folder = process.env.SITE_NAME, 
     // imagesPath = CLOUDINARY_ASSET_DIRECTORIES.at(0)?.path
-    imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(({ inputKey }) => inputKey === 'imagesPath')?.path } = inputs;
+    imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(({ inputKey }) => inputKey === 'imagesPath')?.path, } = inputs;
     if (!folder) {
         utils.build.failPlugin(errors_1.ERROR_SITE_NAME_REQUIRED);
         return;
@@ -61,7 +61,7 @@ async function onBuild({ netlifyConfig, constants, inputs, utils }) {
     // Look for any available images in the provided imagesPath to collect
     // asset details and to grab a Cloudinary URL to use later
     const imagesDirectory = glob_1.glob.sync(`${PUBLISH_DIR}/${imagesPath}/**/*`);
-    const imagesFiles = imagesDirectory.filter(file => !!path_1.default.extname(file));
+    const imagesFiles = imagesDirectory.filter(file => !!node_path_1.default.extname(file));
     if (imagesFiles.length === 0) {
         console.warn(`[Cloudinary] No image files found in ${imagesPath}`);
         console.log(`[Cloudinary] Did you update your images path? You can set the imagesPath input in your Netlify config.`);
@@ -116,7 +116,7 @@ async function onBuild({ netlifyConfig, constants, inputs, utils }) {
     if (deliveryType === 'fetch') {
         await Promise.all(CLOUDINARY_ASSET_DIRECTORIES.map(async ({ inputKey, path: defaultPath }) => {
             const mediaPath = inputs[inputKey] || defaultPath;
-            const cldAssetPath = `/${path_1.default.join(cloudinary_2.PUBLIC_ASSET_PATH, mediaPath)}`;
+            const cldAssetPath = `/${node_path_1.default.join(cloudinary_2.PUBLIC_ASSET_PATH, mediaPath)}`;
             const cldAssetUrl = `${host}${cldAssetPath}`;
             const { cloudinaryUrl: assetRedirectUrl } = await (0, cloudinary_1.getCloudinaryUrl)({
                 deliveryType: 'fetch',
@@ -143,7 +143,7 @@ async function onBuild({ netlifyConfig, constants, inputs, utils }) {
 exports.onBuild = onBuild;
 // Post build looks through all of the output HTML and rewrites any src attributes to use a cloudinary URL
 // This only solves on-page references until any JS refreshes the DOM
-async function onPostBuild({ constants, inputs, utils }) {
+async function onPostBuild({ constants, inputs, utils, }) {
     console.log('[Cloudinary] Replacing on-page images with Cloudinary URLs...');
     const isProduction = process.env.CONTEXT === 'production';
     const host = isProduction
@@ -151,7 +151,7 @@ async function onPostBuild({ constants, inputs, utils }) {
         : process.env.DEPLOY_PRIME_URL;
     console.log(`[Cloudinary] Using host: ${host}`);
     const { PUBLISH_DIR } = constants;
-    const { deliveryType, uploadPreset, folder = process.env.SITE_NAME, } = inputs;
+    const { deliveryType, uploadPreset, folder = process.env.SITE_NAME } = inputs;
     if (!folder) {
         utils.build.failPlugin(errors_1.ERROR_SITE_NAME_REQUIRED);
         return;
@@ -171,7 +171,7 @@ async function onPostBuild({ constants, inputs, utils }) {
     // Find all HTML source files in the publish directory
     const pages = glob_1.glob.sync(`${PUBLISH_DIR}/**/*.html`);
     const results = await Promise.all(pages.map(async (page) => {
-        const sourceHtml = await fs_extra_1.default.readFile(page, 'utf-8');
+        const sourceHtml = await promises_1.default.readFile(page, 'utf-8');
         const { html, errors } = await (0, cloudinary_1.updateHtmlImagesToCloudinary)(sourceHtml, {
             assets: _cloudinaryAssets,
             deliveryType,
@@ -180,7 +180,7 @@ async function onPostBuild({ constants, inputs, utils }) {
             localDir: PUBLISH_DIR,
             remoteHost: host,
         });
-        await fs_extra_1.default.writeFile(page, html);
+        await promises_1.default.writeFile(page, html);
         return {
             page,
             errors,
