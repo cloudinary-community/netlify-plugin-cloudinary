@@ -3,10 +3,10 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-import dataImages from '../data/images'
+import dataImages from '../data/images.json'
 
 export default function Home({ images }) {
-  const [isLoaded, setIsLoaded] = useState()
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     setTimeout(() => {

@@ -16,76 +16,84 @@ import {
   ERROR_SITE_NAME_REQUIRED,
 } from './data/errors'
 
-
 /**
-* Type needs improvement
-* Information was found here <a href="https://docs.netlify.com/integrations/build-plugins/create-plugins/#netlifyconfig">Netlify Config</a>
-*/
+ * Type needs improvement
+ * Information was found here <a href="https://docs.netlify.com/integrations/build-plugins/create-plugins/#netlifyconfig">Netlify Config</a>
+ */
 
 type NetlifyConfig = {
   redirects: Array<{
     from: string
     to?: string
-    status?: number;
+    status?: number
     force?: boolean
     signed?: string
     query?: Partial<Record<string, string>>
     headers?: Partial<Record<string, string>>
-    conditions?: Partial<Record<'Language' | 'Role' | 'Country' | 'Cookie', readonly string[]>>
+    conditions?: Partial<
+      Record<'Language' | 'Role' | 'Country' | 'Cookie', readonly string[]>
+    >
   }>
   headers: Array<{
     for: string
-    values: unknown; // marked as unknown because is not required here.
-  }>;
+    values: unknown // marked as unknown because is not required here.
+  }>
   functions: {
-    directory: string;
-  };
+    directory: string
+  }
   build: {
-    command: string;
+    command: string
     environment: Record<string, string>
-    edge_functions: string;
+    edge_functions: string
     processing: Record<string, unknown>
   }
-
 }
 type Constants = {
-  CONFIG_PATH?: string;
-  PUBLISH_DIR: string;
-  FUNCTIONS_SRC: string;
-  FUNCTIONS_DIST: string;
-  IS_LOCAL: boolean;
-  NETLIFY_BUILD_VERSION: `${string}.${string}.${string}`;
-  SITE_ID: string;
+  CONFIG_PATH?: string
+  PUBLISH_DIR: string
+  FUNCTIONS_SRC: string
+  FUNCTIONS_DIST: string
+  IS_LOCAL: boolean
+  NETLIFY_BUILD_VERSION: `${string}.${string}.${string}`
+  SITE_ID: string
 }
 
 /**
-* this type is built based on the content of the plugin manifest file
-* Information found here https://docs.netlify.com/integrations/build-plugins/create-plugins/#inputs
-*/
+ * this type is built based on the content of the plugin manifest file
+ * Information found here https://docs.netlify.com/integrations/build-plugins/create-plugins/#inputs
+ */
 type Inputs = {
-  cloudName: string;
-  deliveryType: string;
-  imagesPath: string;
-  folder: string;
-  uploadPreset: string;
-  loadingStrategy: string;
+  cloudName: string
+  deliveryType: string
+  imagesPath: string
+  folder: string
+  uploadPreset: string
+  loadingStrategy: string
 }
 
 type Utils = {
   build: {
-    failBuild: (message: string, { error }?: { error: Error }) => void;
-    failPlugin: (message: string, { error }?: { error: Error }) => void;
-    cancelBuild: (message: string, { error }?: { error: Error }) => void;
-  };
+    failBuild: (message: string, { error }?: { error: Error }) => void
+    failPlugin: (message: string, { error }?: { error: Error }) => void
+    cancelBuild: (message: string, { error }?: { error: Error }) => void
+  }
   status: {
-    show: ({ title, summary, text }: { title: string; summary: string; text: string }) => void;
-  };
+    show: ({
+      title,
+      summary,
+      text,
+    }: {
+      title: string
+      summary: string
+      text: string
+    }) => void
+  }
 }
 type OnBuildParams = {
-  netlifyConfig: NetlifyConfig;
-  constants: Constants;
-  inputs: Inputs;
-  utils: Utils;
+  netlifyConfig: NetlifyConfig
+  constants: Constants
+  inputs: Inputs
+  utils: Utils
 }
 type OnPostBuildParams = Omit<OnBuildParams, 'netlifyConfig'>
 
@@ -104,7 +112,12 @@ const CLOUDINARY_ASSET_DIRECTORIES = [
 
 const _cloudinaryAssets = { images: {} } as Assets
 
-export async function onBuild({ netlifyConfig, constants, inputs, utils }: OnBuildParams) {
+export async function onBuild({
+  netlifyConfig,
+  constants,
+  inputs,
+  utils,
+}: OnBuildParams) {
   console.log('[Cloudinary] Creating redirects...')
 
   const isProduction = process.env.CONTEXT === 'production'
@@ -126,7 +139,9 @@ export async function onBuild({ netlifyConfig, constants, inputs, utils }: OnBui
     uploadPreset,
     folder = process.env.SITE_NAME,
     // imagesPath = CLOUDINARY_ASSET_DIRECTORIES.at(0)?.path
-    imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(({ inputKey }) => inputKey === 'imagesPath')?.path
+    imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(
+      ({ inputKey }) => inputKey === 'imagesPath',
+    )?.path,
   } = inputs
 
   if (!folder) {
@@ -263,7 +278,11 @@ export async function onBuild({ netlifyConfig, constants, inputs, utils }: OnBui
 // Post build looks through all of the output HTML and rewrites any src attributes to use a cloudinary URL
 // This only solves on-page references until any JS refreshes the DOM
 
-export async function onPostBuild({ constants, inputs, utils }: OnPostBuildParams ) {
+export async function onPostBuild({
+  constants,
+  inputs,
+  utils,
+}: OnPostBuildParams) {
   console.log('[Cloudinary] Replacing on-page images with Cloudinary URLs...')
 
   const isProduction = process.env.CONTEXT === 'production'
@@ -274,11 +293,7 @@ export async function onPostBuild({ constants, inputs, utils }: OnPostBuildParam
   console.log(`[Cloudinary] Using host: ${host}`)
 
   const { PUBLISH_DIR } = constants
-  const {
-    deliveryType,
-    uploadPreset,
-    folder = process.env.SITE_NAME,
-  } = inputs
+  const { deliveryType, uploadPreset, folder = process.env.SITE_NAME } = inputs
 
   if (!folder) {
     utils.build.failPlugin(ERROR_SITE_NAME_REQUIRED)
@@ -308,17 +323,14 @@ export async function onPostBuild({ constants, inputs, utils }: OnPostBuildParam
     pages.map(async page => {
       const sourceHtml = await fs.readFile(page, 'utf-8')
 
-      const { html, errors } = await updateHtmlImagesToCloudinary(
-        sourceHtml,
-        {
-          assets: _cloudinaryAssets,
-          deliveryType,
-          uploadPreset,
-          folder,
-          localDir: PUBLISH_DIR,
-          remoteHost: host,
-        },
-      )
+      const { html, errors } = await updateHtmlImagesToCloudinary(sourceHtml, {
+        assets: _cloudinaryAssets,
+        deliveryType,
+        uploadPreset,
+        folder,
+        localDir: PUBLISH_DIR,
+        remoteHost: host,
+      })
 
       await fs.writeFile(page, html)
 
@@ -338,4 +350,3 @@ export async function onPostBuild({ constants, inputs, utils }: OnPostBuildParam
     console.log('[Cloudinary] Done.')
   }
 }
-

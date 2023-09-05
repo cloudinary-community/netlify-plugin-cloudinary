@@ -2,7 +2,7 @@ import '../../styles/globals.css'
 import Image from 'next/image'
 import styles from '../../styles/Home.module.css'
 
-import images from '../../data/images'
+import images from '../../data/images.json'
 
 export default function Home() {
   return (

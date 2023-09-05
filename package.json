@@ -3,14 +3,17 @@
   "version": "1.6.0",
   "description": "Supercharge images on your Netlify site with Cloudinary!",
   "main": "dist/index.js",
+  "workspaces":[
+      "demo"
+  ],
   "scripts": {
     "test": "jest",
     "typecheck": "tsc --noEmit -p ./tsconfig.json",
     "compile": "tsc -p ./tsconfig.json",
     "build": "npm run compile && netlify build",
     "deploy": "npm run compile && netlify deploy --build",
-    "lint": "eslint . --ext .ts",
-    "format": "prettier  --write \"(src|test)/*.+(js|ts|json)\""
+    "lint": "eslint . --ext .ts && npm run lint -w ./demo",
+    "format": "prettier  --write \"(src|test)/*.+(js|ts|json)\" && npm run format -w ./demo"
   },
   "author": {
     "name": "Colby Fayock",
