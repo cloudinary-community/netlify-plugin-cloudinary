@@ -5,7 +5,6 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest -w",
     "typecheck": "tsc --noEmit -p ./tsconfig.json",
     "compile": "tsc -p ./tsconfig.json",
     "build": "npm run compile && netlify build",
