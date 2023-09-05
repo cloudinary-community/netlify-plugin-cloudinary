@@ -125,11 +125,6 @@ export async function onBuild({
     ? process.env.NETLIFY_HOST
     : process.env.DEPLOY_PRIME_URL;
 
-  // if(!host) {
-  //   utils.build.failBuild(ERROR_NETLIFY_HOST_UNKNOWN)
-  //   return;
-  // }
-
   console.log(`[Cloudinary] Using host: ${host}`);
 
   const { PUBLISH_DIR } = constants;
@@ -138,7 +133,6 @@ export async function onBuild({
     deliveryType,
     uploadPreset,
     folder = process.env.SITE_NAME,
-    // imagesPath = CLOUDINARY_ASSET_DIRECTORIES.at(0)?.path
     imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(
       ({ inputKey }) => inputKey === 'imagesPath',
     )?.path,
