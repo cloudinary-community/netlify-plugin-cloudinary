@@ -1,4 +1,4 @@
-process.env.CLOUDINARY_CLOUD_NAME="testCloudName"
+process.env.CLOUDINARY_CLOUD_NAME="testcloud"
 process.env.CLOUDINARY_API_KEY="791111111111111"
 process.env.CLOUDINARY_API_SECRET="B1CoYVwbgSZ-Bpk_Firy8jB2480"
 process.env.CLOUDINARY_API_SECRET="ThisIsTheSe-Cre_tAPIKEY_800"

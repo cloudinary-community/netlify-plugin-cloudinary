@@ -16,6 +16,9 @@ describe('lib/util', () => {
     jest.resetModules();
 
     process.env = { ...ENV_ORIGINAL };
+    process.env.CLOUDINARY_CLOUD_NAME = 'testcloud';
+    process.env.CLOUDINARY_API_KEY = '123456789012345';
+    process.env.CLOUDINARY_API_SECRET = 'abcd1234';
 
     cloudinary.config({
       cloud_name: CLOUDINARY_CLOUD_NAME,
@@ -58,21 +61,35 @@ describe('lib/util', () => {
         remoteHost: 'https://cloudinary.netlify.app'
       });
 
-      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
+      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
     });
 
     test('should create a Cloudinary URL with delivery type of fetch from a remote image', async () => {
+
       const { cloudinaryUrl } = await getCloudinaryUrl({
         deliveryType: 'fetch',
         path: 'https://i.imgur.com/vtYmp1x.png'
       });
 
-      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png`);
+      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png`);
     });
 
     // TODO: Mock functions to test Cloudinary uploads without actual upload
 
     test('should create a Cloudinary URL with delivery type of upload from a local image', async () => {
+      // mock cloudinary.uploader.upload call
+      cloudinary.uploader.upload = jest.fn().mockResolvedValue({
+        public_id: 'stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d',
+        secure_url: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/v1613009008/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d.jpg`,
+        original_filename: 'stranger-things-dustin',
+        version: 1613009008,
+        width: 1280,
+        height: 720,
+        format: 'jpg',
+        resource_type: 'image',
+        created_at: '2021-02-11T16:43:28Z',
+      })
+
       const { cloudinaryUrl } = await getCloudinaryUrl({
         deliveryType: 'upload',
         path: '/images/stranger-things-dustin.jpeg',
@@ -80,7 +97,7 @@ describe('lib/util', () => {
         remoteHost: 'https://cloudinary.netlify.app'
       });
 
-      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d`);
+      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d`);
     });
 
     // TODO: Mock functions to test Cloudinary uploads without actual upload
@@ -91,7 +108,7 @@ describe('lib/util', () => {
     //     path: 'https://i.imgur.com/vtYmp1x.png'
     //   });
 
-    //   expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/vtYmp1x-ae71a79c9c36b8d5dba872c3b274a444`);
+    //   expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/vtYmp1x-ae71a79c9c36b8d5dba872c3b274a444`);
     // });
 
   });
@@ -107,7 +124,7 @@ describe('lib/util', () => {
         remoteHost: 'https://cloudinary.netlify.app'
       });
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" loading=\"lazy"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" loading=\"lazy"\></p></body></html>`);
     });
 
     it('should replace a remote image with a Cloudinary URL', async () => {
@@ -117,7 +134,7 @@ describe('lib/util', () => {
         deliveryType: 'fetch'
       });
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png\" loading=\"lazy"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png\" loading=\"lazy"\></p></body></html>`);
     });
 
 
@@ -130,7 +147,7 @@ describe('lib/util', () => {
         remoteHost: 'https://cloudinary.netlify.app',
       });
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" srcset=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 1x, https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 2x\" loading=\"lazy"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" srcset=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 1x, https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 2x\" loading=\"lazy"\></p></body></html>`);
     });
 
     it('should add lazy loading to image when no option is provided', async () => {
@@ -142,7 +159,7 @@ describe('lib/util', () => {
         remoteHost: 'https://cloudinary.netlify.app',
       });
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png\" loading=\"lazy"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png\" loading=\"lazy"\></p></body></html>`);
     });
 
     it('should add eager loading to image when eager option is provided for loadingStrategy', async () => {
@@ -155,7 +172,7 @@ describe('lib/util', () => {
         loadingStrategy: 'eager'
       });
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png\" loading=\"eager"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png\" loading=\"eager"\></p></body></html>`);
     });
 
     it('should test uploading multiple assets', async () => {
