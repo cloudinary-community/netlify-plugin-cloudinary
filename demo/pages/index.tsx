@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { useState, useEffect } from 'react';
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
 
-import dataImages from '../data/images.json'
+import dataImages from '../data/images.json';
 
 export default function Home({ images }) {
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
-      setIsLoaded(true)
-    }, 1000)
-  }, [])
+      setIsLoaded(true);
+    }, 1000);
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -63,7 +63,7 @@ export default function Home({ images }) {
                   alt={image.title}
                 />
               </li>
-            )
+            );
           })}
         </ul>
 
@@ -78,7 +78,7 @@ export default function Home({ images }) {
                   alt={image.title}
                 />
               </li>
-            )
+            );
           })}
         </ul>
 
@@ -94,13 +94,13 @@ export default function Home({ images }) {
                     alt={image.title}
                   />
                 </li>
-              )
+              );
             })}
           </ul>
         )}
       </main>
     </div>
-  )
+  );
 }
 
 export async function getStaticProps() {
@@ -108,5 +108,5 @@ export async function getStaticProps() {
     props: {
       images: dataImages,
     },
-  }
+  };
 }

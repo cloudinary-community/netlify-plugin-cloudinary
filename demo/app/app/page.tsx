@@ -1,8 +1,8 @@
-import '../../styles/globals.css'
-import Image from 'next/image'
-import styles from '../../styles/Home.module.css'
+import '../../styles/globals.css';
+import Image from 'next/image';
+import styles from '../../styles/Home.module.css';
 
-import images from '../../data/images.json'
+import images from '../../data/images.json';
 
 export default function Home() {
   return (
@@ -21,7 +21,7 @@ export default function Home() {
                   alt={image.title}
                 />
               </li>
-            )
+            );
           })}
         </ul>
 
@@ -36,10 +36,10 @@ export default function Home() {
                   alt={image.title}
                 />
               </li>
-            )
+            );
           })}
         </ul>
       </main>
     </div>
-  )
+  );
 }
