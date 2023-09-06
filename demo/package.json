@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
     "next": "13.4.19",
@@ -13,7 +14,10 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@types/react": "18.2.21",
     "eslint": "8.48.0",
-    "eslint-config-next": "13.4.19"
+    "eslint-config-next": "13.4.19",
+    "eslint-config-prettier": "9.0.0",
+    "prettier": "3.0.3"
   }
 }

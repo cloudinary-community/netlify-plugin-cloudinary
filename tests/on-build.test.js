@@ -48,7 +48,6 @@ describe('onBuild', () => {
           deliveryType
         }
       });
-
       expect(redirects[0]).toEqual({
         from: `${imagesPath}/*`,
         to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.NETLIFY_HOST}/cld-assets${imagesPath}/:splat`,
