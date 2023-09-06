@@ -1,3 +1,17 @@
+# [1.8.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.7.1...v1.8.0) (2023-09-06)
+
+
+### Bug Fixes
+
+* cleaning readme, forcing deploy ([d9558d4](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/d9558d4c6d633490517bde2f798f3977e82d16d8))
+* release ([1ce13df](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/1ce13df6402c73308257918013a72a942cd84753))
+* workspace root for release ([589d257](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/589d2575fea20425a942a9ea30a78d06d2a5a2e8))
+
+
+### Features
+
+* pnpm Workspace ([#64](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/64)) ([02f92ac](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/02f92acf001149c9cf229bfb93e455ebd9a68b72))
+
 ## [1.7.1](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.7.0...v1.7.1) (2023-09-06)
 
 
