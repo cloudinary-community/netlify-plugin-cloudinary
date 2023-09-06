@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.7.0...v1.7.1) (2023-09-06)
+
+
+### Bug Fixes
+
+* removing postinstall to avoid breaking package installations ([a5a71cb](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/a5a71cbf99b9f0e085a91ec4d63877c27d2d4dd6))
+
 # [1.7.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.6.0...v1.7.0) (2023-09-06)
 
 
