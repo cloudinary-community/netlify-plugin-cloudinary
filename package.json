@@ -9,6 +9,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "build": "pnpm -r build",
     "build-site": "netlify build --filter demo",
     "format": "pnpm -r format",
     "lint": "pnpm -r lint",
