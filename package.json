@@ -10,7 +10,8 @@
     "build": "npm run compile && netlify build ",
     "deploy": "npm run compile && netlify deploy",
     "lint": "eslint . --ext .ts && cd demo && npm run lint ",
-    "format": "prettier  --write \"(src|test)/*.+(js|ts|json)\" && cd demo && npm run format "
+    "format": "prettier  --write \"(src|test)/*.+(js|ts|json)\" && cd demo && npm run format ",
+    "postinstall": "npm run compile"
   },
   "author": {
     "name": "Colby Fayock",
