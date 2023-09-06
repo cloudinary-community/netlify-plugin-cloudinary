@@ -11,11 +11,15 @@ jobs:
         node: [ '16', '18', '20' ]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-      - run: npm ci
-      - run: npm run test
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
         env:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
@@ -28,12 +32,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2
         with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v2
+          version: 8
+      - uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - run: npm ci
+          cache: 'pnpm'  
+          # https://github.com/pnpm/pnpm/issues/3141
+          registry-url: 'https://registry.npmjs.org'
+      - run: pnpm install --frozen-lockfile
       # Do not store semantic release dependencies in package.json to avoid lower node versions from failing tests
       - run: npm install @semantic-release/changelog @semantic-release/git semantic-release
       - run: npx semantic-release --branches main

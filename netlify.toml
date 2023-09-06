@@ -1,5 +1,5 @@
 [build]
-  command = "cd demo && npm install && npm run build"
+  command = "pnpm --filter demo build"
   publish = "demo/.next"
 
 [[plugins]]
@@ -10,7 +10,7 @@
   # for this plugin to be locally accessible at build time on Netlify's
   # servers. If running locally, the expectation would be that the TS
   # project will have been built either by install or during dev
-  package = "."
+  package = "./netlify-plugin-cloudinary"
 
   [plugins.inputs]
   cloudName = "colbycloud"

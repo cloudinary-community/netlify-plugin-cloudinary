@@ -1,9 +1,0 @@
-.env
-.github
-.netlify
-_next
-demo
-jest.config.js
-node_modules
-netlify.toml
-tests

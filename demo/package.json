@@ -18,6 +18,7 @@
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "eslint-config-prettier": "9.0.0",
+    "netlify-plugin-cloudinary": "workspace:*",
     "prettier": "3.0.3"
   }
 }

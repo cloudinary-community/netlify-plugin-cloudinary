@@ -39,12 +39,17 @@
         "changelogFile": "CHANGELOG.md"
       }
     ],
-    "@semantic-release/npm",
+    [
+      "@semantic-release/npm",
+      {
+        "pkgRoot": "netlify-plugin-cloudinary"
+      }
+    ],
     [
       "@semantic-release/git",
       {
         "assets": [
-          "package.json",
+          "netlify-plugin-cloudinary/package.json",
           "CHANGELOG.md"
         ]
       }
