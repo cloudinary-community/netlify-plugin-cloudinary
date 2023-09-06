@@ -1,11 +1,15 @@
 [build]
-  command = "npm run compile && cd demo && npm install && npm run build"
+  command = "cd demo && npm install && npm run build"
   publish = "demo/.next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 [[plugins]]
+  # package.json includes a postinstall `npm run compile` which allows
+  # for this plugin to be locally accessible at build time on Netlify's
+  # servers. If running locally, the expectation would be that the TS
+  # project will have been built either by install or during dev
   package = "."
 
   [plugins.inputs]
