@@ -1,5 +1,5 @@
 {
-  "name": "svelte-cloudinary",
+  "name": "netlify-plugin-cloudinary",
   "repository": "git@github.com:colbyfayock/netlify-plugin-cloudinary.git",
   "author": {
     "name": "Colby Fayock",
