@@ -1,9 +1,10 @@
 .env
-.github
-.netlify
-_next
-demo
+.eslintignore
+.eslintrc.cjs
+.prettierignore
+.prettierrc
+.setTestEnvVars.js
 jest.config.js
 node_modules
-netlify.toml
-tests
+src
+tsconfig.json
