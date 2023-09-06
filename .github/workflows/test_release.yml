@@ -43,7 +43,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: pnpm install --frozen-lockfile
       # Do not store semantic release dependencies in package.json to avoid lower node versions from failing tests
-      - run: pnpm install @semantic-release/changelog @semantic-release/git semantic-release
+      - run: pnpm install -w @semantic-release/changelog @semantic-release/git semantic-release
       - run: pnpm dlx semantic-release --branches main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
