@@ -14,8 +14,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
-      - run: npm ci
-      - run: npm run test
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
         env:
           CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '18'
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
       # Do not store semantic release dependencies in package.json to avoid lower node versions from failing tests
       - run: npm install @semantic-release/changelog @semantic-release/git semantic-release
       - run: npx semantic-release --branches main
