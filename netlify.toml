@@ -1,6 +1,6 @@
 [build]
-  command = "pnpm --filter demo build"
-  publish = "demo/.next"
+  command = "pnpm --filter docs build"
+  publish = "docs/.next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

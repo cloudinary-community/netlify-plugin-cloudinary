@@ -1,0 +1,22 @@
+import Head from 'next/head';
+
+import Button from '../components/Button';
+
+<Head>
+  <title>Netlify Cloudinary - Automatic Optimization at Scale</title>
+  <meta name="description" content="Optimize and deliver all images in your Netlify site with Cloudinary." />
+  <meta name="og:title" content="Netlify Cloudinary" />
+</Head>
+
+<div className="lg:h-full max-w-5xl mx-auto grid lg:grid-cols-2 py-8 lg:py-0 lg:-mt-[var(--nextra-navbar-height)]">
+  <div className="flex lg:justify-center flex-col order-2 lg:order-1">
+    <h1 className="text-5xl font-bold text-center lg:text-left mb-6">Netlify Cloudinary</h1>
+    <p className="text-xl text-center lg:text-left mb-6">Optimize images at scale on Netlify with Cloudinary</p>
+    <p className="text-center lg:text-left">
+      <Button href="/installation">Get Started</Button>
+    </p>
+  </div>
+  <div className="flex lg:justify-center flex-col order-1 lg:order-2">
+    <img className="w-full max-w-sm mx-auto" width="800" height="600" src="/images/netlify-cloudinary-logos.svg" />
+  </div>
+</div>

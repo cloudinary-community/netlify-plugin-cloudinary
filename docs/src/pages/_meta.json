@@ -1,0 +1,40 @@
+{
+  "index": {
+    "title": "Introduction",
+    "display": "hidden",
+    "type": "page",
+    "theme": {
+      "layout": "full"
+    }
+  },
+  "installation": {
+    "title": "Installation",
+    "theme": {
+      "breadcrumb": false,
+      "toc": false
+    }
+  },
+  "configuration": {
+    "title": "Configuration",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "Resources": {
+    "type": "separator",
+    "title": "Resources"
+  },
+  "guides": "Guides",
+  "troubleshooting": "Troubleshooting",
+
+  "menubar-installation": {
+    "title": "Installation",
+    "href": "/installation",
+    "type": "page"
+  },
+  "menubar-configuration": {
+    "title": "Configuration",
+    "href": "/configuration",
+    "type": "page"
+  }
+}
