@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.6.0...v1.7.0) (2023-09-06)
+
+
+### Features
+
+* migrate to typescript ([#63](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/63)) ([f9b960f](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/f9b960f45cce8d54b0369a53af4613cb65025d03))
+
 # [1.6.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.5.1...v1.6.0) (2023-08-31)
 
 
