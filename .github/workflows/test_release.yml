@@ -42,7 +42,7 @@ jobs:
           # https://github.com/pnpm/pnpm/issues/3141
           registry-url: 'https://registry.npmjs.org'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      - run: pnpm --filter netlify-plugin-cloudinary build
       # Do not store semantic release dependencies in package.json to avoid lower node versions from failing tests
       - run: pnpm install -w @semantic-release/changelog @semantic-release/git semantic-release
       - run: npx semantic-release
