@@ -23,8 +23,34 @@ import OgImage from '../components/OgImage';
     </div>
     <div className="flex lg:justify-center flex-col order-1 lg:order-2 pb-8 lg:pb-0">
       <div className="grid grid-cols-2 gap-12 items-center lg:block lg:relative w-full max-w-xs lg:max-w-xl lg:aspect-[8/6] mx-auto">
-        <img className="lg:absolute lg:top-0 lg:left-0 w-full lg:w-1/2" width="378" height="333" src="/images/netlify-logo-dark.svg" />
-        <img className="lg:absolute lg:bottom-0 lg:right-0 w-full lg:w-1/2" width="359" height="156" src="/images/cloudinary-logo-dark.svg" />
+        <picture className="lg:absolute lg:top-0 lg:left-0 w-full lg:w-1/2">
+          <source
+            width="378"
+            height="333"
+            srcSet="/images/netlify-logo-light.svg"
+            media="(prefers-color-scheme: dark)"
+          />
+          <img
+            width="378"
+            height="333"
+            src="/images/netlify-logo-dark.svg"
+            alt="Netlify Logo"
+          />
+        </picture>
+        <picture className="lg:absolute lg:bottom-0 lg:right-0 w-full lg:w-1/2">
+          <source
+            width="359"
+            height="156"
+            srcSet="/images/cloudinary-logo-light.svg"
+            media="(prefers-color-scheme: dark)"
+          />
+          <img
+            width="359"
+            height="156"
+            src="/images/cloudinary-logo-dark.svg"
+            alt="Cloudinary Logo"
+          />
+        </picture>
       </div>
     </div>
   </div>
