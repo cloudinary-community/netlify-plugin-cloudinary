@@ -20,7 +20,10 @@ import OgImage from '../components/OgImage';
       <Button href="/installation">Get Started</Button>
     </p>
   </div>
-  <div className="flex lg:justify-center flex-col order-1 lg:order-2">
-    <img className="w-full max-w-sm mx-auto" width="800" height="600" src="/images/netlify-cloudinary-logos.svg" />
+  <div className="flex lg:justify-center flex-col order-1 lg:order-2 pb-12 lg:pb-0">
+    <div className="relative w-full max-w-md lg:max-w-xl aspect-[8/6] mx-auto">
+      <img className="absolute top-0 left-0 w-1/2" width="378" height="333" src="/images/netlify-logo-dark.svg" />
+      <img className="absolute bottom-0 right-0 w-1/2" width="359" height="156" src="/images/cloudinary-logo-dark.svg" />
+    </div>
   </div>
 </div>
