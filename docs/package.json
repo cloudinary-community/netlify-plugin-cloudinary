@@ -10,6 +10,7 @@
     "autoprefixer": "^10.4.15",
     "next": "^13.0.6",
     "next-cloudinary": "^4.20.0",
+    "nextjs-google-analytics": "^2.3.3",
     "nextra": "latest",
     "nextra-theme-docs": "latest",
     "postcss": "^8.4.29",
