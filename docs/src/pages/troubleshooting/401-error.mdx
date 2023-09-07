@@ -1,0 +1,20 @@
+import Head from 'next/head';
+
+<Head>
+  <title>Troubleshooting 401 Errors - Netlify Cloudinary</title>
+  <meta name="description" content="Learn how to troubleshoot 401 errors with the Cloudinary Build Plugin for Netlify." />
+  <meta name="og:title" content="Troubleshooting 401 Errors with Netlify Cloudinary" />
+  <meta name="og:description" content="Learn how to troubleshoot 401 errors with the Cloudinary Build Plugin for Netlify." />
+</Head>
+
+# Troubleshooting 401 Errors
+
+## I'm using the default settings, but my images 401
+
+The plugin uses the fetch method by default and if you're receiving a 401 with a valid URL and valid Cloudinary account, you may be currently restricting fetched URLs.
+
+You have two options to resolve this: adding your Netlify domain to the list of "allowed fetch domains" and removing the fetched URL restriction.
+
+Adding your domain to the "allowed fetch domains" list is more secure by not allowing others to use your Cloudinary account with their own images. You can do this under Settings > Security > Allowed fetch domains.
+
+Alternatively, you can remove the restriction and allow all fetched images to work by going to Settings > Security > Restricted media types and unchecking the box for Fetched URL.
