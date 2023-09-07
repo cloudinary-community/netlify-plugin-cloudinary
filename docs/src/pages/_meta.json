@@ -4,7 +4,8 @@
     "display": "hidden",
     "type": "page",
     "theme": {
-      "layout": "raw"
+      "layout": "raw",
+      "timestamp": false
     }
   },
   "installation": {
