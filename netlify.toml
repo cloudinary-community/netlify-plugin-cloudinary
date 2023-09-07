@@ -13,5 +13,5 @@
   package = "./netlify-plugin-cloudinary"
 
   [plugins.inputs]
-  cloudName = "colbycloud"
-  # deliveryType = "upload"
+  cloudName = "netlify-cloudinary"
+  deliveryType = "upload"
