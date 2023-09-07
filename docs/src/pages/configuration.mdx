@@ -1,0 +1,67 @@
+import Head from 'next/head';
+import { Callout } from 'nextra-theme-docs';
+
+import OgImage from '../components/OgImage';
+
+<Head>
+  <title>Configuration - Netlify Cloudinary</title>
+  <meta name="description" content="Configuring the Cloudinary Build Plugin for Netlify." />
+  <meta name="og:title" content="Configuring Netlify Cloudinary" />
+  <meta name="og:description" content="Configuring the Cloudinary Build Plugin for Netlify." />
+</Head>
+
+<OgImage
+  title="Configuration"
+  twitterTitle="Configuring Netlify Cloudinary"
+/>
+
+# Configuring Cloudinary Build Plugin
+
+## Plugin Inputs
+
+| Name            | Required | Example   | Description |
+|-----------------|----------|-----------| ------------|
+| cloudName       | No*      | mycloud   | Cloudinary Cloud Name |
+| deliveryType    | No       | fetch     | The method by which Cloudinary stores and delivers images (Ex: fetch, upload) |
+| folder          | No       | myfolder  | Folder all media will be stored in. Defaults to Netlify site name |
+| imagesPath      | No      | /assets   | Local path application serves image assets from |
+| loadingStrategy | No       | eager     | The method in which in which images are loaded (Ex: lazy, eager) |
+| uploadPreset    | No       | my-preset | Defined set of asset upload defaults in Cloudinary |
+
+<Callout emoji={false}>
+  Cloud Name must be set as an environment variable if not as an input
+</Callout>
+
+## Environment Variables
+
+| Name                   | Required | Example  | Description |
+|------------------------|----------|----------|-------------|
+| CLOUDINARY_CLOUD_NAME  | No*      | mycloud  | Cloudinary Cloud Name |
+| CLOUDINARY_API_KEY     | No       | 1234     | Cloudinary API Key |
+| CLOUDINARY_API_SECRET  | No       | abcd1234 | Cloudinary API Secret |
+
+<Callout emoji={false}>
+  Cloud Name must be set as an input variable if not as an environment variable
+</Callout>
+
+## Setting your Cloud Name
+
+You have two options for setting your Cloud Name: plugin input or environment variable.
+
+### Netlify UI
+
+Inside of your build settings, configure [build environment variable](https://docs.netlify.com/configure-builds/environment-variables) for the following:
+
+```
+Name: CLOUDINARY_CLOUD_NAME
+Value: <Your Cloud Name>
+```
+
+### File-based Configuration
+
+Inside your Netlify config, add the following input configurations under your netlify-plugin-cloudinary plugin:
+
+```toml
+  [plugins.inputs]
+  cloudName = "<Your Cloud Name>"
+```

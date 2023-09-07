@@ -10,7 +10,8 @@
   "private": true,
   "scripts": {
     "build": "pnpm -r build",
-    "build-site": "netlify build --filter demo",
+    "build-site": "netlify build --filter docs",
+    "deploy-site": "netlify deploy --build --filter docs",
     "format": "pnpm -r format",
     "lint": "pnpm -r lint",
     "postinstall": "pnpm --filter netlify-plugin-cloudinary build",
