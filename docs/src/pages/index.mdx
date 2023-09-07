@@ -12,18 +12,20 @@ import OgImage from '../components/OgImage';
   twitterTitle="Netlify Cloudinary - Automatic Optimization at Scale"
 />
 
-<div className="lg:h-full max-w-5xl mx-auto grid lg:grid-cols-2 py-8 lg:py-0 lg:-mt-[var(--nextra-navbar-height)]">
-  <div className="flex lg:justify-center flex-col order-2 lg:order-1">
-    <h1 className="text-5xl font-bold text-center lg:text-left mb-6">Netlify Cloudinary</h1>
-    <p className="text-xl text-center lg:text-left mb-6">Optimize images at scale on Netlify with Cloudinary</p>
-    <p className="text-center lg:text-left">
-      <Button href="/installation">Get Started</Button>
-    </p>
-  </div>
-  <div className="flex lg:justify-center flex-col order-1 lg:order-2 pb-12 lg:pb-0">
-    <div className="relative w-full max-w-md lg:max-w-xl aspect-[8/6] mx-auto">
-      <img className="absolute top-0 left-0 w-1/2" width="378" height="333" src="/images/netlify-logo-dark.svg" />
-      <img className="absolute bottom-0 right-0 w-1/2" width="359" height="156" src="/images/cloudinary-logo-dark.svg" />
+<div className="flex items-center h-[calc(100vh-var(--nextra-navbar-height))]">
+  <div className="max-w-5xl mx-auto grid gap-4 lg:gap-14 lg:grid-cols-2 -mt-[calc(var(--nextra-navbar-height)/2)]">
+    <div className="flex lg:justify-center flex-col order-2 lg:order-1">
+      <h1 className="text-5xl font-bold text-center lg:text-left mb-6">Netlify Cloudinary</h1>
+      <p className="text-xl text-center lg:text-left mb-6">Optimize images at scale on Netlify with Cloudinary</p>
+      <p className="text-center lg:text-left">
+        <Button href="/installation">Get Started</Button>
+      </p>
+    </div>
+    <div className="flex lg:justify-center flex-col order-1 lg:order-2 pb-8 lg:pb-0">
+      <div className="grid grid-cols-2 gap-12 items-center lg:block lg:relative w-full max-w-xs lg:max-w-xl lg:aspect-[8/6] mx-auto">
+        <img className="lg:absolute lg:top-0 lg:left-0 w-full lg:w-1/2" width="378" height="333" src="/images/netlify-logo-dark.svg" />
+        <img className="lg:absolute lg:bottom-0 lg:right-0 w-full lg:w-1/2" width="359" height="156" src="/images/cloudinary-logo-dark.svg" />
+      </div>
     </div>
   </div>
 </div>
