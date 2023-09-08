@@ -1,9 +1,10 @@
+import { getCldImageUrl } from 'next-cloudinary';
+
 import images from '../../data/images.json';
 
-# Local Images
+# CDN Images
 
-Images loaded from the default local directory of `/images` which
-are then replaced in the page output.
+Images that are being sourced from an external CDN.
 
 export const Grid = () => {
   return (
@@ -12,7 +13,7 @@ export const Grid = () => {
         return (
           <li key={image.src}>
             <img
-              src={image.src}
+              src={image.srcCdn}
               width={image.width}
               height={image.height}
               alt={image.title}

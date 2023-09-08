@@ -28,26 +28,3 @@ export const Grid = () => {
 ## Demo
 
 <Grid />
-
-## Code
-
-```
-export const Grid = () => {
-  return (
-    <ul className="grid grid-cols-2 lg:grid-cols-3 gap-6 my-8">
-      {images.map((image) => {
-        return (
-          <li key={image.src}>
-            <Image
-              src={image.src}
-              width={image.width}
-              height={image.height}
-              alt={image.title}
-            />
-          </li>
-        );
-      })}
-    </ul>
-  )
-}
-```
