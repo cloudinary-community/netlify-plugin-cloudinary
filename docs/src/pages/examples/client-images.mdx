@@ -1,0 +1,75 @@
+import { useState, useEffect } from 'react';
+
+import images from '../../data/images.json';
+
+# Client Images
+
+Images loaded in 1 second clientside after the application renders.
+
+export const Grid = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 1000);
+  }, []);
+
+  return (
+    <ul className="grid grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+      {isLoaded && images.map((image) => {
+        return (
+          <li key={image.src}>
+            <img
+              src={image.src}
+              width={image.width}
+              height={image.height}
+              alt={image.title}
+            />
+          </li>
+        );
+      })}
+      {!isLoaded && (
+        <p className="font-bold">Loading...</p>
+      )}
+    </ul>
+  )
+}
+
+## Demo
+
+<Grid />
+
+## Code
+
+```
+export const Grid = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 1000);
+  }, []);
+
+  return (
+    <ul className="grid grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+      {isLoaded && images.map((image) => {
+        return (
+          <li key={image.src}>
+            <img
+              src={image.src}
+              width={image.width}
+              height={image.height}
+              alt={image.title}
+            />
+          </li>
+        );
+      })}
+      {!isLoaded && (
+        <p className="font-bold">Loading...</p>
+      )}
+    </ul>
+  )
+}
+```
