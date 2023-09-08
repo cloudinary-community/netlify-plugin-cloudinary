@@ -1,0 +1,29 @@
+import images from '../../data/images.json';
+
+# Local Images
+
+Images loaded from the default local directory of `/images` which
+are then replaced in the page output.
+
+export const Grid = () => {
+  return (
+    <ul className="grid grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+      {images.map((image) => {
+        return (
+          <li key={image.src}>
+            <img
+              src={image.src}
+              width={image.width}
+              height={image.height}
+              alt={image.title}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  )
+}
+
+## Demo
+
+<Grid />

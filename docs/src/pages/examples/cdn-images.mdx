@@ -1,0 +1,30 @@
+import { getCldImageUrl } from 'next-cloudinary';
+
+import images from '../../data/images.json';
+
+# CDN Images
+
+Images that are being sourced from an external CDN.
+
+export const Grid = () => {
+  return (
+    <ul className="grid grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+      {images.map((image) => {
+        return (
+          <li key={image.src}>
+            <img
+              src={image.srcCdn}
+              width={image.width}
+              height={image.height}
+              alt={image.title}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  )
+}
+
+## Demo
+
+<Grid />

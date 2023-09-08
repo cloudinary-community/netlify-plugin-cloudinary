@@ -1,0 +1,66 @@
+[
+  {
+    "width": 2376,
+    "height": 1574,
+    "src": "/images/examples/beach.jpeg",
+    "srcCdn": "https://github-production-user-asset-6210df.s3.amazonaws.com/1045274/266726174-aeca546d-1589-4dd2-90a7-b1e78867d196.jpeg",
+    "srcCloudinary": "images/examples/beach.jpeg",
+    "title": "Beach"
+  },
+  {
+    "width": 1364,
+    "height": 1705,
+    "src": "/images/examples/city.jpeg",
+    "srcCdn": "https://github-production-user-asset-6210df.s3.amazonaws.com/1045274/266726176-48c8b53d-1054-45e3-9311-71cf4947147f.jpeg",
+    "srcCloudinary": "images/examples/city.jpeg",
+    "title": "City"
+  },
+  {
+    "width": 2344,
+    "height": 1560,
+    "src": "/images/examples/earth.jpeg",
+    "srcCdn": "https://github-production-user-asset-6210df.s3.amazonaws.com/1045274/266726178-f2e89dba-b14b-49c1-8ef9-2e2c66a8b046.jpeg",
+    "srcCloudinary": "images/examples/earth.jpeg",
+    "title": "Earth"
+  },
+  {
+    "width": 2340,
+    "height": 1560,
+    "src": "/images/examples/galaxy.jpeg",
+    "srcCdn": "https://github-production-user-asset-6210df.s3.amazonaws.com/1045274/266726180-0ed180bc-4918-45b6-bda2-0c29538c19ac.jpeg",
+    "srcCloudinary": "images/examples/galaxy.jpeg",
+    "title": "Galaxy"
+  },
+  {
+    "width": 2148,
+    "height": 1611,
+    "src": "/images/examples/iceberg.jpeg",
+    "srcCdn": "https://github-production-user-asset-6210df.s3.amazonaws.com/1045274/266726182-4a0152df-fd79-4986-8459-e02f079aca6f.jpeg",
+    "srcCloudinary": "images/examples/iceberg.jpeg",
+    "title": "Iceberg"
+  },
+  {
+    "width": 1364,
+    "height": 1705,
+    "src": "/images/examples/jungle.jpeg",
+    "srcCdn": "https://github-production-user-asset-6210df.s3.amazonaws.com/1045274/266726185-801d9914-1208-48cc-95ab-8d8d2d63575f.jpeg",
+    "srcCloudinary": "images/examples/jungle.jpeg",
+    "title": "Jungle"
+  },
+  {
+    "width": 2340,
+    "height": 1561,
+    "src": "/images/examples/mountain.jpeg",
+    "srcCdn": "https://github-production-user-asset-6210df.s3.amazonaws.com/1045274/266726186-cc658080-15ea-45d3-a7f1-1ccff217f7c0.jpeg",
+    "srcCloudinary": "images/examples/mountain.jpeg",
+    "title": "Mountain"
+  },
+  {
+    "width": 2340,
+    "height": 1560,
+    "src": "/images/examples/waterfall.jpeg",
+    "srcCdn": "https://github-production-user-asset-6210df.s3.amazonaws.com/1045274/266726189-51a8b091-931f-43fe-99ae-9f9d17942db5.jpeg",
+    "srcCloudinary": "images/examples/waterfall.jpeg",
+    "title": "Waterfall"
+  }
+]

@@ -1,0 +1,32 @@
+import { getCldImageUrl } from 'next-cloudinary';
+
+import images from '../../data/images.json';
+
+# Cloudinary Images
+
+Images already being delivered from Cloudinary will not be replaced.
+
+export const Grid = () => {
+  return (
+    <ul className="grid grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+      {images.map((image) => {
+        return (
+          <li key={image.src}>
+            <img
+              src={getCldImageUrl({
+                src: image.srcCloudinary
+              })}
+              width={image.width}
+              height={image.height}
+              alt={image.title}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  )
+}
+
+## Demo
+
+<Grid />
