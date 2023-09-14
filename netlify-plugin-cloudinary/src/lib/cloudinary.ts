@@ -8,9 +8,11 @@ import { isRemoteUrl, determineRemoteUrl } from './util'
 import { ERROR_CLOUD_NAME_REQUIRED } from '../data/errors'
 
 type CloudinaryConfig = {
+  apiKey?: string;
+  apiSecret?: string;
   cloudName: string;
-  apiKey: string;
-  apiSecret: string;
+  cname?: string;
+  privateCdn?: boolean;
 }
 type DeliveryType =
   string
@@ -85,6 +87,9 @@ export function configureCloudinary(config: CloudinaryConfig) {
     cloud_name: config.cloudName,
     api_key: config.apiKey,
     api_secret: config.apiSecret,
+    private_cdn: config.privateCdn,
+    secure_distribution: config.cname,
+    secure: true
   })
   return cloudinary
 }

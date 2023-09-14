@@ -64,11 +64,13 @@ type Constants = {
  */
 type Inputs = {
   cloudName: string;
+  cname: string;
   deliveryType: string;
-  imagesPath: string;
   folder: string;
-  uploadPreset: string;
+  imagesPath: string;
   loadingStrategy: string;
+  privateCdn: boolean;
+  uploadPreset: string;
 };
 
 type Utils = {
@@ -130,12 +132,14 @@ export async function onBuild({
   const { PUBLISH_DIR } = constants;
 
   const {
+    cname,
     deliveryType,
-    uploadPreset,
     folder = process.env.SITE_NAME,
     imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(
       ({ inputKey }) => inputKey === 'imagesPath',
     )?.path,
+    privateCdn,
+    uploadPreset,
   } = inputs;
 
   if (!folder) {
@@ -159,9 +163,14 @@ export async function onBuild({
   }
 
   configureCloudinary({
+    // Base credentials
     cloudName,
     apiKey,
     apiSecret,
+
+    // Configuration
+    cname,
+    privateCdn,
   });
 
   // Look for any available images in the provided imagesPath to collect
@@ -238,6 +247,7 @@ export async function onBuild({
       CLOUDINARY_ASSET_DIRECTORIES.map(
         async ({ inputKey, path: defaultPath }) => {
           const mediaPath = inputs[inputKey as keyof Inputs] || defaultPath;
+          // @ts-ignore Unsure how to type the above so that Inputs['privateCdn'] doesnt mess up types here
           const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, mediaPath)}`;
           const cldAssetUrl = `${host}${cldAssetPath}`;
 
@@ -287,7 +297,13 @@ export async function onPostBuild({
   console.log(`[Cloudinary] Using host: ${host}`);
 
   const { PUBLISH_DIR } = constants;
-  const { deliveryType, uploadPreset, folder = process.env.SITE_NAME } = inputs;
+  const {
+    cname,
+    deliveryType,
+    folder = process.env.SITE_NAME,
+    privateCdn,
+    uploadPreset,
+  } = inputs;
 
   if (!folder) {
     utils.build.failPlugin(ERROR_SITE_NAME_REQUIRED);
@@ -304,9 +320,14 @@ export async function onPostBuild({
   }
 
   configureCloudinary({
+    // Base credentials
     cloudName,
     apiKey,
     apiSecret,
+
+    // Configuration
+    cname,
+    privateCdn,
   });
 
   // Find all HTML source files in the publish directory

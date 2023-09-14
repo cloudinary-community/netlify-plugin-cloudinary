@@ -89,11 +89,13 @@ npm install netlify-plugin-cloudinary
 | Name            | Required | Example   | Description |
 |-----------------|----------|-----------| ------------|
 | cloudName       | No*      | mycloud   | Cloudinary Cloud Name |
+| cname           | No       | domain.com | The custom domain name (CNAME) to use for building URLs (Advanced Plan Users) |
 | deliveryType    | No       | fetch     | The method by which Cloudinary stores and delivers images (Ex: fetch, upload) |
-| imagesPath       | No      | /assets   | Local path application serves image assets from |
 | folder          | No       | myfolder  | Folder all media will be stored in. Defaults to Netlify site name |
-| uploadPreset    | No       | my-preset | Defined set of asset upload defaults in Cloudinary |
+| imagesPath      | No       | /assets   | Local path application serves image assets from |
 | loadingStrategy | No       | eager     | The method in which in which images are loaded (Ex: lazy, eager) |
+| privateCdn      | No       | true      | Enables Private CDN Distribution (Advanced Plan Users) |
+| uploadPreset    | No       | my-preset | Defined set of asset upload defaults in Cloudinary |
 
 *Cloud Name must be set as an environment variable if not as an input
 

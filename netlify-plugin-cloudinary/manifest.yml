@@ -3,21 +3,27 @@ inputs:
   - name: cloudName
     required: false
     description: "Cloudinary Cloud Name - can be used as an input or environment variable via CLOUDINARY_CLOUD_NAME"
+  - name: cname
+    required: false
+    description: "The custom domain name (CNAME) to use for building URLs (Advanced Plan Users)"
   - name: deliveryType
     required: false
     description: "The method in which Cloudinary stores and delivers images (Ex: fetch, upload)"
     default: "fetch"
+  - name: folder
+    required: false
+    description: "Folder all media will be stored in. Defaults to Netlify site name"
   - name: imagesPath
     required: false
     description: "Local path application serves image assets from"
     default: "/images"
-  - name: folder
-    required: false
-    description: "Folder all media will be stored in. Defaults to Netlify site name"
-  - name: uploadPreset
-    required: false
-    description: "Defined set of asset upload defaults in Cloudinary"
   - name: loadingStrategy
     required: false
     description: "The method in which in which images are loaded (Ex: lazy, eager)"
     default: "lazy"
+  - name: privateCdn
+    required: false
+    description: "Enable Private CDN Distribution (Advanced Plan Users)"
+  - name: uploadPreset
+    required: false
+    description: "Defined set of asset upload defaults in Cloudinary"
