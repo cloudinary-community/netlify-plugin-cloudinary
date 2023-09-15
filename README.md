@@ -293,6 +293,7 @@ npm run test
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/3t8"><img src="https://avatars.githubusercontent.com/u/62209650?v=4?s=100" width="100px;" alt="3t8"/><br /><sub><b>3t8</b></sub></a><br /><a href="https://github.com/cloudinary-community/netlify-plugin-cloudinary/commits?author=3t8" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Abubakrce19"><img src="https://avatars.githubusercontent.com/u/104122959?v=4?s=100" width="100px;" alt="Abubakrce19"/><br /><sub><b>Abubakrce19</b></sub></a><br /><a href="https://github.com/cloudinary-community/netlify-plugin-cloudinary/commits?author=Abubakrce19" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://ericapisani.dev"><img src="https://avatars.githubusercontent.com/u/5655473?v=4?s=100" width="100px;" alt="Erica Pisani"/><br /><sub><b>Erica Pisani</b></sub></a><br /><a href="https://github.com/cloudinary-community/netlify-plugin-cloudinary/commits?author=ericapisani" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://matiashernandez.dev"><img src="https://avatars.githubusercontent.com/u/282006?v=4?s=100" width="100px;" alt="Matías Hernández Arellano"/><br /><sub><b>Matías Hernández Arellano</b></sub></a><br /><a href="https://github.com/cloudinary-community/netlify-plugin-cloudinary/commits?author=matiasfha" title="Code">💻</a></td>
     </tr>
   </tbody>
