@@ -22,10 +22,12 @@ import OgImage from '../components/OgImage';
 | Name            | Required | Example   | Description |
 |-----------------|----------|-----------| ------------|
 | cloudName       | No*      | mycloud   | Cloudinary Cloud Name |
+| cname           | No       | domain.com | The custom domain name (CNAME) to use for building URLs (Advanced Plan Users) |
 | deliveryType    | No       | fetch     | The method by which Cloudinary stores and delivers images (Ex: fetch, upload) |
 | folder          | No       | myfolder  | Folder all media will be stored in. Defaults to Netlify site name |
-| imagesPath      | No      | /assets   | Local path application serves image assets from |
+| imagesPath      | No       | /assets   | Local path application serves image assets from |
 | loadingStrategy | No       | eager     | The method in which in which images are loaded (Ex: lazy, eager) |
+| privateCdn      | No       | true      | Enables Private CDN Distribution (Advanced Plan Users) |
 | uploadPreset    | No       | my-preset | Defined set of asset upload defaults in Cloudinary |
 
 <Callout emoji={false}>

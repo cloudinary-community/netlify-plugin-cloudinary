@@ -2,15 +2,17 @@ import crypto from 'crypto'
 import path from 'path'
 import fetch from 'node-fetch'
 import { JSDOM } from 'jsdom'
-import { v2 as cloudinary } from 'cloudinary'
+import { v2 as cloudinary, ConfigOptions } from 'cloudinary'
 
 import { isRemoteUrl, determineRemoteUrl } from './util'
 import { ERROR_CLOUD_NAME_REQUIRED } from '../data/errors'
 
 type CloudinaryConfig = {
+  apiKey?: string;
+  apiSecret?: string;
   cloudName: string;
-  apiKey: string;
-  apiSecret: string;
+  cname?: string;
+  privateCdn?: boolean;
 }
 type DeliveryType =
   string
@@ -81,11 +83,24 @@ export function getCloudinary(config: CloudinaryOptions & CloudinaryConfig) {
  * configureCloudinary
  */
 export function configureCloudinary(config: CloudinaryConfig) {
-  cloudinary.config({
+  const cloudinaryConfig: ConfigOptions = {
     cloud_name: config.cloudName,
     api_key: config.apiKey,
     api_secret: config.apiSecret,
-  })
+    private_cdn: config.privateCdn,
+    secure: true
+  }
+
+  if ( config.cname ) {
+    cloudinaryConfig.secure_distribution = config.cname;
+    // When configuring a cname, we need to additionally set private CDN
+    // to be true in order to work properly, which may not be obvious
+    // to those setting it up
+    cloudinaryConfig.private_cdn = true;
+  }
+
+  cloudinary.config(cloudinaryConfig);
+
   return cloudinary
 }
 

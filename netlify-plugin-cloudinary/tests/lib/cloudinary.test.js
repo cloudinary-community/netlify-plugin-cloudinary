@@ -1,13 +1,8 @@
-const { getCloudinary, createPublicId, getCloudinaryUrl, updateHtmlImagesToCloudinary } = require('../../src/lib/cloudinary');
+const { getCloudinary, getCloudinaryUrl, createPublicId, configureCloudinary, updateHtmlImagesToCloudinary } = require('../../src/lib/cloudinary');
 
 const mockDemo = require('../mocks/demo.json');
 
 const cloudinary = getCloudinary();
-
-
-const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
-const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
-const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 
 describe('lib/util', () => {
   const ENV_ORIGINAL = process.env;
@@ -20,11 +15,11 @@ describe('lib/util', () => {
     process.env.CLOUDINARY_API_KEY = '123456789012345';
     process.env.CLOUDINARY_API_SECRET = 'abcd1234';
 
-    cloudinary.config({
-      cloud_name: CLOUDINARY_CLOUD_NAME,
-      api_key: CLOUDINARY_API_KEY,
-      api_secret: CLOUDINARY_API_SECRET
-    });
+    configureCloudinary({
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      apiKey: process.env.CLOUDINARY_API_KEY,
+      apiSecret: process.env.CLOUDINARY_API_SECRET,
+    })
   });
 
   afterAll(() => {
