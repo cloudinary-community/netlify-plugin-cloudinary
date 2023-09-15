@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.8.0...v1.9.0) (2023-09-15)
+
+
+### Features
+
+* CNAME & Private CDN ([#71](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/71)) ([17fff6b](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/17fff6b87cf69d1e2d37c1c7ddd211afd8aeba33)), closes [#11](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/11) [#51](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/51)
+
 # [1.8.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.7.1...v1.8.0) (2023-09-06)
 
 
