@@ -34,7 +34,7 @@ describe('lib/util', () => {
         remoteHost: 'https://cloudinary.netlify.app'
       });
 
-      expect(cloudinaryUrl).toEqual(`https://${cname}/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
+      expect(cloudinaryUrl).toEqual(`https://${cname}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
     });
 
   });
@@ -50,7 +50,7 @@ describe('lib/util', () => {
         remoteHost: 'https://cloudinary.netlify.app'
       });
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://${cname}/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" loading=\"lazy"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://${cname}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" loading=\"lazy"\></p></body></html>`);
     });
 
   });
