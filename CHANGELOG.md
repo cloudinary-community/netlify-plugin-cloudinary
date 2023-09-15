@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.9.0...v1.10.0) (2023-09-15)
+
+
+### Features
+
+* Configure Multiple Image Paths ([#75](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/75)) ([e10cffa](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/e10cffa3ff269275a2a6ef3ad39cbd5756711ebc)), closes [#11](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/11) [#61](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/61)
+
 # [1.9.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.8.0...v1.9.0) (2023-09-15)
 
 
