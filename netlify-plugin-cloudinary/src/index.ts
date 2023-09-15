@@ -237,7 +237,6 @@ export async function onBuild({
         // @ts-expect-error what are the expected mediaTypes that will be stored in _cloudinaryAssets
         return _cloudinaryAssets[mediaType].map(async asset => {
           const { publishPath, cloudinaryUrl } = asset;
-
           netlifyConfig.redirects.unshift({
             from: `${publishPath}*`,
             to: cloudinaryUrl,
@@ -257,31 +256,41 @@ export async function onBuild({
     await Promise.all(
       CLOUDINARY_ASSET_DIRECTORIES.map(
         async ({ inputKey, path: defaultPath }) => {
-          const mediaPath = inputs[inputKey as keyof Inputs] || defaultPath;
-          // @ts-ignore Unsure how to type the above so that Inputs['privateCdn'] doesnt mess up types here
-          const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, mediaPath)}`;
-          const cldAssetUrl = `${host}${cldAssetPath}`;
+          let mediaPaths = inputs[inputKey as keyof Inputs] || defaultPath;
 
-          const { cloudinaryUrl: assetRedirectUrl } = await getCloudinaryUrl({
-            deliveryType: 'fetch',
-            folder,
-            path: `${cldAssetUrl}/:splat`,
-            uploadPreset,
-          });
+          // Unsure how to type the above so that Inputs['privateCdn'] doesnt mess up types here
 
-          netlifyConfig.redirects.unshift({
-            from: `${cldAssetPath}/*`,
-            to: `${mediaPath}/:splat`,
-            status: 200,
-            force: true,
-          });
+          if ( !Array.isArray(mediaPaths) && typeof mediaPaths !== 'string' ) return;
 
-          netlifyConfig.redirects.unshift({
-            from: `${mediaPath}/*`,
-            to: assetRedirectUrl,
-            status: 302,
-            force: true,
-          });
+          if ( !Array.isArray(mediaPaths) ) {
+            mediaPaths = [mediaPaths];
+          }
+
+          mediaPaths.forEach(async mediaPath => {
+            const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, mediaPath)}`;
+            const cldAssetUrl = `${host}${cldAssetPath}`;
+
+            const { cloudinaryUrl: assetRedirectUrl } = await getCloudinaryUrl({
+              deliveryType: 'fetch',
+              folder,
+              path: `${cldAssetUrl}/:splat`,
+              uploadPreset,
+            });
+
+            netlifyConfig.redirects.unshift({
+              from: `${cldAssetPath}/*`,
+              to: `${mediaPath}/:splat`,
+              status: 200,
+              force: true,
+            });
+
+            netlifyConfig.redirects.unshift({
+              from: `${mediaPath}/*`,
+              to: assetRedirectUrl,
+              status: 302,
+              force: true,
+            });
+          })
         },
       ),
     );

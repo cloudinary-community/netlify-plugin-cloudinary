@@ -30,3 +30,9 @@ Inside your Netlify config, add the following input configurations under your ne
   cloudName = "[Your Cloudinary Cloud Name]"
   imagesPath = "/my-path"
 ```
+
+If you'd like to specify multiple locations for your images, you can configure `imagesPath` as an array:
+
+```toml
+  imagesPath = [ "/my-path", "/my-other-path" ]
+```

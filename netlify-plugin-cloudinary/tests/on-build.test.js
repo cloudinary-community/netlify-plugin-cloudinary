@@ -117,6 +117,72 @@ describe('onBuild', () => {
       expect(redirects[2]).toEqual(defaultRedirect);
     });
 
+    test('should create redirects with multiple image paths', async () => {
+      const imagesFunctionName = 'cld_images';
+
+      fs.readdir.mockResolvedValue([imagesFunctionName]);
+
+      process.env.SITE_NAME = 'cool-site';
+      process.env.CLOUDINARY_CLOUD_NAME = 'testcloud';
+      process.env.CONTEXT = 'deploy-preview';
+      process.env.DEPLOY_PRIME_URL = 'https://deploy-preview-1234--netlify-plugin-cloudinary.netlify.app';
+
+      const deliveryType = 'fetch';
+      const imagesPath = [ '/images', '/assets' ];
+
+      const defaultRedirect = {
+        from: '/path',
+        to: '/other-path',
+        status: 200
+      }
+
+      const redirects = [defaultRedirect];
+
+      const netlifyConfig = {
+        redirects
+      };
+
+      await onBuild({
+        netlifyConfig,
+        constants: {
+          PUBLISH_DIR: __dirname
+        },
+        inputs: {
+          deliveryType,
+          imagesPath
+        }
+      });
+
+      expect(redirects[0]).toEqual({
+        from: `${imagesPath[1]}/*`,
+        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.DEPLOY_PRIME_URL}/cld-assets${imagesPath[1]}/:splat`,
+        status: 302,
+        force: true
+      });
+
+      expect(redirects[1]).toEqual({
+        from: `/cld-assets${imagesPath[1]}/*`,
+        to: `${imagesPath[1]}/:splat`,
+        status: 200,
+        force: true
+      });
+      expect(redirects[2]).toEqual({
+        from: `${imagesPath[0]}/*`,
+        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.DEPLOY_PRIME_URL}/cld-assets${imagesPath[0]}/:splat`,
+        status: 302,
+        force: true
+      });
+
+      expect(redirects[3]).toEqual({
+        from: `/cld-assets${imagesPath[0]}/*`,
+        to: `${imagesPath[0]}/:splat`,
+        status: 200,
+        force: true
+      });
+
+      expect(redirects[4]).toEqual(defaultRedirect);
+    });
+
   });
 
 });
