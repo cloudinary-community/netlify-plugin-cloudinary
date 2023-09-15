@@ -15,7 +15,7 @@ inputs:
     description: "Folder all media will be stored in. Defaults to Netlify site name"
   - name: imagesPath
     required: false
-    description: "Local path application serves image assets from"
+    description: "Local path(s) application serves image assets from"
     default: "/images"
   - name: loadingStrategy
     required: false

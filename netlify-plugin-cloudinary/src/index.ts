@@ -8,11 +8,14 @@ import {
   getCloudinaryUrl,
   Assets,
 } from './lib/cloudinary';
+import { findAssetsByPath } from './lib/util';
+
 import { PUBLIC_ASSET_PATH } from './data/cloudinary';
 import {
   ERROR_CLOUD_NAME_REQUIRED,
-  ERROR_NETLIFY_HOST_UNKNOWN,
+  ERROR_INVALID_IMAGES_PATH,
   ERROR_NETLIFY_HOST_CLI_SUPPORT,
+  ERROR_NETLIFY_HOST_UNKNOWN,
   ERROR_SITE_NAME_REQUIRED,
 } from './data/errors';
 
@@ -67,7 +70,7 @@ type Inputs = {
   cname: string;
   deliveryType: string;
   folder: string;
-  imagesPath: string;
+  imagesPath: string | Array<string>;
   loadingStrategy: string;
   privateCdn: boolean;
   uploadPreset: string;
@@ -173,11 +176,19 @@ export async function onBuild({
     privateCdn,
   });
 
+  
+
   // Look for any available images in the provided imagesPath to collect
   // asset details and to grab a Cloudinary URL to use later
 
-  const imagesDirectory = glob.sync(`${PUBLISH_DIR}/${imagesPath}/**/*`);
-  const imagesFiles = imagesDirectory.filter(file => !!path.extname(file));
+  if ( typeof imagesPath === 'undefined' ) {
+    throw new Error(ERROR_INVALID_IMAGES_PATH);
+  }
+
+  const imagesFiles = findAssetsByPath({
+    baseDir: PUBLISH_DIR,
+    path: imagesPath
+  })
 
   if (imagesFiles.length === 0) {
     console.warn(`[Cloudinary] No image files found in ${imagesPath}`);
@@ -226,7 +237,6 @@ export async function onBuild({
         // @ts-expect-error what are the expected mediaTypes that will be stored in _cloudinaryAssets
         return _cloudinaryAssets[mediaType].map(async asset => {
           const { publishPath, cloudinaryUrl } = asset;
-
           netlifyConfig.redirects.unshift({
             from: `${publishPath}*`,
             to: cloudinaryUrl,
@@ -246,31 +256,41 @@ export async function onBuild({
     await Promise.all(
       CLOUDINARY_ASSET_DIRECTORIES.map(
         async ({ inputKey, path: defaultPath }) => {
-          const mediaPath = inputs[inputKey as keyof Inputs] || defaultPath;
-          // @ts-ignore Unsure how to type the above so that Inputs['privateCdn'] doesnt mess up types here
-          const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, mediaPath)}`;
-          const cldAssetUrl = `${host}${cldAssetPath}`;
+          let mediaPaths = inputs[inputKey as keyof Inputs] || defaultPath;
 
-          const { cloudinaryUrl: assetRedirectUrl } = await getCloudinaryUrl({
-            deliveryType: 'fetch',
-            folder,
-            path: `${cldAssetUrl}/:splat`,
-            uploadPreset,
-          });
+          // Unsure how to type the above so that Inputs['privateCdn'] doesnt mess up types here
 
-          netlifyConfig.redirects.unshift({
-            from: `${cldAssetPath}/*`,
-            to: `${mediaPath}/:splat`,
-            status: 200,
-            force: true,
-          });
+          if ( !Array.isArray(mediaPaths) && typeof mediaPaths !== 'string' ) return;
 
-          netlifyConfig.redirects.unshift({
-            from: `${mediaPath}/*`,
-            to: assetRedirectUrl,
-            status: 302,
-            force: true,
-          });
+          if ( !Array.isArray(mediaPaths) ) {
+            mediaPaths = [mediaPaths];
+          }
+
+          mediaPaths.forEach(async mediaPath => {
+            const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, mediaPath)}`;
+            const cldAssetUrl = `${host}${cldAssetPath}`;
+
+            const { cloudinaryUrl: assetRedirectUrl } = await getCloudinaryUrl({
+              deliveryType: 'fetch',
+              folder,
+              path: `${cldAssetUrl}/:splat`,
+              uploadPreset,
+            });
+
+            netlifyConfig.redirects.unshift({
+              from: `${cldAssetPath}/*`,
+              to: `${mediaPath}/:splat`,
+              status: 200,
+              force: true,
+            });
+
+            netlifyConfig.redirects.unshift({
+              from: `${mediaPath}/*`,
+              to: assetRedirectUrl,
+              status: 302,
+              force: true,
+            });
+          })
         },
       ),
     );

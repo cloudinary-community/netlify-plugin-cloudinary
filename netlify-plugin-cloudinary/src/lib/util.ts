@@ -1,3 +1,6 @@
+import path from 'node:path';
+import { glob } from 'glob';
+
 /**
  * isRemoteUrl
  */
@@ -48,3 +51,22 @@ export function getQueryParams(url: string) {
   return params
 }
 
+/**
+ * findAssetsByPath
+ */
+
+interface FindAssetsByPath {
+  baseDir: string;
+  path: string | Array<string>;
+}
+
+export function findAssetsByPath(options: FindAssetsByPath) {
+  if ( !Array.isArray(options.path) ) {
+    options.path = [options.path];
+  }
+
+  return options.path.flatMap(assetsPath => {
+    const assetsDirectory = glob.sync(path.join(options.baseDir, assetsPath, '/**/*'));
+    return assetsDirectory.filter(file => !!path.extname(file));
+  })
+}
