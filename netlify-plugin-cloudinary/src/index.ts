@@ -7,6 +7,7 @@ import {
   updateHtmlImagesToCloudinary,
   getCloudinaryUrl,
   Assets,
+  CloudinaryOptions
 } from './lib/cloudinary';
 import { findAssetsByPath } from './lib/util';
 
@@ -72,6 +73,10 @@ type Inputs = {
   folder: string;
   imagesPath: string | Array<string>;
   loadingStrategy: string;
+  maxSize: {
+    height: number;
+    width: number;
+  };
   privateCdn: boolean;
   uploadPreset: string;
 };
@@ -141,6 +146,7 @@ export async function onBuild({
     imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(
       ({ inputKey }) => inputKey === 'imagesPath',
     )?.path,
+    maxSize,
     privateCdn,
     uploadPreset,
   } = inputs;
@@ -176,7 +182,15 @@ export async function onBuild({
     privateCdn,
   });
 
-  
+  const transformations: CloudinaryOptions['transformations'] = [];
+
+  if ( typeof maxSize === 'object' ) {
+    transformations.push({
+      height: maxSize.height,
+      width: maxSize.width,
+      crop: 'limit'
+    })
+  }
 
   // Look for any available images in the provided imagesPath to collect
   // asset details and to grab a Cloudinary URL to use later
@@ -209,6 +223,7 @@ export async function onBuild({
           localDir: PUBLISH_DIR,
           uploadPreset,
           remoteHost: host,
+          transformations
         });
 
         return {
@@ -275,6 +290,7 @@ export async function onBuild({
               folder,
               path: `${cldAssetUrl}/:splat`,
               uploadPreset,
+              transformations
             });
 
             netlifyConfig.redirects.unshift({

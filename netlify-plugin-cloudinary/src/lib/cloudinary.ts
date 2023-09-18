@@ -2,7 +2,7 @@ import crypto from 'crypto'
 import path from 'path'
 import fetch from 'node-fetch'
 import { JSDOM } from 'jsdom'
-import { v2 as cloudinary, ConfigOptions } from 'cloudinary'
+import { v2 as cloudinary, ConfigOptions, TransformationOptions } from 'cloudinary'
 
 import { isRemoteUrl, determineRemoteUrl } from './util'
 import { ERROR_CLOUD_NAME_REQUIRED } from '../data/errors'
@@ -52,11 +52,13 @@ type OtherDelivery = {
   deliveryType: Omit<DeliveryType, 'fetch'>;
   remoteHost?: string
 }
-type CloudinaryOptions = {
+
+export type CloudinaryOptions = {
   folder: string,
   path: string;
   localDir?: string;
   uploadPreset: string;
+  transformations?: Array<TransformationOptions>;
 } & (FetchDelivery | OtherDelivery)
 
 export type Assets = {
@@ -139,6 +141,7 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
     path: filePath,
     localDir,
     remoteHost,
+    transformations = [],
     uploadPreset,
   } = options
 
@@ -232,6 +235,7 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
         fetch_format: 'auto',
         quality: 'auto',
       },
+      ...transformations
     ],
   })
 
