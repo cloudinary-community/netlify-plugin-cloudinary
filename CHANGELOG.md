@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.10.1...v1.10.2) (2023-09-19)
+
+
+### Bug Fixes
+
+* Fixes Netlify URL ([#84](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/84)) ([3a83908](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/3a83908fc921bfec4b2125ed2abd75c243c8d479)), closes [#11](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/11) [#83](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/83)
+
 ## [1.10.1](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.10.0...v1.10.1) (2023-09-19)
 
 
