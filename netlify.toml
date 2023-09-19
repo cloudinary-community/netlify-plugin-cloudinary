@@ -17,6 +17,5 @@
   deliveryType = "upload"
   imagesPath = [ "images", "screenshots" ]
   
-    [[plugins.inputs.maxSize]]
-    width = 800
-    height = 600  
+  [plugins.inputs.maxSize]
+  width = 1200

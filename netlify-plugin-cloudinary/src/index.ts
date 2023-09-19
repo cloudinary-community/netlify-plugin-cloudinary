@@ -75,6 +75,7 @@ type Inputs = {
   imagesPath: string | Array<string>;
   loadingStrategy: string;
   maxSize: {
+    dpr: number | string;
     height: number;
     width: number;
   };
@@ -196,7 +197,8 @@ export async function onBuild({
     transformations.push({
       height: maxSize.height,
       width: maxSize.width,
-      crop: 'limit'
+      crop: 'limit',
+      dpr: maxSize.dpr || '2.0'
     })
   }
 
