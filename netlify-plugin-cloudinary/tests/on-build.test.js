@@ -18,7 +18,7 @@ describe('onBuild', () => {
     process.env.CLOUDINARY_API_SECRET = 'abcd1234';
   });
 
-  afterAll(() => {
+  afterEach(() => {
     fs.readdir = readdir;
     process.env = ENV_ORIGINAL;
   });
