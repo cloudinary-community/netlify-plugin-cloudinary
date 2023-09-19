@@ -36,7 +36,7 @@ describe('onBuild', () => {
       delete process.env.CLOUDINARY_API_KEY;
       delete process.env.CLOUDINARY_API_SECRET;
 
-      process.env.DEPLOY_PRIME_URL = 'https://deploy-preview-1234--netlify-plugin-cloudinary.netlify.app';
+      process.env.DEPLOY_URL = 'https://deploy-preview-1234--netlify-plugin-cloudinary.netlify.app';
 
       const deliveryType = 'upload';
       const imagesPath = '/images';
@@ -68,7 +68,7 @@ describe('onBuild', () => {
       fs.readdir.mockResolvedValue([imagesFunctionName]);
 
       process.env.CONTEXT = 'production';
-      process.env.NETLIFY_HOST = 'https://netlify-plugin-cloudinary.netlify.app';
+      process.env.URL = 'https://netlify-plugin-cloudinary.netlify.app';
 
       // Tests to ensure that delivery type of fetch works without API Key and Secret as it should
 
@@ -101,7 +101,7 @@ describe('onBuild', () => {
       });
       expect(redirects[0]).toEqual({
         from: `${imagesPath}/*`,
-        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.NETLIFY_HOST}/cld-assets${imagesPath}/:splat`,
+        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.URL}/cld-assets${imagesPath}/:splat`,
         status: 302,
         force: true
       });
@@ -122,7 +122,7 @@ describe('onBuild', () => {
       fs.readdir.mockResolvedValue([imagesFunctionName]);
 
       process.env.CONTEXT = 'deploy-preview';
-      process.env.DEPLOY_PRIME_URL = 'https://deploy-preview-1234--netlify-plugin-cloudinary.netlify.app';
+      process.env.DEPLOY_URL = 'https://deploy-preview-1234--netlify-plugin-cloudinary.netlify.app';
 
       const deliveryType = 'fetch';
       const imagesPath = '/images';
@@ -151,7 +151,7 @@ describe('onBuild', () => {
 
       expect(redirects[0]).toEqual({
         from: `${imagesPath}/*`,
-        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.DEPLOY_PRIME_URL}/cld-assets${imagesPath}/:splat`,
+        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.DEPLOY_URL}/cld-assets${imagesPath}/:splat`,
         status: 302,
         force: true
       });
@@ -172,7 +172,7 @@ describe('onBuild', () => {
       fs.readdir.mockResolvedValue([imagesFunctionName]);
 
       process.env.CONTEXT = 'deploy-preview';
-      process.env.DEPLOY_PRIME_URL = 'https://deploy-preview-1234--netlify-plugin-cloudinary.netlify.app';
+      process.env.DEPLOY_URL = 'https://deploy-preview-1234--netlify-plugin-cloudinary.netlify.app';
 
       const deliveryType = 'fetch';
       const imagesPath = [ '/images', '/assets' ];
@@ -202,7 +202,7 @@ describe('onBuild', () => {
 
       expect(redirects[0]).toEqual({
         from: `${imagesPath[1]}/*`,
-        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.DEPLOY_PRIME_URL}/cld-assets${imagesPath[1]}/:splat`,
+        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.DEPLOY_URL}/cld-assets${imagesPath[1]}/:splat`,
         status: 302,
         force: true
       });
@@ -215,7 +215,7 @@ describe('onBuild', () => {
       });
       expect(redirects[2]).toEqual({
         from: `${imagesPath[0]}/*`,
-        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.DEPLOY_PRIME_URL}/cld-assets${imagesPath[0]}/:splat`,
+        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.DEPLOY_URL}/cld-assets${imagesPath[0]}/:splat`,
         status: 302,
         force: true
       });
