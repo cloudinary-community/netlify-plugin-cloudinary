@@ -13,6 +13,7 @@ import { findAssetsByPath } from './lib/util';
 
 import { PUBLIC_ASSET_PATH } from './data/cloudinary';
 import {
+  ERROR_API_CREDENTIALS_REQUIRED,
   ERROR_CLOUD_NAME_REQUIRED,
   ERROR_INVALID_IMAGES_PATH,
   ERROR_NETLIFY_HOST_CLI_SUPPORT,
@@ -166,8 +167,15 @@ export async function onBuild({
   const apiKey = process.env.CLOUDINARY_API_KEY;
   const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
-  if (!cloudName || !apiKey || !apiSecret) {
+  if (!cloudName) {
+    console.error(`[Cloudinary] ${ERROR_CLOUD_NAME_REQUIRED}`);
     utils.build.failBuild(ERROR_CLOUD_NAME_REQUIRED);
+    return;
+  }
+
+  if (deliveryType === 'upload' && (!apiKey || !apiSecret)) {
+    console.error(`[Cloudinary] ${ERROR_API_CREDENTIALS_REQUIRED}`);
+    utils.build.failBuild(ERROR_API_CREDENTIALS_REQUIRED);
     return;
   }
 
@@ -195,14 +203,14 @@ export async function onBuild({
   // Look for any available images in the provided imagesPath to collect
   // asset details and to grab a Cloudinary URL to use later
 
-  if ( typeof imagesPath === 'undefined' ) {
+  if (typeof imagesPath === 'undefined') {
     throw new Error(ERROR_INVALID_IMAGES_PATH);
   }
 
   const imagesFiles = findAssetsByPath({
     baseDir: PUBLISH_DIR,
-    path: imagesPath
-  })
+    path: imagesPath,
+  });
 
   if (imagesFiles.length === 0) {
     console.warn(`[Cloudinary] No image files found in ${imagesPath}`);
@@ -275,9 +283,10 @@ export async function onBuild({
 
           // Unsure how to type the above so that Inputs['privateCdn'] doesnt mess up types here
 
-          if ( !Array.isArray(mediaPaths) && typeof mediaPaths !== 'string' ) return;
+          if (!Array.isArray(mediaPaths) && typeof mediaPaths !== 'string')
+            return;
 
-          if ( !Array.isArray(mediaPaths) ) {
+          if (!Array.isArray(mediaPaths)) {
             mediaPaths = [mediaPaths];
           }
 
@@ -306,7 +315,7 @@ export async function onBuild({
               status: 302,
               force: true,
             });
-          })
+          });
         },
       ),
     );
@@ -350,8 +359,15 @@ export async function onPostBuild({
   const apiKey = process.env.CLOUDINARY_API_KEY;
   const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
-  if (!cloudName || !apiKey || !apiSecret) {
+  if (!cloudName) {
+    console.error(`[Cloudinary] ${ERROR_CLOUD_NAME_REQUIRED}`);
     utils.build.failBuild(ERROR_CLOUD_NAME_REQUIRED);
+    return;
+  }
+
+  if (deliveryType === 'upload' && (!apiKey || !apiSecret)) {
+    console.error(`[Cloudinary] ${ERROR_API_CREDENTIALS_REQUIRED}`);
+    utils.build.failBuild(ERROR_API_CREDENTIALS_REQUIRED);
     return;
   }
 
