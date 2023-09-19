@@ -128,10 +128,8 @@ export async function onBuild({
 
   let host = process.env.URL;
 
-  if ( process.env.CONTEXT === 'branch-deploy' ) {
+  if ( process.env.CONTEXT === 'branch-deploy' || process.env.CONTEXT === 'deploy-preview' ) {
     host = process.env.DEPLOY_PRIME_URL || ''
-  } else if (process.env.CONTEXT === 'deploy-preview' ) {
-    host = process.env.DEPLOY_URL || '';
   }
 
   console.log(`[Cloudinary] Using host: ${host}`);
@@ -321,11 +319,10 @@ export async function onPostBuild({
 
   let host = process.env.URL;
 
-  if ( process.env.CONTEXT === 'branch-deploy' ) {
+  if ( process.env.CONTEXT === 'branch-deploy' || process.env.CONTEXT === 'deploy-preview' ) {
     host = process.env.DEPLOY_PRIME_URL || ''
-  } else if (process.env.CONTEXT === 'deploy-preview' ) {
-    host = process.env.DEPLOY_URL || '';
   }
+
 
   console.log(`[Cloudinary] Using host: ${host}`);
 
