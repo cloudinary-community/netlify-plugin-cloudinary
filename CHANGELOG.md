@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.10.0...v1.10.1) (2023-09-19)
+
+
+### Bug Fixes
+
+* Fixes missing API Key and Secret failing Fetch builds ([#81](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/81)) ([cdd5981](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/cdd598177824c5a3f753cb045a7fe4d6a29d9207)), closes [#11](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/11) [#80](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/80)
+
 # [1.10.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.9.0...v1.10.0) (2023-09-15)
 
 
