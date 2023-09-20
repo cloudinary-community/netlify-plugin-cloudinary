@@ -24,7 +24,6 @@ inputs:
   - name: maxSize
     required: false
     description: "Maximum dimensions (width and height) for an image to be delivered"
-    default: "lazy"
   - name: privateCdn
     required: false
     description: "Enable Private CDN Distribution (Advanced Plan Users)"
