@@ -2,12 +2,14 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { glob } from 'glob';
 
+import { Inputs } from './types/integration';
+
 import {
   configureCloudinary,
   updateHtmlImagesToCloudinary,
   getCloudinaryUrl,
   Assets,
-  CloudinaryOptions
+  getTransformationsFromInputs
 } from './lib/cloudinary';
 import { findAssetsByPath } from './lib/util';
 
@@ -63,25 +65,7 @@ type Constants = {
   SITE_ID: string;
 };
 
-/**
- * this type is built based on the content of the plugin manifest file
- * Information found here https://docs.netlify.com/integrations/build-plugins/create-plugins/#inputs
- */
-type Inputs = {
-  cloudName: string;
-  cname: string;
-  deliveryType: string;
-  folder: string;
-  imagesPath: string | Array<string>;
-  loadingStrategy: string;
-  maxSize: {
-    dpr: number | string;
-    height: number;
-    width: number;
-  };
-  privateCdn: boolean;
-  uploadPreset: string;
-};
+
 
 type Utils = {
   build: {
@@ -192,16 +176,7 @@ export async function onBuild({
     privateCdn,
   });
 
-  const transformations: CloudinaryOptions['transformations'] = [];
-
-  if ( typeof maxSize === 'object' ) {
-    transformations.push({
-      height: maxSize.height,
-      width: maxSize.width,
-      crop: 'limit',
-      dpr: maxSize.dpr || '2.0'
-    })
-  }
+  const transformations = getTransformationsFromInputs(inputs);
 
   // Look for any available images in the provided imagesPath to collect
   // asset details and to grab a Cloudinary URL to use later
@@ -387,6 +362,8 @@ export async function onPostBuild({
     privateCdn,
   });
 
+  const transformations = getTransformationsFromInputs(inputs);
+
   // Find all HTML source files in the publish directory
 
   const pages = glob.sync(`${PUBLISH_DIR}/**/*.html`);
@@ -402,6 +379,7 @@ export async function onPostBuild({
         folder,
         localDir: PUBLISH_DIR,
         remoteHost: host,
+        transformations
       });
 
       await fs.writeFile(page, html);

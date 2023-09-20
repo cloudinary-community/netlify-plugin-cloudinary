@@ -106,6 +106,24 @@ describe('lib/util', () => {
     //   expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/vtYmp1x-ae71a79c9c36b8d5dba872c3b274a444`);
     // });
 
+    test('should apply transformations', async () => {
+      const maxSize = {
+        width: 800,
+        height: 600,
+        dpr: '3.0',
+        crop: 'limit'
+      }
+      const { cloudinaryUrl } = await getCloudinaryUrl({
+        deliveryType: 'fetch',
+        path: '/images/stranger-things-dustin.jpeg',
+        localDir: '/tests/images',
+        remoteHost: 'https://cloudinary.netlify.app',
+        transformations: [maxSize]
+      });
+
+      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/c_${maxSize.crop},dpr_${maxSize.dpr},h_${maxSize.height},w_${maxSize.width}/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
+    });
+
   });
 
   describe('updateHtmlImagesToCloudinary', () => {

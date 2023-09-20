@@ -14,7 +14,7 @@
 
   [plugins.inputs]
   cloudName = "netlify-cloudinary"
-  deliveryType = "upload"
+  # deliveryType = "upload"
   imagesPath = [ "images", "screenshots" ]
   
   [plugins.inputs.maxSize]

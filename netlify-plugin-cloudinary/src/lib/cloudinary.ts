@@ -7,6 +7,8 @@ import { v2 as cloudinary, ConfigOptions, TransformationOptions } from 'cloudina
 import { isRemoteUrl, determineRemoteUrl } from './util'
 import { ERROR_CLOUD_NAME_REQUIRED } from '../data/errors'
 
+import { Inputs } from '../types/integration';
+
 type CloudinaryConfig = {
   apiKey?: string;
   apiSecret?: string;
@@ -271,6 +273,7 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
     localDir,
     remoteHost,
     loadingStrategy = 'lazy',
+    transformations
   } = options
 
   const errors = []
@@ -296,7 +299,6 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
 
     // If we don't have an asset and thus don't have a Cloudinary URL, create
     // one for our asset
-
     if (!cloudinaryUrl) {
       try {
         const { cloudinaryUrl: url } = await getCloudinaryUrl({
@@ -306,6 +308,7 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
           localDir,
           uploadPreset,
           remoteHost,
+          transformations
         })
         cloudinaryUrl = url
       } catch (e) {
@@ -376,3 +379,22 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
   }
 }
 
+/**
+ * getTransformationsFromInputs
+ */
+
+export function getTransformationsFromInputs(inputs: Inputs) {
+  const { maxSize } = inputs;
+
+  const transformations: CloudinaryOptions['transformations'] = [];
+
+  if ( typeof maxSize === 'object' ) {
+    transformations.push({
+      height: maxSize.height,
+      width: maxSize.width,
+      crop: 'limit',
+      dpr: maxSize.dpr || '2.0'
+    })
+  }
+  return transformations;
+}
