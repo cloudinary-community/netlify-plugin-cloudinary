@@ -132,10 +132,11 @@ export async function onBuild({
 }: OnBuildParams) {
   console.log('[Cloudinary] Creating redirects...');
 
-  const isProduction = process.env.CONTEXT === 'production';
-  const host = isProduction
-    ? process.env.NETLIFY_HOST
-    : process.env.DEPLOY_PRIME_URL;
+  let host = process.env.URL;
+
+  if ( process.env.CONTEXT === 'branch-deploy' || process.env.CONTEXT === 'deploy-preview' ) {
+    host = process.env.DEPLOY_PRIME_URL || ''
+  }
 
   console.log(`[Cloudinary] Using host: ${host}`);
 
@@ -336,10 +337,12 @@ export async function onPostBuild({
 }: OnPostBuildParams) {
   console.log('[Cloudinary] Replacing on-page images with Cloudinary URLs...');
 
-  const isProduction = process.env.CONTEXT === 'production';
-  const host = isProduction
-    ? process.env.NETLIFY_HOST
-    : process.env.DEPLOY_PRIME_URL;
+  let host = process.env.URL;
+
+  if ( process.env.CONTEXT === 'branch-deploy' || process.env.CONTEXT === 'deploy-preview' ) {
+    host = process.env.DEPLOY_PRIME_URL || ''
+  }
+
 
   console.log(`[Cloudinary] Using host: ${host}`);
 

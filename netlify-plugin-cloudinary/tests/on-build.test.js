@@ -68,7 +68,7 @@ describe('onBuild', () => {
       fs.readdir.mockResolvedValue([imagesFunctionName]);
 
       process.env.CONTEXT = 'production';
-      process.env.NETLIFY_HOST = 'https://netlify-plugin-cloudinary.netlify.app';
+      process.env.URL = 'https://netlify-plugin-cloudinary.netlify.app';
 
       // Tests to ensure that delivery type of fetch works without API Key and Secret as it should
 
@@ -101,7 +101,7 @@ describe('onBuild', () => {
       });
       expect(redirects[0]).toEqual({
         from: `${imagesPath}/*`,
-        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.NETLIFY_HOST}/cld-assets${imagesPath}/:splat`,
+        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.URL}/cld-assets${imagesPath}/:splat`,
         status: 302,
         force: true
       });
