@@ -2,11 +2,14 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { glob } from 'glob';
 
+import { Inputs } from './types/integration';
+
 import {
   configureCloudinary,
   updateHtmlImagesToCloudinary,
   getCloudinaryUrl,
   Assets,
+  getTransformationsFromInputs
 } from './lib/cloudinary';
 import { findAssetsByPath } from './lib/util';
 
@@ -62,20 +65,7 @@ type Constants = {
   SITE_ID: string;
 };
 
-/**
- * this type is built based on the content of the plugin manifest file
- * Information found here https://docs.netlify.com/integrations/build-plugins/create-plugins/#inputs
- */
-type Inputs = {
-  cloudName: string;
-  cname: string;
-  deliveryType: string;
-  folder: string;
-  imagesPath: string | Array<string>;
-  loadingStrategy: string;
-  privateCdn: boolean;
-  uploadPreset: string;
-};
+
 
 type Utils = {
   build: {
@@ -143,6 +133,7 @@ export async function onBuild({
     imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(
       ({ inputKey }) => inputKey === 'imagesPath',
     )?.path,
+    maxSize,
     privateCdn,
     uploadPreset,
   } = inputs;
@@ -185,6 +176,8 @@ export async function onBuild({
     privateCdn,
   });
 
+  const transformations = getTransformationsFromInputs(inputs);
+
   // Look for any available images in the provided imagesPath to collect
   // asset details and to grab a Cloudinary URL to use later
 
@@ -216,6 +209,7 @@ export async function onBuild({
           localDir: PUBLISH_DIR,
           uploadPreset,
           remoteHost: host,
+          transformations
         });
 
         return {
@@ -283,6 +277,7 @@ export async function onBuild({
               folder,
               path: `${cldAssetUrl}/:splat`,
               uploadPreset,
+              transformations
             });
 
             netlifyConfig.redirects.unshift({
@@ -367,6 +362,8 @@ export async function onPostBuild({
     privateCdn,
   });
 
+  const transformations = getTransformationsFromInputs(inputs);
+
   // Find all HTML source files in the publish directory
 
   const pages = glob.sync(`${PUBLISH_DIR}/**/*.html`);
@@ -382,6 +379,7 @@ export async function onPostBuild({
         folder,
         localDir: PUBLISH_DIR,
         remoteHost: host,
+        transformations
       });
 
       await fs.writeFile(page, html);
