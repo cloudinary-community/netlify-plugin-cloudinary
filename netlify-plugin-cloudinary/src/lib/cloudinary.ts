@@ -393,7 +393,7 @@ export function getTransformationsFromInputs(inputs: Inputs) {
       height: maxSize.height,
       width: maxSize.width,
       crop: 'limit',
-      dpr: maxSize.dpr || '2.0'
+      dpr: maxSize.dpr
     })
   }
   return transformations;
