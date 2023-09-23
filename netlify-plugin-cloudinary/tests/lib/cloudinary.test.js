@@ -1,4 +1,5 @@
-const { getCloudinary, getCloudinaryUrl, createPublicId, configureCloudinary, updateHtmlImagesToCloudinary } = require('../../src/lib/cloudinary');
+const { ERROR_ASSET_UPLOAD, ERROR_INVALID_SRCSET } = require('../../src/data/errors');
+const { getCloudinary, createPublicId, getCloudinaryUrl, configureCloudinary, updateHtmlImagesToCloudinary } = require('../../src/lib/cloudinary');
 
 const mockDemo = require('../mocks/demo.json');
 
@@ -69,7 +70,6 @@ describe('lib/util', () => {
       expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png`);
     });
 
-    // TODO: Mock functions to test Cloudinary uploads without actual upload
 
     test('should create a Cloudinary URL with delivery type of upload from a local image', async () => {
       // mock cloudinary.uploader.upload call
@@ -94,6 +94,22 @@ describe('lib/util', () => {
 
       expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d`);
     });
+
+    test('should fail to create a Cloudinary URL with delivery type of upload', async () => {
+      // mock cloudinary.uploader.upload call
+      cloudinary.uploader.upload = jest.fn().mockImplementation(() => Promise.reject('error'))
+
+
+      await expect(getCloudinaryUrl({
+        deliveryType: 'upload',
+        path: '/images/stranger-things-dustin.jpeg',
+        localDir: 'tests',
+        remoteHost: 'https://cloudinary.netlify.app'
+      })).rejects.toThrow(ERROR_ASSET_UPLOAD);
+    });
+
+
+
 
     // TODO: Mock functions to test Cloudinary uploads without actual upload
 

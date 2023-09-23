@@ -107,6 +107,7 @@ const CLOUDINARY_ASSET_DIRECTORIES = [
  */
 
 const _cloudinaryAssets = { images: {} } as Assets;
+const globalErrors = [];
 
 export async function onBuild({
   netlifyConfig,
@@ -118,7 +119,7 @@ export async function onBuild({
 
   let host = process.env.URL;
 
-  if ( process.env.CONTEXT === 'branch-deploy' || process.env.CONTEXT === 'deploy-preview' ) {
+  if (process.env.CONTEXT === 'branch-deploy' || process.env.CONTEXT === 'deploy-preview') {
     host = process.env.DEPLOY_PRIME_URL || ''
   }
 
@@ -139,6 +140,7 @@ export async function onBuild({
   } = inputs;
 
   if (!folder) {
+    console.error(`[Cloudinary] ${ERROR_SITE_NAME_REQUIRED}`);
     utils.build.failPlugin(ERROR_SITE_NAME_REQUIRED);
     return;
   }
@@ -182,6 +184,7 @@ export async function onBuild({
   // asset details and to grab a Cloudinary URL to use later
 
   if (typeof imagesPath === 'undefined') {
+    console.error(`[Cloudinary] ${ERROR_INVALID_IMAGES_PATH}`)
     throw new Error(ERROR_INVALID_IMAGES_PATH);
   }
 
@@ -219,13 +222,7 @@ export async function onBuild({
       }),
     );
   } catch (e) {
-    console.error('Error', e);
-    if (e instanceof Error) {
-      utils.build.failBuild(e.message);
-    } else {
-      utils.build.failBuild(e as string);
-    }
-    return;
+    globalErrors.push(e)
   }
 
   // If the delivery type is set to upload, we need to be able to map individual assets based on their public ID,
@@ -236,15 +233,18 @@ export async function onBuild({
     await Promise.all(
       Object.keys(_cloudinaryAssets).flatMap(mediaType => {
         // @ts-expect-error what are the expected mediaTypes that will be stored in _cloudinaryAssets
-        return _cloudinaryAssets[mediaType].map(async asset => {
-          const { publishPath, cloudinaryUrl } = asset;
-          netlifyConfig.redirects.unshift({
-            from: `${publishPath}*`,
-            to: cloudinaryUrl,
-            status: 302,
-            force: true,
+        if (Object.hasOwn(_cloudinaryAssets[mediaType], 'map')) {
+          // @ts-expect-error what are the expected mediaTypes that will be stored in _cloudinaryAssets
+          return _cloudinaryAssets[mediaType].map(async asset => {
+            const { publishPath, cloudinaryUrl } = asset;
+            netlifyConfig.redirects.unshift({
+              from: `${publishPath}*`,
+              to: cloudinaryUrl,
+              status: 302,
+              force: true,
+            });
           });
-        });
+        }
       }),
     );
   }
@@ -261,8 +261,7 @@ export async function onBuild({
 
           // Unsure how to type the above so that Inputs['privateCdn'] doesnt mess up types here
 
-          if (!Array.isArray(mediaPaths) && typeof mediaPaths !== 'string')
-            return;
+          if (!Array.isArray(mediaPaths) && typeof mediaPaths !== 'string') return;
 
           if (!Array.isArray(mediaPaths)) {
             mediaPaths = [mediaPaths];
@@ -271,35 +270,36 @@ export async function onBuild({
           mediaPaths.forEach(async mediaPath => {
             const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, mediaPath)}`;
             const cldAssetUrl = `${host}${cldAssetPath}`;
+            try {
+              const { cloudinaryUrl: assetRedirectUrl } = await getCloudinaryUrl({
+                deliveryType: 'fetch',
+                folder,
+                path: `${cldAssetUrl}/:splat`,
+                uploadPreset,
+              });
 
-            const { cloudinaryUrl: assetRedirectUrl } = await getCloudinaryUrl({
-              deliveryType: 'fetch',
-              folder,
-              path: `${cldAssetUrl}/:splat`,
-              uploadPreset,
-              transformations
-            });
+              netlifyConfig.redirects.unshift({
+                from: `${cldAssetPath}/*`,
+                to: `${mediaPath}/:splat`,
+                status: 200,
+                force: true,
+              });
 
-            netlifyConfig.redirects.unshift({
-              from: `${cldAssetPath}/*`,
-              to: `${mediaPath}/:splat`,
-              status: 200,
-              force: true,
-            });
-
-            netlifyConfig.redirects.unshift({
-              from: `${mediaPath}/*`,
-              to: assetRedirectUrl,
-              status: 302,
-              force: true,
-            });
-          });
-        },
-      ),
-    );
+              netlifyConfig.redirects.unshift({
+                from: `${mediaPath}/*`,
+                to: assetRedirectUrl,
+                status: 302,
+                force: true,
+              });
+            } catch (error) {
+              globalErrors.push(error)
+            }
+          })
+        })
+    )
   }
 
-  console.log('[Cloudinary] Done.');
+
 }
 
 // Post build looks through all of the output HTML and rewrites any src attributes to use a cloudinary URL
@@ -314,7 +314,7 @@ export async function onPostBuild({
 
   let host = process.env.URL;
 
-  if ( process.env.CONTEXT === 'branch-deploy' || process.env.CONTEXT === 'deploy-preview' ) {
+  if (process.env.CONTEXT === 'branch-deploy' || process.env.CONTEXT === 'deploy-preview') {
     host = process.env.DEPLOY_PRIME_URL || ''
   }
 
@@ -331,6 +331,7 @@ export async function onPostBuild({
   } = inputs;
 
   if (!folder) {
+    console.error(`[Cloudinary] ${ERROR_SITE_NAME_REQUIRED}`);
     utils.build.failPlugin(ERROR_SITE_NAME_REQUIRED);
     return;
   }
@@ -392,11 +393,19 @@ export async function onPostBuild({
   );
 
   const errors = results.filter(({ errors }) => errors.length > 0);
+  // Collect the errors in the global scope to be used in the summary onEnd
+  globalErrors.push(...errors)
 
-  if (errors.length > 0) {
-    console.log(`[Cloudinary] Done with ${errors.length} errors...`);
-    console.log(JSON.stringify(errors, null, 2));
-  } else {
-    console.log('[Cloudinary] Done.');
-  }
+}
+
+
+export function onEnd({ utils }: { utils: Utils }) {
+  const summary = globalErrors.length > 0 ? `Cloudinary build plugin completed with ${globalErrors.length} errors` : "Cloudinary build plugin completed successfully"
+  const text = globalErrors.length > 0 ? `The build process found ${globalErrors.length} errors. Check build logs for more information` : "No errors found during build"
+  utils.status.show({
+    title: "[Cloudinary] Done.",
+    // Required.
+    summary,
+    text
+  });
 }
