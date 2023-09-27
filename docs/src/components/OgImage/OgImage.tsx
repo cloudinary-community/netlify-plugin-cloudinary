@@ -50,7 +50,7 @@ const OgImage = ({ title, twitterTitle }: OgImageProps) => {
             fontFamily: 'Source Sans Pro',
             fontSize: 60,
             fontWeight: 'bold',
-            text: 'next.cloudinary.dev'
+            text: 'netlify.cloudinary.dev'
           }
         }
       ]}
