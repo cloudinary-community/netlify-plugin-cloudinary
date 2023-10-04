@@ -5,7 +5,7 @@ import { JSDOM } from 'jsdom'
 import { v2 as cloudinary, ConfigOptions, TransformationOptions } from 'cloudinary'
 
 import { isRemoteUrl, determineRemoteUrl } from './util'
-import { ERROR_CLOUD_NAME_REQUIRED } from '../data/errors'
+import { ERROR_API_CREDENTIALS_REQUIRED, ERROR_ASSET_UPLOAD, ERROR_CLOUD_NAME_REQUIRED, ERROR_UPLOAD_PRESET } from '../data/errors'
 
 import { Inputs } from '../types/integration';
 
@@ -95,7 +95,7 @@ export function configureCloudinary(config: CloudinaryConfig) {
     secure: true
   }
 
-  if ( config.cname ) {
+  if (config.cname) {
     cloudinaryConfig.secure_distribution = config.cname;
     // When configuring a cname, we need to additionally set private CDN
     // to be true in order to work properly, which may not be obvious
@@ -155,13 +155,14 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
   const canSignUpload = apiKey && apiSecret
 
   if (!cloudName) {
-    throw new Error(ERROR_CLOUD_NAME_REQUIRED)
+    throw new Error(`[Cloudinary] ${ERROR_CLOUD_NAME_REQUIRED}`)
   }
 
   if (deliveryType === 'upload' && !canSignUpload && !uploadPreset) {
-    throw new Error(
-      `To use deliveryType ${deliveryType}, please use an uploadPreset for unsigned requests or an API Key and Secret for signed requests.`,
-    )
+    if (!uploadPreset) {
+      throw new Error(`[Cloudinary] ${ERROR_UPLOAD_PRESET}`)
+    }
+    throw new Error(`[Cloudinary] ${ERROR_API_CREDENTIALS_REQUIRED}`)
   }
 
   let fileLocation
@@ -206,20 +207,31 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
     if (canSignUpload) {
       // We need an API Key and Secret to use signed uploading
 
-      results = await cloudinary.uploader.upload(fullPath, {
-        ...uploadOptions,
-      })
+      try {
+        results = await cloudinary.uploader.upload(fullPath, {
+          ...uploadOptions,
+        })
+      } catch (error) {
+        console.error(`[Cloudinary] ${ERROR_ASSET_UPLOAD}`)
+        console.error(`[Cloudinary] \tpath: ${fullPath}`)
+        throw Error(ERROR_ASSET_UPLOAD)
+      }
     } else {
       // If we want to avoid signing our uploads, we don't need our API Key and Secret,
       // however, we need to provide an uploadPreset
-
-      results = await cloudinary.uploader.unsigned_upload(
-        fullPath,
-        uploadPreset,
-        {
-          ...uploadOptions,
-        },
-      )
+      try {
+        results = await cloudinary.uploader.unsigned_upload(
+          fullPath,
+          uploadPreset,
+          {
+            ...uploadOptions,
+          },
+        )
+      } catch (error) {
+        console.error(`[Cloudinary] ${ERROR_ASSET_UPLOAD}`)
+        console.error(`[Cloudinary] path: ${fullPath}`)
+        throw Error(ERROR_ASSET_UPLOAD)
+      }
     }
 
     // Finally use the stored public ID to grab the image URL
@@ -340,14 +352,25 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
         if (exists && deliveryType === 'upload') {
           return exists.cloudinaryUrl
         }
-        return getCloudinaryUrl({
-          deliveryType,
-          folder,
-          path: url[0],
-          localDir,
-          uploadPreset,
-          remoteHost,
-        })
+        try {
+
+          return getCloudinaryUrl({
+            deliveryType,
+            folder,
+            path: url[0],
+            localDir,
+            uploadPreset,
+            remoteHost,
+          })
+        } catch (e) {
+          if (e instanceof Error) {
+            errors.push({
+              imgSrc,
+              message: e.message
+            })
+          }
+
+        }
       })
 
       const srcsetUrlsCloudinary = await Promise.all(srcsetUrlsPromises)
