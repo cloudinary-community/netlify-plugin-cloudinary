@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.11.0...v1.12.0) (2023-10-04)
+
+
+### Features
+
+* throw and catch error when calls to cloudinary upload fails ([#72](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/72)) ([c90c46f](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/c90c46ffc9a7ed4bb3c00fa87606f2130cef1596)), closes [#58](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/58)
+
 # [1.11.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.10.2...v1.11.0) (2023-09-20)
 
 
