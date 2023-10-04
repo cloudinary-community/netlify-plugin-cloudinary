@@ -21,6 +21,9 @@ inputs:
     required: false
     description: "The method in which in which images are loaded (Ex: lazy, eager)"
     default: "lazy"
+  - name: maxSize
+    required: false
+    description: "Maximum dimensions (width and height) for an image to be delivered"
   - name: privateCdn
     required: false
     description: "Enable Private CDN Distribution (Advanced Plan Users)"

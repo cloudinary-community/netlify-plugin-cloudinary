@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.10.2...v1.11.0) (2023-09-20)
+
+
+### Features
+
+* Max Size ([#78](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/78)) ([57cb8fb](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/57cb8fba2d82ecc234f950dab459574d23dfafae)), closes [#11](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/11) [#62](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/62)
+
 ## [1.10.2](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.10.1...v1.10.2) (2023-09-19)
 
 

@@ -27,12 +27,31 @@ import OgImage from '../components/OgImage';
 | folder          | string  | No      | myfolder  | Folder all media will be stored in. Defaults to Netlify site name |
 | imagesPath      | string/Array | No | /assets   | Local path application serves image assets from |
 | loadingStrategy | string  | No      | eager     | The method in which in which images are loaded (Ex: lazy, eager) |
+| maxSize         | object  | No      | eager     | See Below. |
 | privateCdn      | boolean | No      | true      | Enables Private CDN Distribution (Advanced Plan Users) |
 | uploadPreset    | string  | No      | my-preset | Defined set of asset upload defaults in Cloudinary |
 
 <Callout emoji={false}>
   Cloud Name must be set as an environment variable if not as an input
 </Callout>
+
+### Max Size
+
+The Max Size option gives you the ability to configure a maximum width and height that images will scale down to, helping to avoid serving unnecessarily large images.
+
+By default, the aspect ratio of the images are preserved, so by specifying both a maximum width and height, you're telling Cloudinary to scale the image down so that neither the width or height are beyond that value.
+
+Additionally, the plugin uses a crop method of `limit` which avoids upscaling images if the images are already smaller than the given size, which reduces unnecessary upscaling as the browser will typically automatically handle.
+
+The options available are:
+
+| Name            | Type    | Example   | Description |
+|-----------------|---------|-----------| ------------|
+| dpr             | string  | 2.0       | Device Pixel Ratio which essentially multiplies the width and height for pixel density. |
+| height          | number  | 600       | Maximum height an image can be delivered as. |
+| width           | number  | 800       | Maximum width an image can be delivered as.  |
+
+It's important to note that this will not change the width or height attribute of the image within the DOM, this will only be the image that is being delivered by Cloudinary.
 
 ## Environment Variables
 

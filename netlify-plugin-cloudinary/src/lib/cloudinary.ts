@@ -2,10 +2,12 @@ import crypto from 'crypto'
 import path from 'path'
 import fetch from 'node-fetch'
 import { JSDOM } from 'jsdom'
-import { v2 as cloudinary, ConfigOptions } from 'cloudinary'
+import { v2 as cloudinary, ConfigOptions, TransformationOptions } from 'cloudinary'
 
 import { isRemoteUrl, determineRemoteUrl } from './util'
 import { ERROR_CLOUD_NAME_REQUIRED } from '../data/errors'
+
+import { Inputs } from '../types/integration';
 
 type CloudinaryConfig = {
   apiKey?: string;
@@ -52,11 +54,13 @@ type OtherDelivery = {
   deliveryType: Omit<DeliveryType, 'fetch'>;
   remoteHost?: string
 }
-type CloudinaryOptions = {
+
+export type CloudinaryOptions = {
   folder: string,
   path: string;
   localDir?: string;
   uploadPreset: string;
+  transformations?: Array<TransformationOptions>;
 } & (FetchDelivery | OtherDelivery)
 
 export type Assets = {
@@ -139,6 +143,7 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
     path: filePath,
     localDir,
     remoteHost,
+    transformations = [],
     uploadPreset,
   } = options
 
@@ -232,6 +237,7 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
         fetch_format: 'auto',
         quality: 'auto',
       },
+      ...transformations
     ],
   })
 
@@ -267,6 +273,7 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
     localDir,
     remoteHost,
     loadingStrategy = 'lazy',
+    transformations
   } = options
 
   const errors = []
@@ -292,7 +299,6 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
 
     // If we don't have an asset and thus don't have a Cloudinary URL, create
     // one for our asset
-
     if (!cloudinaryUrl) {
       try {
         const { cloudinaryUrl: url } = await getCloudinaryUrl({
@@ -302,6 +308,7 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
           localDir,
           uploadPreset,
           remoteHost,
+          transformations
         })
         cloudinaryUrl = url
       } catch (e) {
@@ -372,3 +379,22 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
   }
 }
 
+/**
+ * getTransformationsFromInputs
+ */
+
+export function getTransformationsFromInputs(inputs: Inputs) {
+  const { maxSize } = inputs;
+
+  const transformations: CloudinaryOptions['transformations'] = [];
+
+  if ( typeof maxSize === 'object' ) {
+    transformations.push({
+      height: maxSize.height,
+      width: maxSize.width,
+      crop: 'limit',
+      dpr: maxSize.dpr
+    })
+  }
+  return transformations;
+}
