@@ -16,11 +16,11 @@
 
 # Cloudinary Netlify Plugin
 
-Optimize and serve all images served in your Netlify site deploy with [Cloudinary](https://cloudinary.com/).
+Optimize and serve all images served in your Netlify site, deploy with [Cloudinary](https://cloudinary.com/).
 
-The Cloudinary plugin hooks into your Netlify build process and sets up images for optimization and delivery. First, the plugin replaces all your on-page, post-compilation images with a Cloudinary-sourced URL, greatly accelerating your initial page load. Next, for comprehensive coverage, Cloudinary redirects assets requested from your images directory to a Cloudinary URL with the default fetch feature or the upload delivery type.
+The Cloudinary plugin hooks into your Netlify build process and sets up images for optimization and delivery. First, the plugin replaces all your on-page, post-compilation images with a Cloudinary-sourced URL, greatly accelerating your initial page load. Next, for comprehensive coverage, Cloudinary redirects assets requested from your images' directory to a Cloudinary URL with the default fetch feature or the upload delivery type.
 
-tl;dr automatically serves smaller images in modern formats
+Tl;dr automatically serves smaller images in modern formats
 
 **This plugin is not officially supported by Cloudinary.**
 
@@ -34,7 +34,7 @@ tl;dr automatically serves smaller images in modern formats
 
 Before installing, make sure you're set up with a free [Cloudinary](https://cloudinary.com/) account.
 
-### Installing via Netlify UI
+### Installing via the Netlify UI
 
 - [Install the plugin](https://app.netlify.com/plugins/netlify-plugin-cloudinary/install) using the [Netlify Build Plugins Directory](https://app.netlify.com/plugins)
 
@@ -91,9 +91,9 @@ npm install netlify-plugin-cloudinary
 | cloudName       | string  | No*     | mycloud   | Cloudinary Cloud Name |
 | cname           | string  | No      | domain.com | The custom domain name (CNAME) to use for building URLs (Advanced Plan Users) |
 | deliveryType    | string  | No      | fetch     | The method by which Cloudinary stores and delivers images (Ex: fetch, upload) |
-| folder          | string  | No      | myfolder  | Folder all media will be stored in. Defaults to Netlify site name |
-| imagesPath      | string/Array | No | /assets   | Local path application serves image assets from |
-| loadingStrategy | string  | No      | eager     | The method in which in which images are loaded (Ex: lazy, eager) |
+| folder          | string  | No      | myfolder  | The folder all media will be stored in. Defaults to the Netlify site name |
+| imagesPath      | string/Array | No | /assets   | A local path application serves image assets from |
+| loadingStrategy | string  | No      | eager     | The method in which images are loaded (Ex: lazy, eager) |
 | maxSize         | object  | No      | eager     | See Below. |
 | privateCdn      | boolean | No      | true      | Enables Private CDN Distribution (Advanced Plan Users) |
 | uploadPreset    | string  | No      | my-preset | Defined set of asset upload defaults in Cloudinary |
@@ -104,7 +104,7 @@ npm install netlify-plugin-cloudinary
 
 The Max Size option gives you the ability to configure a maximum width and height that images will scale down to, helping to avoid serving unnecessarily large images.
 
-By default, the aspect ratio of the images are preserved, so by specifying both a maximum width and height, you're telling Cloudinary to scale the image down so that neither the width or height are beyond that value.
+By default, the aspect ratio of the images is preserved, so by specifying both a maximum width and height, you're telling Cloudinary to scale the image down so that neither the width nor height are beyond that value.
 
 Additionally, the plugin uses a crop method of `limit` which avoids upscaling images if the images are already smaller than the given size, which reduces unnecessary upscaling as the browser will typically automatically handle.
 
@@ -112,7 +112,7 @@ The options available are:
 
 | Name            | Type    | Example   | Description |
 |-----------------|---------|-----------| ------------|
-| dpr             | string  | 2.0       | Device Pixel Ratio which essentially multiplies the width and height for pixel density. |
+| dpr             | string  | 2.0       | Device pixel ratio, which essentially multiplies the width and height for pixel density. |
 | height          | number  | 600       | Maximum height an image can be delivered as. |
 | width           | number  | 800       | Maximum width an image can be delivered as.  |
 
@@ -130,7 +130,7 @@ It's important to note that this will not change the width or height attribute o
 
 ### Setting your Cloud Name
 
-You have two options for setting your Cloud Name: plugin input or environment variable.
+You have two options for setting your Cloud Name: plugin input or an environment variable.
 
 **Input**
 
@@ -157,9 +157,9 @@ Learn how to [set environment variables with Netlify](https://docs.netlify.com/c
 
 Default - no additional configuration needed.
 
-The fetch method allows you to use Cloudinary delivery by providing a remote URL. Learn more about using delivering remote images with [fetch](https://cloudinary.com/documentation/fetch_remote_images).
+The fetch method allows you to use Cloudinary delivery by providing a remote URL. Learn more about delivering remote images with [fetch](https://cloudinary.com/documentation/fetch_remote_images).
 
-> Note: if you are currently restricting Fetched URLs, you need to ensure your Netlify URL is listed under allowed fetch domains. Older accounts may restrict fetched images by default. Read more about [restricting the allowed fetch domains](https://cloudinary.com/documentation/fetch_remote_images#restricting_the_allowed_fetch_domains).
+> Note: if you are currently restricting Fetched URLs, you need to ensure your Netlify URL is listed under allowed fetch domains. Older accounts may restrict the fetched images by default. Read more about [restricting the allowed fetch domains](https://cloudinary.com/documentation/fetch_remote_images#restricting_the_allowed_fetch_domains).
 
 **upload - Unsigned**
 
@@ -223,11 +223,11 @@ Inside your Netlify config:
 
 ### I'm using the default settings but my images 404
 
-The plugin uses the fetch method by default and if you're receiving a 404 with a valid URL and valid Cloudinary account, you may be currently restricting fetched URLs.
+The plugin uses the fetch method by default, and if you're receiving a 404 with a valid URL and a valid Cloudinary account, you may be currently restricting fetched URLs.
 
 You have two options to resolve this: adding your Netlify domain to the list of "allowed fetch domains" and removing the fetched URL restriction.
 
-Adding your domain to the "allowed fetch domains" list is more secure by not allowing others to use your Cloudinary account with their own images. You can do this under Settings > Security > Allowed fetch domains.
+Adding your domain to the "allowed fetch domains" list makes it more secure by not allowing others to use your Cloudinary account with their own images. You can do this under Settings > Security > Allowed fetch domains.
 
 Alternatively, you can remove the restriction and allow all fetched images to work by going to Settings > Security > Restricted media types and unchecking the box for Fetched URL.
 
@@ -235,15 +235,15 @@ Alternatively, you can remove the restriction and allow all fetched images to wo
 
 ### Delivery Part 1: Replacing all static, on-page images with Cloudinary URLs
 
-During the Netlify build process, the plugin is able to tap into the `onPostBuild` hook where we use [jsdom](https://github.com/jsdom/jsdom) to create a node-based representation of the DOM for each output HTML file, then walk through each node, and if it's an image, we replace the source with a Cloudinary URL.
+During the Netlify build process, the plugin is able to tap into the `onPostBuild` hook, where we use [jsdom](https://github.com/jsdom/jsdom) to create a node-based representation of the DOM for each output HTML file, then walk through each node, and if it's an image, we replace the source with a Cloudinary URL.
 
-Depending on the configuration, we'll either use the full URL for that image with the [Cloudinary fetch API](https://cloudinary.com/documentation/fetch_remote_images) or alternatively that image will be [uploaded](https://cloudinary.com/documentation/upload_images), where then it will be served by public ID from the Cloudinary account.
+Depending on the configuration, we'll either use the full URL for that image with the [Cloudinary fetch API](https://cloudinary.com/documentation/fetch_remote_images) or alternatively that image will be [uploaded](https://cloudinary.com/documentation/upload_images), where it will be served by a public ID from the Cloudinary account.
 
-While this works great for a lot of cases and in particular the first load of that page, using a framework with clientside routing or features that mutate the DOM may prevent that Cloudinary URL from persisting, making all of that hard work disappear, meaning it will be served from the Netlify CDN or original remote source (which is fine, but that leads us to Part 2).
+While this works great for a lot of cases, and in particular the first load of that page, using a framework with clientside routing or features that mutate the DOM may prevent that Cloudinary URL from persisting, making all of that hard work disappear, meaning it will be served from the Netlify CDN or original remote source (which is fine, but that leads us to Part 2).
 
 ### Delivery Part 2: Serving all assets from the /images directory from Cloudinary
 
-To provide comprehensive coverage of images being served from Cloudinary, we take advantage of Netlify's dynamic redirects and serverless functions to map any image being served from the /images directory (or the configured `imagesPath`), redirect it to a serverless function, which then gets redirected to a Cloudinary URL.
+To provide comprehensive coverage of images being served from Cloudinary, we take advantage of Netlify's dynamic redirects and serverless functions to map any image being served from the /images directory (or the configured `imagesPath`) and redirect it to a serverless function, which then gets redirected to a Cloudinary URL.
 
 Through this process, we're still able to afford the same option of using either the fetch or upload API depending on preference, where the latter would be uploaded if it's a new asset within the serverless function.
 
@@ -274,7 +274,7 @@ Which will combine the build and deploy contexts and run through the full proces
 
 ### Demo
 
-The repository additionally includes a demo that uses the plugin. The demo is a simple Next.js application that lows a few images statically and those same images in a separate list once the page loads. This helps us test both the on-page image replacement and the redirecting of the images directory.
+The repository additionally includes a demo that uses the plugin. The demo is a simple Next.js application that loads a few images statically and those same images in a separate list once the page loads. This helps us test both the on-page image replacement and the redirecting of the images' directory.
 
 You can link this project to your Netlify account for testing purposes by creating a new Netlify site at the root of this project and linking it to that new site.
 
@@ -286,7 +286,7 @@ netlify deploy --build
 
 ### Tests
 
-Tests require all environment variables to be actively set pass. See [configuration](#-configuration) above to see which variables need to be set.
+Tests require all environment variables to be actively set to pass. See the [configuration](#-configuration) above to see which variables need to be set.
 
 Once set, tests can be run with:
 
