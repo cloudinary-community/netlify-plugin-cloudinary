@@ -99,7 +99,18 @@ describe('onBuild', () => {
           deliveryType
         }
       });
-      
+
+      // The analytics string that's added to the URLs is dynamic based on package version.
+      // The resulting value is also not static, so we can't simply add it to the end of the
+      // URL, so strip the analytics from the URLs as it's not important for this particular
+      // test, being covered elsewhere.
+
+      redirects.forEach(redirect => {
+        if ( redirect.to.includes('https://res.cloudinary.com') ) {
+          redirect.to = redirect.to.split('?')[0];
+        }
+      })
+
       expect(redirects[0]).toEqual({
         from: `${imagesPath}/*`,
         to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.URL}/cld-assets${imagesPath}/:splat`,
@@ -149,6 +160,17 @@ describe('onBuild', () => {
           deliveryType
         }
       });
+
+      // The analytics string that's added to the URLs is dynamic based on package version.
+      // The resulting value is also not static, so we can't simply add it to the end of the
+      // URL, so strip the analytics from the URLs as it's not important for this particular
+      // test, being covered elsewhere.
+
+      redirects.forEach(redirect => {
+        if ( redirect.to.includes('https://res.cloudinary.com') ) {
+          redirect.to = redirect.to.split('?')[0];
+        }
+      })
 
       expect(redirects[0]).toEqual({
         from: `${imagesPath}/*`,
@@ -200,6 +222,17 @@ describe('onBuild', () => {
           imagesPath
         }
       });
+
+      // The analytics string that's added to the URLs is dynamic based on package version.
+      // The resulting value is also not static, so we can't simply add it to the end of the
+      // URL, so strip the analytics from the URLs as it's not important for this particular
+      // test, being covered elsewhere.
+      
+      redirects.forEach(redirect => {
+        if ( redirect.to.includes('https://res.cloudinary.com') ) {
+          redirect.to = redirect.to.split('?')[0];
+        }
+      })
 
       expect(redirects[0]).toEqual({
         from: `${imagesPath[1]}/*`,
