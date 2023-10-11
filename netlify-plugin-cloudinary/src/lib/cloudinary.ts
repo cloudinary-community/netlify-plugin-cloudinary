@@ -251,6 +251,11 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
       },
       ...transformations
     ],
+    urlAnalytics: true,
+    sdkCode: 'F',
+    sdkSemver: '0.0.0',
+    techVersion: '0.0.0',
+    product: 'B'
   })
 
   return {
