@@ -4,6 +4,7 @@ import fetch from 'node-fetch'
 import { JSDOM } from 'jsdom'
 import { v2 as cloudinary, ConfigOptions, TransformationOptions } from 'cloudinary'
 
+import { ANALYTICS_SDK_CODE, ANALYTICS_SDK_SEMVER, ANALYTICS_PRODUCT } from '../data/analytics';
 import { isRemoteUrl, determineRemoteUrl } from './util'
 import { ERROR_API_CREDENTIALS_REQUIRED, ERROR_ASSET_UPLOAD, ERROR_CLOUD_NAME_REQUIRED, ERROR_UPLOAD_PRESET } from '../data/errors'
 
@@ -62,6 +63,13 @@ export type CloudinaryOptions = {
   uploadPreset: string;
   transformations?: Array<TransformationOptions>;
 } & (FetchDelivery | OtherDelivery)
+
+export type CloudinaryAnalytics = {
+  sdkCode?: string;
+  sdkSemver?: string;
+  techVersion?: string;
+  product?: string;
+}
 
 export type Assets = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -136,7 +144,7 @@ export async function createPublicId({ path: filePath }: { path: string }) {
  * getCloudinaryUrl
  */
 
-export async function getCloudinaryUrl(options: CloudinaryOptions) {
+export async function getCloudinaryUrl(options: CloudinaryOptions, analytics?: CloudinaryAnalytics) {
   const {
     deliveryType,
     folder,
@@ -252,12 +260,13 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
       ...transformations
     ],
     urlAnalytics: true,
-    sdkCode: 'F',
-    sdkSemver: '0.0.0',
+    sdkCode: ANALYTICS_SDK_CODE,
+    sdkSemver: ANALYTICS_SDK_SEMVER,
     techVersion: '0.0.0',
-    product: 'B'
-  })
-
+    product: ANALYTICS_PRODUCT,
+    ...analytics
+  });
+  
   return {
     sourceUrl: fileLocation,
     cloudinaryUrl,
@@ -281,7 +290,7 @@ function getAsset(imgUrl: string, assets: Assets) {
   return cloudinaryAsset
 }
 
-export async function updateHtmlImagesToCloudinary(html: string, options: UpdateCloudinaryOptions) {
+export async function updateHtmlImagesToCloudinary(html: string, options: UpdateCloudinaryOptions, analytics?: CloudinaryAnalytics) {
   const {
     assets,
     deliveryType,
@@ -326,7 +335,7 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
           uploadPreset,
           remoteHost,
           transformations
-        })
+        }, analytics)
         cloudinaryUrl = url
       } catch (e) {
         if (e instanceof Error) {
@@ -366,7 +375,7 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
             localDir,
             uploadPreset,
             remoteHost,
-          })
+          }, analytics)
         } catch (e) {
           if (e instanceof Error) {
             errors.push({

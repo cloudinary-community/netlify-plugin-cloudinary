@@ -1,4 +1,14 @@
 const { configureCloudinary, getCloudinaryUrl, updateHtmlImagesToCloudinary } = require('../../src/lib/cloudinary');
+const { ANALYTICS_SDK_CODE, ANALYTICS_PRODUCT } = require('../../src/data/analytics');
+
+const TEST_ANALYTICS_CONFIG = {
+  sdkCode: ANALYTICS_SDK_CODE,
+  sdkSemver: '1.1.1',
+  techVersion: '1.1.1',
+  product: ANALYTICS_PRODUCT,
+}
+
+const TEST_ANALYTICS_STRING = 'AFCd1Bl0';
 
 describe('lib/util', () => {
   const ENV_ORIGINAL = process.env;
@@ -33,7 +43,7 @@ describe('lib/util', () => {
         remoteHost: 'https://cloudinary.netlify.app'
       });
 
-      expect(cloudinaryUrl).toEqual(`https://${process.env.CLOUDINARY_CLOUD_NAME}-res.cloudinary.com/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
+      expect(cloudinaryUrl).toMatch(`https://${process.env.CLOUDINARY_CLOUD_NAME}-res.cloudinary.com/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
     });
 
   });
@@ -47,9 +57,9 @@ describe('lib/util', () => {
         deliveryType: 'fetch',
         localDir: 'tests',
         remoteHost: 'https://cloudinary.netlify.app'
-      });
+      }, TEST_ANALYTICS_CONFIG);
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://${process.env.CLOUDINARY_CLOUD_NAME}-res.cloudinary.com/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" loading=\"lazy"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://${process.env.CLOUDINARY_CLOUD_NAME}-res.cloudinary.com/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg?_a=${TEST_ANALYTICS_STRING}\" loading=\"lazy"\></p></body></html>`);
     });
 
   });
