@@ -16,4 +16,5 @@ export type Inputs = {
   };
   privateCdn: boolean;
   uploadPreset: string;
+  uploadConcurrency: number;
 };

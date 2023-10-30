@@ -137,6 +137,7 @@ export async function onBuild({
     maxSize,
     privateCdn,
     uploadPreset,
+    uploadConcurrency,
   } = inputs;
 
   if (!folder) {
@@ -201,11 +202,13 @@ export async function onBuild({
   }
 
   try {
-    _cloudinaryAssets.images = await Promise.all(
-      imagesFiles.map(async image => {
-        const publishPath = image.replace(PUBLISH_DIR, '');
+    const { default: pLimit } = await import('p-limit');
+    const limitUploadFiles = pLimit(uploadConcurrency)
+    const uploadsQueue = imagesFiles.map(async image => {
+      const publishPath = image.replace(PUBLISH_DIR, '');
+      return limitUploadFiles(() => {
 
-        const cloudinary = await getCloudinaryUrl({
+        const cloudinary = getCloudinaryUrl({
           deliveryType,
           folder,
           path: publishPath,
@@ -219,8 +222,9 @@ export async function onBuild({
           publishPath,
           ...cloudinary,
         };
-      }),
-    );
+      })
+    })
+    _cloudinaryAssets.images = await Promise.all(uploadsQueue);
   } catch (e) {
     globalErrors.push(e)
   }

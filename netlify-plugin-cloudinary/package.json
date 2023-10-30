@@ -19,10 +19,12 @@
   },
   "license": "MIT",
   "dependencies": {
+    "babel-jest": "29.7.0",
     "cloudinary": "^1.40.0",
     "glob": "^10.3.3",
     "jsdom": "21",
-    "node-fetch": "2"
+    "node-fetch": "2",
+    "p-limit": "4.0.0"
   },
   "devDependencies": {
     "@netlify/config": "20.8.1",
@@ -42,5 +44,8 @@
     "prettier": "3.0.3",
     "ts-jest": "29.1.1",
     "typescript": "5.2.2"
+  },
+  "engines": {
+    "node": ">=16"
   }
 }
