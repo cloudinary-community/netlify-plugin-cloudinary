@@ -1,5 +1,7 @@
-const { ERROR_ASSET_UPLOAD, ERROR_INVALID_SRCSET } = require('../../src/data/errors');
-const { getCloudinary, createPublicId, getCloudinaryUrl, configureCloudinary, updateHtmlImagesToCloudinary } = require('../../src/lib/cloudinary');
+import { vi, expect, describe, test, beforeEach, afterAll, it } from 'vitest';
+
+import { ERROR_ASSET_UPLOAD } from '../../src/data/errors';
+import { getCloudinary, createPublicId, configureCloudinary, getCloudinaryUrl, updateHtmlImagesToCloudinary } from '../../src/lib/cloudinary';
 
 const mockDemo = require('../mocks/demo.json');
 
@@ -9,7 +11,7 @@ describe('lib/util', () => {
   const ENV_ORIGINAL = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
 
     process.env = { ...ENV_ORIGINAL };
     process.env.CLOUDINARY_CLOUD_NAME = 'testcloud';
@@ -73,7 +75,7 @@ describe('lib/util', () => {
 
     test('should create a Cloudinary URL with delivery type of upload from a local image', async () => {
       // mock cloudinary.uploader.upload call
-      cloudinary.uploader.upload = jest.fn().mockResolvedValue({
+      cloudinary.uploader.upload = vi.fn().mockResolvedValue({
         public_id: 'stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d',
         secure_url: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/v1613009008/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d.jpg`,
         original_filename: 'stranger-things-dustin',
@@ -97,7 +99,7 @@ describe('lib/util', () => {
 
     test('should fail to create a Cloudinary URL with delivery type of upload', async () => {
       // mock cloudinary.uploader.upload call
-      cloudinary.uploader.upload = jest.fn().mockImplementation(() => Promise.reject('error'))
+      cloudinary.uploader.upload = vi.fn().mockImplementation(() => Promise.reject('error'))
 
 
       await expect(getCloudinaryUrl({
