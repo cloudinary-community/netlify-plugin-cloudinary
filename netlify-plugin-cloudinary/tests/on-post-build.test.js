@@ -1,18 +1,20 @@
-const fs = require('fs').promises;
-const path = require('path');
-const { JSDOM } = require('jsdom');
-
-const { onPostBuild } = require('../src/');
+import { vi, expect, describe, test, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { JSDOM } from 'jsdom';
+import { onPostBuild } from '../src/';
 
 const mocksPath = path.join(__dirname, 'mocks/html');
 const tempPath = path.join(mocksPath, 'temp');
 
 async function mkdir(directoryPath) {
   let dir;
+  console.log('directoryPath', directoryPath)
   try {
     dir = await fs.stat(directoryPath);
   } catch(e) {}
   if ( dir && dir.isDirectory() ) return;
+  console.log('mkdir')
   await fs.mkdir(directoryPath);
 }
 
@@ -24,7 +26,7 @@ describe('onPostBuild', () => {
   });
 
   beforeEach(async () => {
-    jest.resetModules();
+    vi.resetModules();
 
     process.env = { ...ENV_ORIGINAL };
 
@@ -34,7 +36,7 @@ describe('onPostBuild', () => {
     process.env.CLOUDINARY_API_SECRET = 'abcd1234';
 
     const mockFiles = (await fs.readdir(mocksPath)).filter(filePath => filePath.includes('.html'));
-    const tempTestPath = path.join(tempPath, expect.getState().currentTestName);
+    const tempTestPath = path.join(tempPath, expect.getState().currentTestName.replace('/', '_'));
     await mkdir(tempTestPath);
     await Promise.all(mockFiles.map(async file => {
       await fs.copyFile(path.join(mocksPath, file), path.join(tempTestPath, file));
@@ -44,7 +46,7 @@ describe('onPostBuild', () => {
   afterEach(async () => {
     process.env = ENV_ORIGINAL;
 
-    await fs.rm(path.join(tempPath, expect.getState().currentTestName), { recursive: true, force: true });
+    await fs.rm(path.join(tempPath, expect.getState().currentTestName.replace('/', '_')), { recursive: true, force: true });
   });
 
   afterAll(async () => {
@@ -64,7 +66,7 @@ describe('onPostBuild', () => {
 
       const deliveryType = 'fetch';
 
-      const tempTestPath = path.join(tempPath, expect.getState().currentTestName);
+      const tempTestPath = path.join(tempPath, expect.getState().currentTestName.replace('/', '_'));
 
       await onPostBuild({
         constants: {
@@ -103,7 +105,7 @@ describe('onPostBuild', () => {
 
       const deliveryType = 'fetch';
 
-      const tempTestPath = path.join(tempPath, expect.getState().currentTestName);
+      const tempTestPath = path.join(tempPath, expect.getState().currentTestName.replace('/', '_'));
 
       const maxSize = {
         width: 800,
