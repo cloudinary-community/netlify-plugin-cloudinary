@@ -100,6 +100,9 @@ importers:
       node-fetch:
         specifier: '2'
         version: 2.7.0
+      p-limit:
+        specifier: 3.1.0
+        version: 3.1.0
     devDependencies:
       '@netlify/config':
         specifier: 20.8.1

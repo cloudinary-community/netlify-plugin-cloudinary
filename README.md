@@ -97,7 +97,7 @@ npm install netlify-plugin-cloudinary
 | maxSize         | object  | No      | eager     | See Below. |
 | privateCdn      | boolean | No      | true      | Enables Private CDN Distribution (Advanced Plan Users) |
 | uploadPreset    | string  | No      | my-preset | Defined set of asset upload defaults in Cloudinary |
-
+| uploadConcurrency | number | No     | 10        | Maximum value of concurrent uploads |
 *Cloud Name must be set as an environment variable if not as an input
 
 #### Max Size

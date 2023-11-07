@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { glob } from 'glob';
+import pLimit from 'p-limit';
 
 import { Inputs } from './types/integration';
 
@@ -101,6 +102,8 @@ const CLOUDINARY_ASSET_DIRECTORIES = [
   },
 ];
 
+const DEFAULT_CONCURRENCY = 10;
+
 /**
  * TODO
  * - Handle srcset
@@ -130,13 +133,14 @@ export async function onBuild({
   const {
     cname,
     deliveryType,
-    folder = process.env.SITE_NAME,
+    folder = process.env.SITE_NAME || '',
     imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(
       ({ inputKey }) => inputKey === 'imagesPath',
     )?.path,
     maxSize,
     privateCdn,
     uploadPreset,
+    uploadConcurrency = DEFAULT_CONCURRENCY,
   } = inputs;
 
   if (!folder) {
@@ -201,26 +205,31 @@ export async function onBuild({
   }
 
   try {
-    _cloudinaryAssets.images = await Promise.all(
-      imagesFiles.map(async image => {
-        const publishPath = image.replace(PUBLISH_DIR, '');
+    const limitUploadFiles = pLimit(uploadConcurrency);
+    const uploadsQueue = imagesFiles.map(image => {
+      const publishPath = image.replace(PUBLISH_DIR, '');
+      return limitUploadFiles(() => {
+        async function uploadFile() {
+          const cloudinary = await getCloudinaryUrl({
+            deliveryType,
+            folder,
+            path: publishPath,
+            localDir: PUBLISH_DIR,
+            uploadPreset,
+            remoteHost: host,
+            transformations
+          });
 
-        const cloudinary = await getCloudinaryUrl({
-          deliveryType,
-          folder,
-          path: publishPath,
-          localDir: PUBLISH_DIR,
-          uploadPreset,
-          remoteHost: host,
-          transformations
-        });
+          return {
+            publishPath,
+            ...cloudinary,
+          };
+        }
+        return uploadFile();
+      })
+    })
 
-        return {
-          publishPath,
-          ...cloudinary,
-        };
-      }),
-    );
+    _cloudinaryAssets.images = await Promise.all(uploadsQueue);
   } catch (e) {
     globalErrors.push(e)
   }

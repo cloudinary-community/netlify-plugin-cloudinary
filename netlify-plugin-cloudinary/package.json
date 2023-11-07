@@ -22,7 +22,8 @@
     "cloudinary": "^1.40.0",
     "glob": "^10.3.3",
     "jsdom": "21",
-    "node-fetch": "2"
+    "node-fetch": "2",
+    "p-limit": "3.1.0"
   },
   "devDependencies": {
     "@netlify/config": "20.8.1",

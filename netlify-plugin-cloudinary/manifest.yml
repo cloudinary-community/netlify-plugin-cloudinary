@@ -30,3 +30,7 @@ inputs:
   - name: uploadPreset
     required: false
     description: "Defined set of asset upload defaults in Cloudinary"
+  - name: uploadConcurrency
+    required: false
+    description: "Maximum value of concurrent uploads"
+    default: 10
