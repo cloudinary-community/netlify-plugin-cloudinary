@@ -1,14 +1,15 @@
-const fs = require('fs').promises;
-const { onBuild } = require('../src/');
-const { ERROR_API_CREDENTIALS_REQUIRED } = require('../src/data/errors');
+import { vi, expect, describe, test, beforeEach,afterEach } from 'vitest';
+import { promises as fs } from 'fs';
+import { onBuild } from '../src/';
+import { ERROR_API_CREDENTIALS_REQUIRED } from '../src/data/errors';
 
 describe('onBuild', () => {
   const ENV_ORIGINAL = process.env;
   const readdir = fs.readdir;
 
   beforeEach(() => {
-    fs.readdir = jest.fn();
-    jest.resetModules();
+    fs.readdir = vi.fn();
+    vi.resetModules();
 
     process.env = { ...ENV_ORIGINAL };
 
@@ -31,7 +32,7 @@ describe('onBuild', () => {
       // We don't need a "special" test for this as it's default functionality that should work with
       // any valid test, so we can isntead ensure the keys don't exist and delete them
 
-      jest.spyOn(global.console, 'error').mockImplementation();
+      vi.spyOn(global.console, 'error').mockImplementation();
 
       delete process.env.CLOUDINARY_API_KEY;
       delete process.env.CLOUDINARY_API_SECRET;

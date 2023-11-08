@@ -1,4 +1,6 @@
-const { isRemoteUrl, determineRemoteUrl, getQueryParams } = require('../../src/lib/util');
+import { expect, describe, test } from 'vitest';
+
+import { isRemoteUrl, determineRemoteUrl, getQueryParams } from '../../src/lib/util';
 
 describe('lib/util', () => {
 

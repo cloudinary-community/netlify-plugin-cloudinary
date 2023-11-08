@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.12.0...v1.13.0) (2023-11-07)
+
+
+### Features
+
+* Concurrency ([#89](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/89)) ([6a8d70f](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/6a8d70f923384f4a2ddae66967b8010cff551b01)), closes [#57](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/57)
+
 # [1.12.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.11.0...v1.12.0) (2023-10-04)
 
 
