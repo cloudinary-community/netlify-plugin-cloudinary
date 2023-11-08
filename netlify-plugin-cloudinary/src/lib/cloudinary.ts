@@ -203,14 +203,16 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
     }
 
     let results
+    const maxAttempts = 3; 
 
-    for (let attempt = 0; attempt < 1; attempt++) {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
         if (canSignUpload) {
           // We need an API Key and Secret to use signed uploading
           results = await cloudinary.uploader.upload(fullPath, {
             ...uploadOptions,
           })
+          break;
         }
         else {
           // If we want to avoid signing our uploads, we don't need our API Key and Secret,
@@ -222,12 +224,17 @@ export async function getCloudinaryUrl(options: CloudinaryOptions) {
               ...uploadOptions,
             },
           )
+          break;
         }
-        break;
       } catch (error) {
-        console.error(`[Cloudinary] ${ERROR_ASSET_UPLOAD}`)
-        console.error(`[Cloudinary] \tpath: ${fullPath}`)
-        throw Error(ERROR_ASSET_UPLOAD)
+        console.error(`[Cloudinary] Attempt ${attempt + 1} - ${ERROR_ASSET_UPLOAD}`);
+        console.error(`[Cloudinary] Attempt ${attempt + 1} - \tpath: ${fullPath}`)
+        if (attempt === maxAttempts - 1) {
+          // If it's the last attempt, rethrow the error or handle it accordingly
+          throw Error(ERROR_ASSET_UPLOAD);
+        } else {
+          await new Promise(resolve => setTimeout(resolve, 500));      
+        }
       }
     }
 
