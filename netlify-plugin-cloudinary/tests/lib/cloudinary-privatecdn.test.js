@@ -1,10 +1,12 @@
-const { configureCloudinary, getCloudinaryUrl, updateHtmlImagesToCloudinary } = require('../../src/lib/cloudinary');
+import { vi, expect, describe, test, beforeEach, afterAll, it } from 'vitest';
+
+import { configureCloudinary, getCloudinaryUrl, updateHtmlImagesToCloudinary } from '../../src/lib/cloudinary';
 
 describe('lib/util', () => {
   const ENV_ORIGINAL = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
 
     process.env = { ...ENV_ORIGINAL };
     process.env.CLOUDINARY_CLOUD_NAME = 'testcloud';
