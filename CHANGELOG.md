@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.13.0...v1.13.1) (2023-11-10)
+
+
+### Bug Fixes
+
+* Fixes uncaught errors in concurrency loop ([#95](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/95)) ([2c6a33b](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/2c6a33b45da29a4b6a01e3b1630905989df69177)), closes [#11](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/11) [#94](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/94)
+
 # [1.13.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.12.0...v1.13.0) (2023-11-07)
 
 
