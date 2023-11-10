@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.13.1...v1.14.0) (2023-11-10)
+
+
+### Features
+
+* Retry failed requests ([bda0cd9](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/bda0cd94da2bc870a943562d43cc47fc17a3ad15)), closes [#82](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/82)
+
 ## [1.13.1](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.13.0...v1.13.1) (2023-11-10)
 
 

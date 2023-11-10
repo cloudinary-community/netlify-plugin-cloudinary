@@ -1,6 +1,6 @@
 {
   "name": "netlify-plugin-cloudinary",
-  "version": "1.13.1",
+  "version": "1.14.0",
   "description": "Supercharge images on your Netlify site with Cloudinary!",
   "main": "dist/index.js",
   "scripts": {
