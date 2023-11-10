@@ -204,12 +204,12 @@ export async function onBuild({
     );
   }
 
-  try {
-    const limitUploadFiles = pLimit(uploadConcurrency);
-    const uploadsQueue = imagesFiles.map(image => {
-      const publishPath = image.replace(PUBLISH_DIR, '');
-      return limitUploadFiles(() => {
-        async function uploadFile() {
+  const limitUploadFiles = pLimit(uploadConcurrency);
+  const uploadsQueue = imagesFiles.map((image, i) => {
+    const publishPath = image.replace(PUBLISH_DIR, '');
+    return limitUploadFiles(() => {
+      async function uploadFile() {
+        try {
           const cloudinary = await getCloudinaryUrl({
             deliveryType,
             folder,
@@ -224,15 +224,15 @@ export async function onBuild({
             publishPath,
             ...cloudinary,
           };
+        } catch(e) {
+          globalErrors.push(e);
         }
-        return uploadFile();
-      })
+      }
+      return uploadFile();
     })
+  })
 
-    _cloudinaryAssets.images = await Promise.all(uploadsQueue);
-  } catch (e) {
-    globalErrors.push(e)
-  }
+  _cloudinaryAssets.images = await Promise.all(uploadsQueue);
 
   // If the delivery type is set to upload, we need to be able to map individual assets based on their public ID,
   // which would require a dynamic middle solution, but that adds more hops than we want, so add a new redirect
