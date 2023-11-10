@@ -109,6 +109,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "kcoderhtml",
+      "name": "Kieran Klukas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/92754843?v=4",
+      "profile": "https://github.com/kcoderhtml",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
