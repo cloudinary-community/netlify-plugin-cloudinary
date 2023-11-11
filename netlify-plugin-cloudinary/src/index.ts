@@ -335,6 +335,7 @@ export async function onPostBuild({
     cname,
     deliveryType,
     folder = process.env.SITE_NAME,
+    loadingStrategy = inputs.loadingStrategy || 'lazy',
     privateCdn,
     uploadPreset,
   } = inputs;
@@ -387,6 +388,7 @@ export async function onPostBuild({
         deliveryType,
         uploadPreset,
         folder,
+        loadingStrategy,
         localDir: PUBLISH_DIR,
         remoteHost: host,
         transformations
