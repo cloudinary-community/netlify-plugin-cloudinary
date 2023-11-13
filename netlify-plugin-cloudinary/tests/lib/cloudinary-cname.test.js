@@ -49,7 +49,8 @@ describe('lib/util', () => {
       const { html } = await updateHtmlImagesToCloudinary(sourceHtml, {
         deliveryType: 'fetch',
         localDir: 'tests',
-        remoteHost: 'https://cloudinary.netlify.app'
+        remoteHost: 'https://cloudinary.netlify.app',
+        loadingStrategy: 'lazy'
       });
 
       expect(html).toEqual(`<html><head></head><body><p><img src=\"https://${cname}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" loading=\"lazy"\></p></body></html>`);
