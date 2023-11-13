@@ -143,4 +143,50 @@ describe('onPostBuild', () => {
 
   });
 
+  describe('loadingStrategy', () => {
+    test.each([
+      {loadingStrategy: undefined, expected: 'lazy'},
+      {loadingStrategy: 'lazy', expected: 'lazy'},
+      {loadingStrategy: 'eager', expected: 'eager'},
+    ])('should use $expected as img loading attribute when netlify.toml loadingStrategy is $loadingStrategy', async ({loadingStrategy, expected}) => {
+      process.env.CONTEXT = 'production';
+      process.env.NETLIFY_HOST = 'https://netlify-plugin-cloudinary.netlify.app';
+
+      // Tests to ensure that delivery type of fetch works without API Key and Secret as it should
+
+      delete process.env.CLOUDINARY_API_KEY;
+      delete process.env.CLOUDINARY_API_SECRET;
+
+      const deliveryType = 'fetch';
+
+      const tempTestPath = path.join(tempPath, expect.getState().currentTestName.replace(replaceRegEx, replaceValue));
+
+      const inputs = {
+        deliveryType,
+        folder: process.env.SITE_NAME
+      }
+
+      if (loadingStrategy != undefined) {
+        inputs['loadingStrategy'] = loadingStrategy
+        }
+
+      await onPostBuild({
+        constants: {
+          PUBLISH_DIR: tempTestPath
+        },
+        inputs: inputs,
+      });
+
+      const files = await fs.readdir(tempTestPath);
+
+      await Promise.all(files.map(async file => {
+        const data = await fs.readFile(path.join(tempTestPath, file), 'utf-8');
+        const dom = new JSDOM(data);
+        const images = Array.from(dom.window.document.querySelectorAll('img'));
+        images.forEach(image => {
+          expect(image.getAttribute('loading')).toMatch(expected);
+        })
+      }));
+    })
+  });
 });
