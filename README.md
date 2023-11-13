@@ -316,6 +316,7 @@ npm run test
       <td align="center" valign="top" width="14.28%"><a href="http://ericapisani.dev"><img src="https://avatars.githubusercontent.com/u/5655473?v=4?s=100" width="100px;" alt="Erica Pisani"/><br /><sub><b>Erica Pisani</b></sub></a><br /><a href="https://github.com/cloudinary-community/netlify-plugin-cloudinary/commits?author=ericapisani" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://matiashernandez.dev"><img src="https://avatars.githubusercontent.com/u/282006?v=4?s=100" width="100px;" alt="Matías Hernández Arellano"/><br /><sub><b>Matías Hernández Arellano</b></sub></a><br /><a href="https://github.com/cloudinary-community/netlify-plugin-cloudinary/commits?author=matiasfha" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kcoderhtml"><img src="https://avatars.githubusercontent.com/u/92754843?v=4?s=100" width="100px;" alt="Kieran Klukas"/><br /><sub><b>Kieran Klukas</b></sub></a><br /><a href="https://github.com/cloudinary-community/netlify-plugin-cloudinary/commits?author=kcoderhtml" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://gshel.org"><img src="https://avatars.githubusercontent.com/u/35184207?v=4?s=100" width="100px;" alt="Gretchen Shelby-Dormer"/><br /><sub><b>Gretchen Shelby-Dormer</b></sub></a><br /><a href="https://github.com/cloudinary-community/netlify-plugin-cloudinary/commits?author=gshel" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
