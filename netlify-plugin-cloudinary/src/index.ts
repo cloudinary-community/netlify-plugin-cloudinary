@@ -127,6 +127,8 @@ export async function onBuild({
   }
 
   console.log(`[Cloudinary] Using host: ${host}`);
+  console.log('PUBLISH_DIR', constants["PUBLISH_DIR"])
+  // console.log('NETLIFYCONFIG', netlifyConfig['redirects'])
 
   const { PUBLISH_DIR } = constants;
 
@@ -277,7 +279,7 @@ export async function onBuild({
           }
 
           mediaPaths.forEach(async mediaPath => {
-            const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, mediaPath)}`;
+            const cldAssetPath = `/${path.posix.join(PUBLIC_ASSET_PATH, mediaPath)}`;
             const cldAssetUrl = `${host}${cldAssetPath}`;
             try {
               const { cloudinaryUrl: assetRedirectUrl } = await getCloudinaryUrl({
