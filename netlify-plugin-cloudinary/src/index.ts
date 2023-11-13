@@ -127,8 +127,6 @@ export async function onBuild({
   }
 
   console.log(`[Cloudinary] Using host: ${host}`);
-  console.log('PUBLISH_DIR', constants["PUBLISH_DIR"])
-  // console.log('NETLIFYCONFIG', netlifyConfig['redirects'])
 
   const { PUBLISH_DIR } = constants;
 
