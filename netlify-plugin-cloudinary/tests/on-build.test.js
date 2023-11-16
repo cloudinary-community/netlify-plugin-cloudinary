@@ -182,6 +182,21 @@ describe('onBuild', () => {
           });
           validate(imagesPath, redirects);
         });
+
+        test('imagesPath undefined', async () => {
+
+          await onBuild({
+            netlifyConfig,
+            constants: {
+              PUBLISH_DIR: '.next/out/'
+            },
+            inputs: {
+              deliveryType
+            }
+          });
+          let imagesPath = '/images';
+          validate(imagesPath, redirects);
+        });
       });
     })
   });
