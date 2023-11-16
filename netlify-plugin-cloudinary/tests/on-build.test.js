@@ -160,7 +160,8 @@ describe('onBuild', () => {
 
         test.each([
           '/images',
-          '/images/nest'
+          '/nest',
+          '/images/nesttest'
         ])('%o', async (imagesPath) => {
 
           imagesPath = imagesPath.replace(/\//g, path[os].sep);
