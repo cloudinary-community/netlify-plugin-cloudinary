@@ -277,6 +277,7 @@ export async function onBuild({
           }
 
           mediaPaths.forEach(async mediaPath => {
+            mediaPath = mediaPath.split(path.sep).join(path.posix.sep)
             const cldAssetPath = `/${path.posix.join(PUBLIC_ASSET_PATH, mediaPath)}`;
             const cldAssetUrl = `${host}${cldAssetPath}`;
             try {
