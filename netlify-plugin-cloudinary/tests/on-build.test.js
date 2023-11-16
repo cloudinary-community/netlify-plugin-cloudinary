@@ -165,7 +165,6 @@ describe('onBuild', () => {
               imagesPath
             }
           });
-
           validate(imagesPath, redirects);
         });
 
@@ -177,7 +176,8 @@ describe('onBuild', () => {
               PUBLISH_DIR: `.next/out${imagesPath}`
             },
             inputs: {
-              deliveryType
+              deliveryType,
+              imagesPath
             }
           });
           validate(imagesPath, redirects);

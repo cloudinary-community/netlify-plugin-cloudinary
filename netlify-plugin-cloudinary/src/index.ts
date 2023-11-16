@@ -134,9 +134,7 @@ export async function onBuild({
     cname,
     deliveryType,
     folder = process.env.SITE_NAME || '',
-    imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(
-      ({ inputKey }) => inputKey === 'imagesPath',
-    )?.path,
+    imagesPath = inputs.imagesPath || '/images',
     maxSize,
     privateCdn,
     uploadPreset,
