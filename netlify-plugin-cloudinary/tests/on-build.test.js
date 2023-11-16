@@ -110,7 +110,7 @@ describe('onBuild', () => {
 
       let count = 0
       imagesPath?.reverse().forEach(element => {
-        let i = element.split(path.sep).join(path.posix.sep).replace('/', '');
+        let i = element.split(path.win32.sep).join(path.posix.sep).replace('/', '');
 
         expect(redirects[count]).toEqual({
           from: `/${i}/*`,
