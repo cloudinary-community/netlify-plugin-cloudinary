@@ -132,17 +132,28 @@ describe('onBuild', () => {
 
     describe.each(['posix', 'win32'])('Operating system: %o', (os) => {
       let separator = path[os].sep;
+      let imagesPathStrings = [
+        '/images',
+        '/nest',
+        '/images/nesttest'
+      ];
+      imagesPathStrings = imagesPathStrings.map(i => i.replace(/\//g, separator));
+
+      let imagesPathLists = [
+        [['/images', '/assets']],
+        [['/images/nest1', '/assets/nest2']],
+        [['/example/hey', '/mixed', '/test']]
+      ];
+      imagesPathLists = imagesPathLists.map(collection =>
+        collection.map(imagesPath =>
+          imagesPath.map(i => i.replace(/\//g, separator))
+        )
+      );
 
       describe.each(contexts)(`should create redirects with default ${deliveryType}-based configuration in $name context`, async (context) => {
         process.env.URL = context.url;
 
-        test.each([
-          [['/images', '/assets']],
-          [['/images/nest1', '/assets/nest2']],
-          [['/example/hey', '/mixed', '/test']]
-        ])('%o', async (imagesPath) => {
-
-          imagesPath = imagesPath.map(i => i.replace(/\//g, path[os].sep));
+        test.each(imagesPathLists)('%o', async (imagesPath) => {
 
           await onBuild({
             netlifyConfig,
@@ -158,13 +169,7 @@ describe('onBuild', () => {
           validate(imagesPath, redirects);
         });
 
-        test.each([
-          '/images',
-          '/nest',
-          '/images/nesttest'
-        ])('%o', async (imagesPath) => {
-
-          imagesPath = imagesPath.replace(/\//g, path[os].sep);
+        test.each(imagesPathStrings)('%o', async (imagesPath) => {
 
           await onBuild({
             netlifyConfig,
