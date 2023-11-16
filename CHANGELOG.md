@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.14.0...v1.15.0) (2023-11-13)
+
+
+### Features
+
+* Get loadingStrategy value from netlify.toml inputs, default to 'lazy' if not provided ([#98](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/98)) ([8d68b05](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/8d68b05b35edaf641860822a6dad13989a582854))
+
 # [1.14.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.13.1...v1.14.0) (2023-11-10)
 
 

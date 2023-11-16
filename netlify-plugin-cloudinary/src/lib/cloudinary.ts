@@ -70,7 +70,7 @@ export type Assets = {
 
 type UpdateCloudinaryOptions = Omit<CloudinaryOptions, 'path'> & {
   assets: Assets;
-  loadingStrategy?: "lazy"
+  loadingStrategy: string;
 }
 
 /**
@@ -288,7 +288,7 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
     folder,
     localDir,
     remoteHost,
-    loadingStrategy = 'lazy',
+    loadingStrategy,
     transformations
   } = options
 
