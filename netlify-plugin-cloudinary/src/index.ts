@@ -134,7 +134,7 @@ export async function onBuild({
     cname,
     deliveryType,
     folder = process.env.SITE_NAME || '',
-    imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(
+    imagesPath = inputs.imagesPath || CLOUDINARY_ASSET_DIRECTORIES.find(
       ({ inputKey }) => inputKey === 'imagesPath',
     )?.path,
     maxSize,
@@ -277,6 +277,7 @@ export async function onBuild({
           }
 
           mediaPaths.forEach(async mediaPath => {
+            mediaPath = mediaPath.split(path.win32.sep).join(path.posix.sep);
             const cldAssetPath = `/${path.posix.join(PUBLIC_ASSET_PATH, mediaPath)}`;
             const cldAssetUrl = `${host}${cldAssetPath}`;
             try {
