@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.15.0...v1.16.0) (2023-12-04)
+
+
+### Features
+
+* Consolidate onBuild tests + verify imagesPath for multiple operating systems ([#101](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/101)) ([90b20bd](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/90b20bde822c8190fe760f86dd9fee8591a2e611)), closes [#100](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/100) [#100](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/100)
+
 # [1.15.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.14.0...v1.15.0) (2023-11-13)
 
 
