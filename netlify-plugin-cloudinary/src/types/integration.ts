@@ -10,9 +10,10 @@ export type Inputs = {
   imagesPath: string | Array<string>;
   loadingStrategy: string;
   maxSize: {
+    crop: string;
     dpr: number | string;
-    height: number;
-    width: number;
+    height: number | string;
+    width: number | string;
   };
   privateCdn: boolean;
   uploadPreset: string;

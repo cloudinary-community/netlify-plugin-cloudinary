@@ -419,7 +419,7 @@ export function getTransformationsFromInputs(inputs: Inputs) {
     transformations.push({
       height: maxSize.height,
       width: maxSize.width,
-      crop: 'limit',
+      crop: maxSize.crop || 'limit',
       dpr: maxSize.dpr
     })
   }
