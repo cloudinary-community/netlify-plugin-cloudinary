@@ -88,37 +88,49 @@ npm install netlify-plugin-cloudinary
 
 | Name            | Type    |Required | Example   | Description |
 |-----------------|---------|---------|-----------| ------------|
-| cloudName       | string  | No*     | mycloud   | Cloudinary Cloud Name |
-| cname           | string  | No      | domain.com | The custom domain name (CNAME) to use for building URLs (Advanced Plan Users) |
-| deliveryType    | string  | No      | fetch     | The method by which Cloudinary stores and delivers images (Ex: fetch, upload) |
+| [cloudName](#setting-your-cloud-name) | string  | No*     | mycloud   | Cloudinary Cloud Name |
+| cname           | string  | No      | domain.com | [custom domain name (CNAME) to use for building URLs (Advanced Plan Users)](https://cloudinary.com/documentation/advanced_url_delivery_options#private_cdns_and_cnames) |
+| [deliveryType](#changing-your-delivery-type)    | string  | No      | fetch     | Cloudinary method for image storage and delivery (Ex: fetch, upload) |
 | folder          | string  | No      | myfolder  | Folder all media will be stored in. Defaults to Netlify site name |
-| imagesPath      | string/Array | No | /assets   | Local path application serves image assets from |
-| loadingStrategy | string  | No      | eager     | The method in which in which images are loaded (Ex: lazy, eager) |
-| maxSize         | object  | No      | eager     | See Below. |
-| privateCdn      | boolean | No      | true      | Enables Private CDN Distribution (Advanced Plan Users) |
-| uploadPreset    | string  | No      | my-preset | Defined set of asset upload defaults in Cloudinary |
+| [imagesPath](#customizing-where-your-images-are-served-from) | string/Array | No | /assets   | Local path application serves image assets from |
+| loadingStrategy | string  | No      | eager     | [`loading` attribute to use on images](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) (Ex: lazy, eager) |
+| [maxSize](#maxsize) | object  | No      | [plugins.inputs.maxSize]<br />crop = "limit"<br />dpr = "auto" <br />width = "auto:100:400"<br />height = 200 | Settings for optimizing Cloudinary image outputs |
+| privateCdn      | boolean | No      | true      | [Enables Private CDN Distribution (Advanced Plan Users)](https://cloudinary.com/documentation/advanced_url_delivery_options#private_cdns_and_cnames) |
+| uploadPreset    | string  | No      | my-preset | [Defined set of asset upload defaults in Cloudinary](https://cloudinary.com/documentation/upload_presets) |
 | uploadConcurrency | number | No     | 10        | Maximum value of concurrent uploads |
-*Cloud Name must be set as an environment variable if not as an input
 
-#### Max Size
+#### maxSize
 
-The Max Size option gives you the ability to configure a maximum width and height that images will scale down to, helping to avoid serving unnecessarily large images.
+`maxSize` gives you the ability to configure a maximum height and width that images will scale down to, helping to avoid serving unnecessarily large images.
 
-By default, the aspect ratio of the images are preserved, so by specifying both a maximum width and height, you're telling Cloudinary to scale the image down so that neither the width or height are beyond that value.
+By default, the aspect ratio of an image is preserved.
 
-Additionally, the plugin uses a crop method of `limit` which avoids upscaling images if the images are already smaller than the given size, which reduces unnecessary upscaling as the browser will typically automatically handle.
+By default, the Cloudinary crop mode `limit` is used to avoid upscaling an image if the image's original size is smaller than the maximum height and width; reduces unnecessary upscaling as the browser will typically automatically handle.
 
 The options available are:
 
-| Name            | Type    | Example   | Description |
-|-----------------|---------|-----------| ------------|
-| dpr             | string  | 2.0       | Device Pixel Ratio which essentially multiplies the width and height for pixel density. |
-| height          | number  | 600       | Maximum height an image can be delivered as. |
-| width           | number  | 800       | Maximum width an image can be delivered as.  |
+| Name              | Type    | Example   | Description |
+|-------------------|---------|-----------| ------------|
+| `crop`            | string  | `"limit"` | [Cloudinary crop mode](https://cloudinary.com/documentation/resizing_and_cropping#resize_and_crop_modes) to apply to image. |
+| `dpr`             | string  | `2.0` | [Device Pixel Ratio](https://cloudinary.com/documentation/resizing_and_cropping#set_device_pixel_ratio_dpr) which essentially multiplies the width and height for pixel density. |
+| `height`          | string or number | `"auto"` or `600` | Maximum [height](https://cloudinary.com/documentation/transformation_reference#h_height) an image can be delivered as. |
+| `width`           | string or number | `"auto:100:400"` or `800` | Maximum [width](https://cloudinary.com/documentation/transformation_reference#w_width) an image can be delivered as. |
 
-It's important to note that this will not change the width or height attribute of the image within the DOM, this will only be the image that is being delivered by Cloudinary.
+For users interested in [scaling images automatically with client hints](https://cloudinary.com/blog/automatic_responsive_images_with_client_hints), height and width accept string values like `"auto"` and `"auto:100:400"`.
+
+```toml
+  [plugins.inputs.maxSize]
+  crop = "limit"
+  dpr = "auto"
+  width = "auto:100:400"
+  height = 200
+```
+
+It's important to note that these settings do **not** modify the width or height attributes of the image within the DOM; these settings **only** affect the image delivered by Cloudinary.
 
 ### Environment Variables
+
+[Learn where to find these environment variable values.](https://www.youtube.com/watch?v=1SIp9VL5TMo)
 
 | Name                   | Required | Example  | Description |
 |------------------------|----------|----------|-------------|
