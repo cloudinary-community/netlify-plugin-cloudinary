@@ -1,6 +1,8 @@
-const { ERROR_ASSET_UPLOAD, ERROR_INVALID_SRCSET } = require('../../src/data/errors');
-const { getCloudinary, createPublicId, getCloudinaryUrl, configureCloudinary, updateHtmlImagesToCloudinary } = require('../../src/lib/cloudinary');
-const { ANALYTICS_SDK_CODE, ANALYTICS_PRODUCT } = require('../../src/data/analytics');
+import { vi, expect, describe, test, beforeEach, afterAll, it } from 'vitest';
+
+import { ERROR_ASSET_UPLOAD } from '../../src/data/errors';
+import { getCloudinary, createPublicId, configureCloudinary, getCloudinaryUrl, updateHtmlImagesToCloudinary } from '../../src/lib/cloudinary';
+import { ANALYTICS_SDK_CODE, ANALYTICS_PRODUCT } from '../../src/data/analytics';
 
 const mockDemo = require('../mocks/demo.json');
 
@@ -19,7 +21,7 @@ describe('lib/util', () => {
   const ENV_ORIGINAL = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
 
     process.env = { ...ENV_ORIGINAL };
     process.env.CLOUDINARY_CLOUD_NAME = 'testcloud';
@@ -83,7 +85,7 @@ describe('lib/util', () => {
 
     test('should create a Cloudinary URL with delivery type of upload from a local image', async () => {
       // mock cloudinary.uploader.upload call
-      cloudinary.uploader.upload = jest.fn().mockResolvedValue({
+      cloudinary.uploader.upload = vi.fn().mockResolvedValue({
         public_id: 'stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d',
         secure_url: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/v1613009008/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d.jpg`,
         original_filename: 'stranger-things-dustin',
@@ -107,7 +109,7 @@ describe('lib/util', () => {
 
     test('should fail to create a Cloudinary URL with delivery type of upload', async () => {
       // mock cloudinary.uploader.upload call
-      cloudinary.uploader.upload = jest.fn().mockImplementation(() => Promise.reject('error'))
+      cloudinary.uploader.upload = vi.fn().mockImplementation(() => Promise.reject('error'))
 
 
       await expect(getCloudinaryUrl({
@@ -160,7 +162,8 @@ describe('lib/util', () => {
       const { html } = await updateHtmlImagesToCloudinary(sourceHtml, {
         deliveryType: 'fetch',
         localDir: 'tests',
-        remoteHost: 'https://cloudinary.netlify.app'
+        remoteHost: 'https://cloudinary.netlify.app',
+        loadingStrategy: 'lazy'
       }, TEST_ANALYTICS_CONFIG);
 
       expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg?_a=${TEST_ANALYTICS_STRING}\" loading=\"lazy"\></p></body></html>`);
@@ -170,7 +173,8 @@ describe('lib/util', () => {
       const sourceHtml = '<html><head></head><body><p><img src="https://i.imgur.com/vtYmp1x.png"></p></body></html>';
 
       const { html } = await updateHtmlImagesToCloudinary(sourceHtml, {
-        deliveryType: 'fetch'
+        deliveryType: 'fetch',
+        loadingStrategy: 'lazy'
       }, TEST_ANALYTICS_CONFIG);
 
       expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png?_a=${TEST_ANALYTICS_STRING}\" loading=\"lazy"\></p></body></html>`);
@@ -184,21 +188,10 @@ describe('lib/util', () => {
         deliveryType: 'fetch',
         localDir: 'tests',
         remoteHost: 'https://cloudinary.netlify.app',
+        loadingStrategy: 'lazy'
       }, TEST_ANALYTICS_CONFIG);
 
       expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg?_a=${TEST_ANALYTICS_STRING}\" srcset=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg?_a=${TEST_ANALYTICS_STRING} 1x, https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg?_a=${TEST_ANALYTICS_STRING} 2x\" loading=\"lazy"\></p></body></html>`);
-    });
-
-    it('should add lazy loading to image when no option is provided', async () => {
-      const sourceHtml = '<html><head></head><body><p><img src="https://i.imgur.com/vtYmp1x.png"></p></body></html>';
-
-      const { html } = await updateHtmlImagesToCloudinary(sourceHtml, {
-        deliveryType: 'fetch',
-        localDir: 'tests',
-        remoteHost: 'https://cloudinary.netlify.app',
-      }, TEST_ANALYTICS_CONFIG);
-
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png?_a=${TEST_ANALYTICS_STRING}\" loading=\"lazy"\></p></body></html>`);
     });
 
     it('should add eager loading to image when eager option is provided for loadingStrategy', async () => {
@@ -221,6 +214,7 @@ describe('lib/util', () => {
         deliveryType: 'upload',
         localDir: 'demo/.next',
         remoteHost: 'https://main--netlify-plugin-cloudinary.netlify.app',
+        loadingStrategy: 'lazy',
         folder: 'netlify-plugin-cloudinary',
         assets: mockDemo.assets
       }, TEST_ANALYTICS_CONFIG);

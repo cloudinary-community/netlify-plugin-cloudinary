@@ -78,7 +78,7 @@ export type Assets = {
 
 type UpdateCloudinaryOptions = Omit<CloudinaryOptions, 'path'> & {
   assets: Assets;
-  loadingStrategy?: "lazy"
+  loadingStrategy: string;
 }
 
 /**
@@ -211,34 +211,38 @@ export async function getCloudinaryUrl(options: CloudinaryOptions, analytics?: C
     }
 
     let results
+    const maxAttempts = 3; 
 
-    if (canSignUpload) {
-      // We need an API Key and Secret to use signed uploading
-
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
-        results = await cloudinary.uploader.upload(fullPath, {
-          ...uploadOptions,
-        })
-      } catch (error) {
-        console.error(`[Cloudinary] ${ERROR_ASSET_UPLOAD}`)
-        console.error(`[Cloudinary] \tpath: ${fullPath}`)
-        throw Error(ERROR_ASSET_UPLOAD)
-      }
-    } else {
-      // If we want to avoid signing our uploads, we don't need our API Key and Secret,
-      // however, we need to provide an uploadPreset
-      try {
-        results = await cloudinary.uploader.unsigned_upload(
-          fullPath,
-          uploadPreset,
-          {
+        if (canSignUpload) {
+          // We need an API Key and Secret to use signed uploading
+          results = await cloudinary.uploader.upload(fullPath, {
             ...uploadOptions,
-          },
-        )
+          })
+          break;
+        }
+        else {
+          // If we want to avoid signing our uploads, we don't need our API Key and Secret,
+          // however, we need to provide an uploadPreset
+          results = await cloudinary.uploader.unsigned_upload(
+            fullPath,
+            uploadPreset,
+            {
+              ...uploadOptions,
+            },
+          )
+          break;
+        }
       } catch (error) {
-        console.error(`[Cloudinary] ${ERROR_ASSET_UPLOAD}`)
-        console.error(`[Cloudinary] path: ${fullPath}`)
-        throw Error(ERROR_ASSET_UPLOAD)
+        console.error(`[Cloudinary] Attempt ${attempt + 1} - ${ERROR_ASSET_UPLOAD}`);
+        console.error(`[Cloudinary] Attempt ${attempt + 1} - \tpath: ${fullPath}`)
+        if (attempt === maxAttempts - 1) {
+          // If it's the last attempt, rethrow the error or handle it accordingly
+          throw Error(ERROR_ASSET_UPLOAD);
+        } else {
+          await new Promise(resolve => setTimeout(resolve, 500));      
+        }
       }
     }
 
@@ -298,7 +302,7 @@ export async function updateHtmlImagesToCloudinary(html: string, options: Update
     folder,
     localDir,
     remoteHost,
-    loadingStrategy = 'lazy',
+    loadingStrategy,
     transformations
   } = options
 

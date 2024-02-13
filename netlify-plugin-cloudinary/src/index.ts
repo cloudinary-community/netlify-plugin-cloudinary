@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { glob } from 'glob';
+import pLimit from 'p-limit';
 
 import { Inputs } from './types/integration';
 
@@ -101,6 +102,8 @@ const CLOUDINARY_ASSET_DIRECTORIES = [
   },
 ];
 
+const DEFAULT_CONCURRENCY = 10;
+
 /**
  * TODO
  * - Handle srcset
@@ -130,13 +133,14 @@ export async function onBuild({
   const {
     cname,
     deliveryType,
-    folder = process.env.SITE_NAME,
-    imagesPath = CLOUDINARY_ASSET_DIRECTORIES.find(
+    folder = process.env.SITE_NAME || '',
+    imagesPath = inputs.imagesPath || CLOUDINARY_ASSET_DIRECTORIES.find(
       ({ inputKey }) => inputKey === 'imagesPath',
     )?.path,
     maxSize,
     privateCdn,
     uploadPreset,
+    uploadConcurrency = DEFAULT_CONCURRENCY,
   } = inputs;
 
   if (!folder) {
@@ -200,30 +204,35 @@ export async function onBuild({
     );
   }
 
-  try {
-    _cloudinaryAssets.images = await Promise.all(
-      imagesFiles.map(async image => {
-        const publishPath = image.replace(PUBLISH_DIR, '');
+  const limitUploadFiles = pLimit(uploadConcurrency);
+  const uploadsQueue = imagesFiles.map((image, i) => {
+    const publishPath = image.replace(PUBLISH_DIR, '');
+    return limitUploadFiles(() => {
+      async function uploadFile() {
+        try {
+          const cloudinary = await getCloudinaryUrl({
+            deliveryType,
+            folder,
+            path: publishPath,
+            localDir: PUBLISH_DIR,
+            uploadPreset,
+            remoteHost: host,
+            transformations
+          });
 
-        const cloudinary = await getCloudinaryUrl({
-          deliveryType,
-          folder,
-          path: publishPath,
-          localDir: PUBLISH_DIR,
-          uploadPreset,
-          remoteHost: host,
-          transformations
-        });
+          return {
+            publishPath,
+            ...cloudinary,
+          };
+        } catch(e) {
+          globalErrors.push(e);
+        }
+      }
+      return uploadFile();
+    })
+  })
 
-        return {
-          publishPath,
-          ...cloudinary,
-        };
-      }),
-    );
-  } catch (e) {
-    globalErrors.push(e)
-  }
+  _cloudinaryAssets.images = await Promise.all(uploadsQueue);
 
   // If the delivery type is set to upload, we need to be able to map individual assets based on their public ID,
   // which would require a dynamic middle solution, but that adds more hops than we want, so add a new redirect
@@ -268,7 +277,8 @@ export async function onBuild({
           }
 
           mediaPaths.forEach(async mediaPath => {
-            const cldAssetPath = `/${path.join(PUBLIC_ASSET_PATH, mediaPath)}`;
+            mediaPath = mediaPath.split(path.win32.sep).join(path.posix.sep);
+            const cldAssetPath = `/${path.posix.join(PUBLIC_ASSET_PATH, mediaPath)}`;
             const cldAssetUrl = `${host}${cldAssetPath}`;
             try {
               const { cloudinaryUrl: assetRedirectUrl } = await getCloudinaryUrl({
@@ -326,6 +336,7 @@ export async function onPostBuild({
     cname,
     deliveryType,
     folder = process.env.SITE_NAME,
+    loadingStrategy = inputs.loadingStrategy || 'lazy',
     privateCdn,
     uploadPreset,
   } = inputs;
@@ -378,6 +389,7 @@ export async function onPostBuild({
         deliveryType,
         uploadPreset,
         folder,
+        loadingStrategy,
         localDir: PUBLISH_DIR,
         remoteHost: host,
         transformations

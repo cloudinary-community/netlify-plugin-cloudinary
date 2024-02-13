@@ -1,5 +1,7 @@
-const { configureCloudinary, getCloudinaryUrl, updateHtmlImagesToCloudinary } = require('../../src/lib/cloudinary');
-const { ANALYTICS_SDK_CODE, ANALYTICS_PRODUCT } = require('../../src/data/analytics');
+import { vi, expect, describe, test, beforeEach, afterAll, it } from 'vitest';
+
+import { configureCloudinary, getCloudinaryUrl, updateHtmlImagesToCloudinary } from '../../src/lib/cloudinary';
+import { ANALYTICS_SDK_CODE, ANALYTICS_PRODUCT } from '../../src/data/analytics';
 
 const TEST_ANALYTICS_CONFIG = {
   sdkCode: ANALYTICS_SDK_CODE,
@@ -14,7 +16,7 @@ describe('lib/util', () => {
   const ENV_ORIGINAL = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
 
     process.env = { ...ENV_ORIGINAL };
     process.env.CLOUDINARY_CLOUD_NAME = 'testcloud';
@@ -56,7 +58,8 @@ describe('lib/util', () => {
       const { html } = await updateHtmlImagesToCloudinary(sourceHtml, {
         deliveryType: 'fetch',
         localDir: 'tests',
-        remoteHost: 'https://cloudinary.netlify.app'
+        remoteHost: 'https://cloudinary.netlify.app',
+        loadingStrategy: 'lazy'
       }, TEST_ANALYTICS_CONFIG);
 
       expect(html).toEqual(`<html><head></head><body><p><img src=\"https://${process.env.CLOUDINARY_CLOUD_NAME}-res.cloudinary.com/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg?_a=${TEST_ANALYTICS_STRING}\" loading=\"lazy"\></p></body></html>`);

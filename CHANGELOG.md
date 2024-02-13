@@ -1,3 +1,38 @@
+# [1.16.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.15.0...v1.16.0) (2023-12-04)
+
+
+### Features
+
+* Consolidate onBuild tests + verify imagesPath for multiple operating systems ([#101](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/101)) ([90b20bd](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/90b20bde822c8190fe760f86dd9fee8591a2e611)), closes [#100](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/100) [#100](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/100)
+
+# [1.15.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.14.0...v1.15.0) (2023-11-13)
+
+
+### Features
+
+* Get loadingStrategy value from netlify.toml inputs, default to 'lazy' if not provided ([#98](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/98)) ([8d68b05](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/8d68b05b35edaf641860822a6dad13989a582854))
+
+# [1.14.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.13.1...v1.14.0) (2023-11-10)
+
+
+### Features
+
+* Retry failed requests ([bda0cd9](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/bda0cd94da2bc870a943562d43cc47fc17a3ad15)), closes [#82](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/82)
+
+## [1.13.1](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.13.0...v1.13.1) (2023-11-10)
+
+
+### Bug Fixes
+
+* Fixes uncaught errors in concurrency loop ([#95](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/95)) ([2c6a33b](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/2c6a33b45da29a4b6a01e3b1630905989df69177)), closes [#11](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/11) [#94](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/94)
+
+# [1.13.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.12.0...v1.13.0) (2023-11-07)
+
+
+### Features
+
+* Concurrency ([#89](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/89)) ([6a8d70f](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/6a8d70f923384f4a2ddae66967b8010cff551b01)), closes [#57](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/57)
+
 # [1.12.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.11.0...v1.12.0) (2023-10-04)
 
 

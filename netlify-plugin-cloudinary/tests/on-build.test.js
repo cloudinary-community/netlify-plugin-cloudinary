@@ -1,14 +1,27 @@
-const fs = require('fs').promises;
-const { onBuild } = require('../src/');
-const { ERROR_API_CREDENTIALS_REQUIRED } = require('../src/data/errors');
+import { promises as fs } from 'fs';
+import path from 'node:path';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { onBuild } from '../src/';
+import { ERROR_API_CREDENTIALS_REQUIRED } from '../src/data/errors';
+
+const contexts = [
+  {
+    name: 'production',
+    url: 'https://netlify-plugin-cloudinary.netlify.app'
+  },
+  {
+    name: 'deploy-preview',
+    url: 'https://deploy-preview-1234--netlify-plugin-cloudinary.netlify.app'
+  }
+]
 
 describe('onBuild', () => {
   const ENV_ORIGINAL = process.env;
   const readdir = fs.readdir;
 
   beforeEach(() => {
-    fs.readdir = jest.fn();
-    jest.resetModules();
+    fs.readdir = vi.fn();
+    vi.resetModules();
 
     process.env = { ...ENV_ORIGINAL };
 
@@ -31,7 +44,7 @@ describe('onBuild', () => {
       // We don't need a "special" test for this as it's default functionality that should work with
       // any valid test, so we can isntead ensure the keys don't exist and delete them
 
-      jest.spyOn(global.console, 'error').mockImplementation();
+      vi.spyOn(global.console, 'error').mockImplementation();
 
       delete process.env.CLOUDINARY_API_KEY;
       delete process.env.CLOUDINARY_API_SECRET;
@@ -50,7 +63,7 @@ describe('onBuild', () => {
         },
         utils: {
           build: {
-            failBuild: () => {}
+            failBuild: () => { }
           }
         }
       });
@@ -62,208 +75,140 @@ describe('onBuild', () => {
 
   describe('Redirects', () => {
 
-    test('should create redirects with defaut fetch-based configuration in production context', async () => {
-      const imagesFunctionName = 'cld_images';
+    let deliveryType = 'fetch';
+    let netlifyConfig;
+    let redirects;
 
-      fs.readdir.mockResolvedValue([imagesFunctionName]);
+    const defaultRedirect = {
+      from: '/path',
+      to: '/other-path',
+      status: 200
+    }
 
-      process.env.CONTEXT = 'production';
-      process.env.URL = 'https://netlify-plugin-cloudinary.netlify.app';
-
+    beforeEach(async () => {
       // Tests to ensure that delivery type of fetch works without API Key and Secret as it should
 
       delete process.env.CLOUDINARY_API_KEY;
       delete process.env.CLOUDINARY_API_SECRET;
 
-      const deliveryType = 'fetch';
-      const imagesPath = '/images';
+      // resets vars for each tests
+      redirects = [defaultRedirect];
 
-      const defaultRedirect = {
-        from: '/path',
-        to: '/other-path',
-        status: 200
-      }
-
-      const redirects = [defaultRedirect];
-
-      const netlifyConfig = {
+      netlifyConfig = {
         redirects
       };
 
-      await onBuild({
-        netlifyConfig,
-        constants: {
-          PUBLISH_DIR: `.next/out${imagesPath}`
-        },
-        inputs: {
-          deliveryType
-        }
-      });
-
-      // The analytics string that's added to the URLs is dynamic based on package version.
-      // The resulting value is also not static, so we can't simply add it to the end of the
-      // URL, so strip the analytics from the URLs as it's not important for this particular
-      // test, being covered elsewhere.
-
-      redirects.forEach(redirect => {
-        if ( redirect.to.includes('https://res.cloudinary.com') ) {
-          redirect.to = redirect.to.split('?')[0];
-        }
-      })
-
-      expect(redirects[0]).toEqual({
-        from: `${imagesPath}/*`,
-        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.URL}/cld-assets${imagesPath}/:splat`,
-        status: 302,
-        force: true
-      });
-
-      expect(redirects[1]).toEqual({
-        from: `/cld-assets${imagesPath}/*`,
-        to: `${imagesPath}/:splat`,
-        status: 200,
-        force: true
-      });
-
-      expect(redirects[2]).toEqual(defaultRedirect);
-    });
-
-    test('should create redirects with defaut fetch-based configuration in deploy preview context', async () => {
       const imagesFunctionName = 'cld_images';
 
       fs.readdir.mockResolvedValue([imagesFunctionName]);
-
-      process.env.CONTEXT = 'deploy-preview';
-      process.env.DEPLOY_PRIME_URL = 'https://deploy-preview-1234--netlify-plugin-cloudinary.netlify.app';
-
-      const deliveryType = 'fetch';
-      const imagesPath = '/images';
-
-      const defaultRedirect = {
-        from: '/path',
-        to: '/other-path',
-        status: 200
-      }
-
-      const redirects = [defaultRedirect];
-
-      const netlifyConfig = {
-        redirects
-      };
-
-      await onBuild({
-        netlifyConfig,
-        constants: {
-          PUBLISH_DIR: `.next/out${imagesPath}`
-        },
-        inputs: {
-          deliveryType
-        }
-      });
-
-      // The analytics string that's added to the URLs is dynamic based on package version.
-      // The resulting value is also not static, so we can't simply add it to the end of the
-      // URL, so strip the analytics from the URLs as it's not important for this particular
-      // test, being covered elsewhere.
-
-      redirects.forEach(redirect => {
-        if ( redirect.to.includes('https://res.cloudinary.com') ) {
-          redirect.to = redirect.to.split('?')[0];
-        }
-      })
-
-      expect(redirects[0]).toEqual({
-        from: `${imagesPath}/*`,
-        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.DEPLOY_PRIME_URL}/cld-assets${imagesPath}/:splat`,
-        status: 302,
-        force: true
-      });
-
-      expect(redirects[1]).toEqual({
-        from: `/cld-assets${imagesPath}/*`,
-        to: `${imagesPath}/:splat`,
-        status: 200,
-        force: true
-      });
-
-      expect(redirects[2]).toEqual(defaultRedirect);
     });
 
-    test('should create redirects with multiple image paths', async () => {
-      const imagesFunctionName = 'cld_images';
-
-      fs.readdir.mockResolvedValue([imagesFunctionName]);
-
-      process.env.CONTEXT = 'deploy-preview';
-      process.env.DEPLOY_PRIME_URL = 'https://deploy-preview-1234--netlify-plugin-cloudinary.netlify.app';
-
-      const deliveryType = 'fetch';
-      const imagesPath = [ '/images', '/assets' ];
-
-      const defaultRedirect = {
-        from: '/path',
-        to: '/other-path',
-        status: 200
-      }
-
-      const redirects = [defaultRedirect];
-
-      const netlifyConfig = {
-        redirects
+    function validate(imagesPath, redirects, url) {
+      if (typeof (imagesPath) === 'string') {
+        imagesPath = [imagesPath]
       };
 
-      await onBuild({
-        netlifyConfig,
-        constants: {
-          PUBLISH_DIR: __dirname
-        },
-        inputs: {
-          deliveryType,
-          imagesPath
-        }
+      let count = 0
+      imagesPath?.reverse().forEach(element => {
+        let i = element.split(path.win32.sep).join(path.posix.sep).replace('/', '');
+
+        // The analytics string that's added to the URLs is dynamic based on package version.
+        // The resulting value is also not static, so we can't simply add it to the end of the
+        // URL, so strip the analytics from the URLs as it's not important for this particular
+        // test, being covered elsewhere.
+
+        redirects.forEach(redirect => {
+          if ( redirect.to.includes('https://res.cloudinary.com') ) {
+            redirect.to = redirect.to.split('?')[0];
+          }
+        })
+
+        expect(redirects[count]).toEqual({
+          from: `/${i}/*`,
+          to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.URL}/cld-assets/${i}/:splat`,
+          status: 302,
+          force: true
+        });
+
+        expect(redirects[count + 1]).toEqual({
+          from: `/cld-assets/${i}/*`,
+          to: `/${i}/:splat`,
+          status: 200,
+          force: true
+        });
+        count += 2;
       });
+      expect(redirects[redirects.length - 1]).toEqual(defaultRedirect);
+    }
 
-      // The analytics string that's added to the URLs is dynamic based on package version.
-      // The resulting value is also not static, so we can't simply add it to the end of the
-      // URL, so strip the analytics from the URLs as it's not important for this particular
-      // test, being covered elsewhere.
-      
-      redirects.forEach(redirect => {
-        if ( redirect.to.includes('https://res.cloudinary.com') ) {
-          redirect.to = redirect.to.split('?')[0];
-        }
-      })
+    describe.each(['posix', 'win32'])('Operating system: %o', (os) => {
+      let separator = path[os].sep;
+      let imagesPathStrings = [
+        '/images',
+        '/nest',
+        '/images/nesttest'
+      ];
+      imagesPathStrings = imagesPathStrings.map(i => i.replace(/\//g, separator));
 
-      expect(redirects[0]).toEqual({
-        from: `${imagesPath[1]}/*`,
-        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.DEPLOY_PRIME_URL}/cld-assets${imagesPath[1]}/:splat`,
-        status: 302,
-        force: true
+      let imagesPathLists = [
+        [['/images', '/assets']],
+        [['/images/nest1', '/assets/nest2']],
+        [['/example/hey', '/mixed', '/test']]
+      ];
+      imagesPathLists = imagesPathLists.map(collection =>
+        collection.map(imagesPath =>
+          imagesPath.map(i => i.replace(/\//g, separator))
+        )
+      );
+
+      describe.each(contexts)(`should create redirects with default ${deliveryType}-based configuration in $name context`, async (context) => {
+        process.env.URL = context.url;
+
+        test.each(imagesPathLists)('%o', async (imagesPath) => {
+
+          await onBuild({
+            netlifyConfig,
+            constants: {
+              PUBLISH_DIR: __dirname
+            },
+            inputs: {
+              deliveryType,
+              imagesPath
+            }
+          });
+          validate(imagesPath, redirects);
+        });
+
+        test.each(imagesPathStrings)('%o', async (imagesPath) => {
+
+          await onBuild({
+            netlifyConfig,
+            constants: {
+              PUBLISH_DIR: `.next/out${imagesPath}`
+            },
+            inputs: {
+              deliveryType,
+              imagesPath
+            }
+          });
+          validate(imagesPath, redirects);
+        });
+
+        test('imagesPath undefined', async () => {
+
+          await onBuild({
+            netlifyConfig,
+            constants: {
+              PUBLISH_DIR: '.next/out/'
+            },
+            inputs: {
+              deliveryType
+            }
+          });
+          let imagesPath = '/images';
+          validate(imagesPath, redirects);
+        });
       });
-
-      expect(redirects[1]).toEqual({
-        from: `/cld-assets${imagesPath[1]}/*`,
-        to: `${imagesPath[1]}/:splat`,
-        status: 200,
-        force: true
-      });
-      expect(redirects[2]).toEqual({
-        from: `${imagesPath[0]}/*`,
-        to: `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/${deliveryType}/f_auto,q_auto/${process.env.DEPLOY_PRIME_URL}/cld-assets${imagesPath[0]}/:splat`,
-        status: 302,
-        force: true
-      });
-
-      expect(redirects[3]).toEqual({
-        from: `/cld-assets${imagesPath[0]}/*`,
-        to: `${imagesPath[0]}/:splat`,
-        status: 200,
-        force: true
-      });
-
-      expect(redirects[4]).toEqual(defaultRedirect);
-    });
-
+    })
   });
-
 });
