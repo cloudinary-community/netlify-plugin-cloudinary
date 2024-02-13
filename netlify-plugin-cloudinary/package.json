@@ -19,7 +19,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "cloudinary": "^1.41.0",
+    "cloudinary": "^2.0.1",
     "glob": "^10.3.3",
     "jsdom": "21",
     "node-fetch": "2",

@@ -10,7 +10,7 @@ const TEST_ANALYTICS_CONFIG = {
   product: ANALYTICS_PRODUCT,
 }
 
-const TEST_ANALYTICS_STRING = 'AFCd1Bl0';
+const TEST_ANALYTICS_STRING = 'BBFCd1Bl0';
 
 describe('lib/util', () => {
   const ENV_ORIGINAL = process.env;

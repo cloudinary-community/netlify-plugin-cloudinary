@@ -62,10 +62,10 @@ importers:
         version: 2.3.3(next@13.4.19)(react@18.2.0)
       nextra:
         specifier: latest
-        version: 2.13.2(next@13.4.19)(react-dom@18.2.0)(react@18.2.0)
+        version: 2.13.3(next@13.4.19)(react-dom@18.2.0)(react@18.2.0)
       nextra-theme-docs:
         specifier: latest
-        version: 2.13.2(next@13.4.19)(nextra@2.13.2)(react-dom@18.2.0)(react@18.2.0)
+        version: 2.13.3(next@13.4.19)(nextra@2.13.3)(react-dom@18.2.0)(react@18.2.0)
       postcss:
         specifier: ^8.4.29
         version: 8.4.29
@@ -89,8 +89,8 @@ importers:
   netlify-plugin-cloudinary:
     dependencies:
       cloudinary:
-        specifier: ^1.41.0
-        version: 1.41.0
+        specifier: ^2.0.1
+        version: 2.0.1
       glob:
         specifier: ^10.3.3
         version: 10.3.4
@@ -2338,20 +2338,10 @@ packages:
     engines: {node: '>=0.8'}
     dev: true
 
-  /cloudinary-core@2.13.0(lodash@4.17.21):
-    resolution: {integrity: sha512-Nt0Q5I2FtenmJghtC4YZ3MZZbGg1wLm84SsxcuVwZ83OyJqG9CNIGp86CiI6iDv3QobaqBUpOT7vg+HqY5HxEA==}
-    peerDependencies:
-      lodash: '>=4.0'
+  /cloudinary@2.0.1:
+    resolution: {integrity: sha512-+j5GswtCwjAmLhjs/K26id4Zvh53zL/YWzgyenxgbdXdXmdFM8d5H1FV1sJCkpS77AqylJKBzyztySdILM+F+A==}
+    engines: {node: '>=9'}
     dependencies:
-      lodash: 4.17.21
-    dev: false
-
-  /cloudinary@1.41.0:
-    resolution: {integrity: sha512-qFf2McjvILJITePf4VF1PrY/8c2zy+/q5FVV6V3VWrP/gpIZsusPqXL4QZ6ZKXibPRukzMYqsQEhaSQgJHKKow==}
-    engines: {node: '>=0.6'}
-    dependencies:
-      cloudinary-core: 2.13.0(lodash@4.17.21)
-      core-js: 3.32.1
       lodash: 4.17.21
       q: 1.5.1
     dev: false
@@ -2489,11 +2479,6 @@ packages:
       meow: 12.1.1
       split2: 4.2.0
     dev: true
-
-  /core-js@3.32.1:
-    resolution: {integrity: sha512-lqufgNn9NLnESg5mQeYsxQP5w7wrViSj0jr/kv6ECQiByzQkrn1MKvV0L3acttpDqfQrHLwr2KCMgX5b8X+lyQ==}
-    requiresBuild: true
-    dev: false
 
   /core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -6564,11 +6549,11 @@ packages:
       fsevents: 2.3.3
     dev: false
 
-  /nextra-theme-docs@2.13.2(next@13.4.19)(nextra@2.13.2)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-yE4umXaImp1/kf/sFciPj2+EFrNSwd9Db26hi98sIIiujzGf3+9eUgAz45vF9CwBw50FSXxm1QGRcY+slQ4xQQ==}
+  /nextra-theme-docs@2.13.3(next@13.4.19)(nextra@2.13.3)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-B6xrnR86Gg4GzV56AomSwtmvSyAvnJz1xKOGGav1XKxkwvC8QeI17jdt/CqiKyIObJ+5bLqSFiKhaAZ5DYQP3g==}
     peerDependencies:
       next: '>=9.5.3'
-      nextra: 2.13.2
+      nextra: 2.13.3
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
@@ -6584,15 +6569,15 @@ packages:
       next: 13.4.19(react-dom@18.2.0)(react@18.2.0)
       next-seo: 6.1.0(next@13.4.19)(react-dom@18.2.0)(react@18.2.0)
       next-themes: 0.2.1(next@13.4.19)(react-dom@18.2.0)(react@18.2.0)
-      nextra: 2.13.2(next@13.4.19)(react-dom@18.2.0)(react@18.2.0)
+      nextra: 2.13.3(next@13.4.19)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      scroll-into-view-if-needed: 3.0.10
+      scroll-into-view-if-needed: 3.1.0
       zod: 3.22.4
     dev: false
 
-  /nextra@2.13.2(next@13.4.19)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-pIgOSXNUqTz1laxV4ChFZOU7lzJAoDHHaBPj8L09PuxrLKqU1BU/iZtXAG6bQeKCx8EPdBsoXxEuENnL9QGnGA==}
+  /nextra@2.13.3(next@13.4.19)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-OBVuyQKh+oqrbVt0AosgNYnuReWuNrtJVEN7q18b/oEg2wEpuiq3UJfmIvGgOdNYc3zv3OYrzbcq7IhwtdHHEw==}
     engines: {node: '>=16'}
     peerDependencies:
       next: '>=9.5.3'
@@ -7888,8 +7873,8 @@ packages:
       loose-envify: 1.4.0
     dev: false
 
-  /scroll-into-view-if-needed@3.0.10:
-    resolution: {integrity: sha512-t44QCeDKAPf1mtQH3fYpWz8IM/DyvHLjs8wUvvwMYxk5moOqCzrMSxK6HQVD0QVmVjXFavoFIPRVrMuJPKAvtg==}
+  /scroll-into-view-if-needed@3.1.0:
+    resolution: {integrity: sha512-49oNpRjWRvnU8NyGVmUaYG4jtTkNonFZI86MmGRDqBphEK2EXT9gdEUoQPZhuBM8yWHxCWbobltqYO5M4XrUvQ==}
     dependencies:
       compute-scroll-into-view: 3.0.3
     dev: false
