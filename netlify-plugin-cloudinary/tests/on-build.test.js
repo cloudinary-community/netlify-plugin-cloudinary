@@ -101,7 +101,7 @@ describe('onBuild', () => {
       const imagesFunctionName = 'cld_images';
 
       fs.readdir.mockResolvedValue([imagesFunctionName]);
-    })
+    });
 
     function validate(imagesPath, redirects, url) {
       if (typeof (imagesPath) === 'string') {
@@ -111,6 +111,17 @@ describe('onBuild', () => {
       let count = 0
       imagesPath?.reverse().forEach(element => {
         let i = element.split(path.win32.sep).join(path.posix.sep).replace('/', '');
+
+        // The analytics string that's added to the URLs is dynamic based on package version.
+        // The resulting value is also not static, so we can't simply add it to the end of the
+        // URL, so strip the analytics from the URLs as it's not important for this particular
+        // test, being covered elsewhere.
+
+        redirects.forEach(redirect => {
+          if ( redirect.to.includes('https://res.cloudinary.com') ) {
+            redirect.to = redirect.to.split('?')[0];
+          }
+        })
 
         expect(redirects[count]).toEqual({
           from: `/${i}/*`,

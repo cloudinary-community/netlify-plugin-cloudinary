@@ -2,10 +2,20 @@ import { vi, expect, describe, test, beforeEach, afterAll, it } from 'vitest';
 
 import { ERROR_ASSET_UPLOAD } from '../../src/data/errors';
 import { getCloudinary, createPublicId, configureCloudinary, getCloudinaryUrl, updateHtmlImagesToCloudinary } from '../../src/lib/cloudinary';
+import { ANALYTICS_SDK_CODE, ANALYTICS_PRODUCT } from '../../src/data/analytics';
 
 const mockDemo = require('../mocks/demo.json');
 
 const cloudinary = getCloudinary();
+
+const TEST_ANALYTICS_CONFIG = {
+  sdkCode: ANALYTICS_SDK_CODE,
+  sdkSemver: '1.1.1',
+  techVersion: '1.1.1',
+  product: ANALYTICS_PRODUCT,
+}
+
+const TEST_ANALYTICS_STRING = 'BBFCd1Bl0';
 
 describe('lib/util', () => {
   const ENV_ORIGINAL = process.env;
@@ -59,7 +69,7 @@ describe('lib/util', () => {
         remoteHost: 'https://cloudinary.netlify.app'
       });
 
-      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
+      expect(cloudinaryUrl).toMatch(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
     });
 
     test('should create a Cloudinary URL with delivery type of fetch from a remote image', async () => {
@@ -69,7 +79,7 @@ describe('lib/util', () => {
         path: 'https://i.imgur.com/vtYmp1x.png'
       });
 
-      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png`);
+      expect(cloudinaryUrl).toMatch(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png`);
     });
 
 
@@ -94,7 +104,7 @@ describe('lib/util', () => {
         remoteHost: 'https://cloudinary.netlify.app'
       });
 
-      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d`);
+      expect(cloudinaryUrl).toMatch(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/stranger-things-dustin-fc571e771d5ca7d9223a7eebfd2c505d`);
     });
 
     test('should fail to create a Cloudinary URL with delivery type of upload', async () => {
@@ -121,7 +131,7 @@ describe('lib/util', () => {
     //     path: 'https://i.imgur.com/vtYmp1x.png'
     //   });
 
-    //   expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/vtYmp1x-ae71a79c9c36b8d5dba872c3b274a444`);
+    //   expect(cloudinaryUrl).toMatch(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/f_auto,q_auto/vtYmp1x-ae71a79c9c36b8d5dba872c3b274a444`);
     // });
 
     test('should apply transformations', async () => {
@@ -139,7 +149,7 @@ describe('lib/util', () => {
         transformations: [maxSize]
       });
 
-      expect(cloudinaryUrl).toEqual(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/c_${maxSize.crop},dpr_${maxSize.dpr},h_${maxSize.height},w_${maxSize.width}/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
+      expect(cloudinaryUrl).toMatch(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/c_${maxSize.crop},dpr_${maxSize.dpr},h_${maxSize.height},w_${maxSize.width}/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg`);
     });
 
   });
@@ -154,9 +164,9 @@ describe('lib/util', () => {
         localDir: 'tests',
         remoteHost: 'https://cloudinary.netlify.app',
         loadingStrategy: 'lazy'
-      });
+      }, TEST_ANALYTICS_CONFIG);
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" loading=\"lazy"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg?_a=${TEST_ANALYTICS_STRING}\" loading=\"lazy"\></p></body></html>`);
     });
 
     it('should replace a remote image with a Cloudinary URL', async () => {
@@ -165,9 +175,9 @@ describe('lib/util', () => {
       const { html } = await updateHtmlImagesToCloudinary(sourceHtml, {
         deliveryType: 'fetch',
         loadingStrategy: 'lazy'
-      });
+      }, TEST_ANALYTICS_CONFIG);
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png\" loading=\"lazy"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png?_a=${TEST_ANALYTICS_STRING}\" loading=\"lazy"\></p></body></html>`);
     });
 
 
@@ -179,9 +189,9 @@ describe('lib/util', () => {
         localDir: 'tests',
         remoteHost: 'https://cloudinary.netlify.app',
         loadingStrategy: 'lazy'
-      });
+      }, TEST_ANALYTICS_CONFIG);
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg\" srcset=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 1x, https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg 2x\" loading=\"lazy"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg?_a=${TEST_ANALYTICS_STRING}\" srcset=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg?_a=${TEST_ANALYTICS_STRING} 1x, https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://cloudinary.netlify.app/images/stranger-things-dustin.jpeg?_a=${TEST_ANALYTICS_STRING} 2x\" loading=\"lazy"\></p></body></html>`);
     });
 
     it('should add eager loading to image when eager option is provided for loadingStrategy', async () => {
@@ -192,9 +202,9 @@ describe('lib/util', () => {
         localDir: 'tests',
         remoteHost: 'https://cloudinary.netlify.app',
         loadingStrategy: 'eager'
-      });
+      }, TEST_ANALYTICS_CONFIG);
 
-      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png\" loading=\"eager"\></p></body></html>`);
+      expect(html).toEqual(`<html><head></head><body><p><img src=\"https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/f_auto,q_auto/https://i.imgur.com/vtYmp1x.png?_a=${TEST_ANALYTICS_STRING}\" loading=\"eager"\></p></body></html>`);
     });
 
     it('should test uploading multiple assets', async () => {
@@ -207,7 +217,7 @@ describe('lib/util', () => {
         loadingStrategy: 'lazy',
         folder: 'netlify-plugin-cloudinary',
         assets: mockDemo.assets
-      });
+      }, TEST_ANALYTICS_CONFIG);
 
       expect(html).toEqual(mockDemo.htmlAfter);
     });
