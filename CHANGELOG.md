@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.16.0...v1.17.0) (2024-02-13)
+
+
+### Features
+
+* Adds Analytics Code to URLs ([#87](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/87)) ([4940fb0](https://github.com/colbyfayock/netlify-plugin-cloudinary/commit/4940fb03386b63aa1e9a44bc9db5d04a183983bf)), closes [#11](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/11) [#70](https://github.com/colbyfayock/netlify-plugin-cloudinary/issues/70)
+
 # [1.16.0](https://github.com/colbyfayock/netlify-plugin-cloudinary/compare/v1.15.0...v1.16.0) (2023-12-04)
 
 
