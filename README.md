@@ -22,13 +22,13 @@ The Cloudinary plugin hooks into your Netlify build process and sets up images f
 
 tl;dr automatically serves smaller images in modern formats
 
-**This plugin is not officially supported by Cloudinary.**
-
 - [Getting Started](#%EF%B8%8F-getting-started)
 - [Configuration](#-configuration)
 - [Common Questions & Issues](#%EF%B8%8F%EF%B8%8F-common-questions--issues)
 - [How It Works](#%EF%B8%8F-how-it-works)
 - [Development](#-development)
+
+**This is a community library supported by the Cloudinary Developer Experience team.**
 
 ## ⚡️ Getting Started
 
